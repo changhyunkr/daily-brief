@@ -1,164 +1,124 @@
 {
   "date": "2026-03-13",
-  "generatedAt": 1773399426139,
+  "generatedAt": 1773400914739,
   "generatedBy": "github-actions",
   "model": "gemini+gpt4o",
   "headlines": [
     {
       "id": "h1",
       "cat": "일본",
-      "title": "일본은행, 금리 동결 및 긴축 기조 유지 전망",
-      "summary": "일본은행이 정책금리를 0.75%로 동결하고 긴축 기조를 유지할 것으로 예상됨.",
-      "detail": "이는 2025년 1월과 12월의 금리 인상 이후, 2026년 말까지 정책금리가 1%에 도달할 가능성이 제기됨.",
-      "implications": "금리 인상은 부동산과 기타 장기 투자에 대한 영향을 줄 것으로 예상됨.",
-      "source": "AMP, Dai-ichi Life Research Institute Inc.",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHYSV2A3qkU6__rFS49zaXXYSILommRTHy1aJVrbk3NL6bbboK7Xtjogb04HUUROtgbTZ-mVj0WuQDBbfkuW0Zlws8n5AF4xMAbFzJpZqiXfM2CTn7ydiVMytN5A6XTUdBHqIAeSp8sxUxeSecH2_1Jor56Laomqf8jVICGJXy8t1yRmfMPoo_R"
+      "title": "일본은행, 3월 금리 인상 가능성 낮아… 중동 정세 주시",
+      "summary": "일본은행 부총재 히미노 료조는 3월 금리 인상에 대한 명확한 신호를 보내지 않으며, 중동 분쟁으로 인한 경제 불확실성을 언급.",
+      "detail": "시장의 3월 금리 동결 기대를 강화하는 발언. 미즈호 금융그룹은 지속적인 인플레이션과 엔화 약세로 인해 금리 인상을 전망.",
+      "implications": "PE/RE 투자자들은 BOJ 정책과 중동 정세 주시 필요.",
+      "source": "The Japan Times, Reuters",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHy7d5IUlZsgevF7WDTm0t4tbqpPfokfAtMXwWNbAm3DB0k5F9nPSmuhdquVLCd1hzV1unadI-t54qMdoyA2jY0NNMeCBss8eZ126JkVqrf1AgBloHIsEW45-0X5QxezMk3UWaQ1UUVRCXKop7r3r1E5oIIJTeH9XCIr2BLCBUzMbCOIOp1ByVs8s1AO_S_ZNPwz7OJgemQaOsnYA=="
     },
     {
       "id": "h2",
       "cat": "일본",
-      "title": "닛케이 평균, 유가 급등 영향으로 54,000엔 하회",
-      "summary": "일본 증시에서 닛케이 평균 주가가 유가 급등에 따라 54,000엔 밑으로 떨어짐.",
-      "detail": "중동 정세 불안이 글로벌 시장에 영향을 미침.",
-      "implications": "유가 상승은 기업 비용 증가로 인해 투자 수익에 영향을 미칠 수 있음.",
-      "source": "Yahoo! Finance",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGLjiHRp-IM4of_7Nt0AOLrOfel0mGHNQY4ix8avcgz8RDScB3-LBFoNjxiVnwixH6BRgtJeYBWyivQ5VpGMvaqMtrpexBPee-h4cJRJm9CnGnA1ppGGFtne4vBWPAkIa0g7abCaIZyu5-dZyTtto-Hf8-c2fQfr79Vp94UVO0pmZkGCSTogH82GCjq"
+      "title": "닛케이 225, 중동 전쟁 우려 및 유가 급등으로 급락 후 낙폭 축소",
+      "summary": "도쿄 증시에서 닛케이 225 지수는 이란 정세 긴장으로 장 초반 하락했으나 낙폭을 줄임.",
+      "detail": "미국 고용 지표 악화 등의 영향으로 하락했으나 원유 가격 진정으로 낙폭 축소.",
+      "implications": "PE/RE 투자자들은 원유 가격 변동성 주시.",
+      "source": "日本証券新聞, BNN Bloomberg",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHd2G6CXYtvM1DIKwhtMPRvuZU5hxMfNEV2gq6pPwzl5eGf6SRz8Uj61cXbSqaMj966uViBmjEgFOo3CbqYTU5U1CBOXJ7KzgKSbPt6lfTxzZrX5Q=="
     },
     {
       "id": "h3",
-      "cat": "일본 / 부동산",
-      "title": "일본 부동산 투자 시장, 견조한 활동 지속 전망",
-      "summary": "2026년 일본 상업용 부동산 시장은 2025년 수준의 투자 활동을 보일 것으로 예상됨.",
-      "detail": "특히 오피스 부문은 임차 수요와 낮은 공실률로 임대료 상승 전망.",
-      "implications": "투자자에게 안정적인 수익성과 장기적 성장 가능성 제공.",
-      "source": "CBRE, JLL",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHN9OZEzrCRluhbISvwcQ1wznCYALZI695uNcYEMaDr3SaST1llOgONldXTy9lR5vHFwvFVZ0c5-DLnfYgccPqb3C44B7dmGuzAF57R-8g_9IuTUFM5k-WrHt6JpwupeJbIZG8i5mvNiKPmJMdrqSiHA0RoLhTrSwtGc759yOP-"
+      "cat": "일본",
+      "title": "혼다, 전기차 전략 재평가로 북미 3개 EV 모델 개발 취소",
+      "summary": "혼다는 사업 환경 변화와 미국 관세 정책 영향으로 북미 EV 모델 개발 취소.",
+      "detail": "이에 따라 2026년 회계연도 실적 하향 조정.",
+      "implications": "PE/RE 투자자들은 자동차 산업 변동성과 정책 변화 주시.",
+      "source": "Honda Motor Co., Ltd.",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF6rYB9AIp3L0-5iT4XO42Ytb-uZ13CdD7n3HRHuDH6Io9d0w7CeKQUT-mWgnukxeG5ZeNOHRunF-5tiFxPMlJZE1D5tX7YiLNStSeQ_j6PdzTHVFJBtm5KFrZuHeu5vWBoACv9L75QRGAJbYTy9MJ58yHN1Q=="
     },
     {
       "id": "h4",
-      "cat": "일본 / 딜",
-      "title": "일본 액티비스트 투자, 경영권 개입으로 진화",
-      "summary": "액티비스트 투자자들의 활동 확대 및 기업 지배구조 개선을 넘어서 경영권 개입으로 변화 중.",
-      "detail": "이는 일본 기업의 가치 향상 방법이 다양화되고 있음을 시사.",
-      "implications": "경영권 개입은 특정 기업에 대한 가치 증가를 목표로 하며, 이는 주주 환원 및 기업 가치 증가로 연결될 수 있음.",
-      "source": "Daiwa Institute of Research",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGiGJDq2ZLnDc9maqJ7qIlAYhmPFpDEJ-v7_Amsxc9HXOZJ_8q2o3yY-etiGnD7IoSKPBx6TJ3-k1mtQi_DZ-7uFvRXtoNvm_wOrdP-hHB8hotnFllfkdHpRv39xBRYZKtfAgVUe9DBPajkfobcz1XYNysh"
+      "cat": "딜",
+      "title": "PAG 및 KKR, 삿포로 홀딩스의 삿포로 부동산 인수",
+      "summary": "PAG와 KKR이 삿포로 부동산 지분 100% 인수 계약 체결.",
+      "detail": "거래 규모는 약 30억 달러이며, 2026년 6월 1일부터 3년에 걸쳐 완료 예정.",
+      "implications": "PE/RE 투자자들은 대규모 부동산 거래 기회 주시.",
+      "source": "PAG, KKR, Mingtiandi",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHC_XFtgZUNRAlLt_BfBEN-BQsSJOb71ncTfzct-fLR53_w8oWeDm9ec3aDA10gL3js_vsdvTb3PNd1YbOrwrr82ElXeZ9Jxd9oFtT9eZCuGTRKWTviKg2TjAe29c5h_NzXEg5-qv5T_k4RcWmr_i_JIHEbqROdOXqMvXvalhf8z-wI_uvG5inklUrAU_y2g6ty"
     },
     {
       "id": "h5",
-      "cat": "일본 / 딜",
-      "title": "오릭스, 미국 에너지 인프라 서비스 자회사 매각",
-      "summary": "오릭스가 미국 에너지 인프라 자회사를 특수목적회사에 매각.",
-      "detail": "이는 최고 매출 달성 후 기업 가치 향상을 겨냥한 매각임.",
-      "implications": "에너지 인프라 부문에서 현금 유동성을 확보하고, 다른 재투자 기회를 모색할 수 있음.",
-      "source": "Nihon M&A Center",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGWxJGa__eIN0lgRc-k3tjZXt-i82zOSEjHv76tIowU4u3zKi5pgv-w8x9hjJRGzQaxLf7pXXlAx89Uk5EVF25Ahosilthk7T1X7bD0ePA_4Nag8htphM9B8-Ff4lL7I7qaLcEQAQCRaZhdR-A=="
-    },
-    {
-      "id": "h6",
-      "cat": "일본 / 딜",
-      "title": "베인캐피탈, 아시아 펀드 105억 달러 조성",
-      "summary": "베인캐피탈이 아시아 지역 대상으로 PE 펀드 105억 달러 조성 완료에 근접.",
-      "detail": "일본 중견기업 투자를 위해 20억 달러 펀드 추가 조성.",
-      "implications": "일본 중소기업에 대한 투자를 강화하여 장기적 성장 가능성을 노릴 수 있음.",
-      "source": "Yahoo! Finance (Reuters)",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHfBL55199NigZZIYfkjVj0wWpuInwch826VctrnMYFJsyvaglhjP2VEWyCGLU1S8q8fpuKroy26DUYiHFgQACkZfuaDoX4ayaiOhbmqhq1u6UTjRo4vWe-SZH66tZHzviclmvIUJQQekOLjcYOiJSI9eMZDnNWC4RPzW8-E_IENAP_-rlejh8YABGP"
-    },
-    {
-      "id": "h7",
-      "cat": "일본 / 매크로",
-      "title": "일본 2026년 GDP 성장률 소폭 하향 조정",
-      "summary": "다이이치생명경제연구소가 일본의 실질 GDP 성장률 전망치를 0.9%에서 0.8%로 조정.",
-      "detail": "이란 정세 악화로 관련 원유 가격 상승을 반영한 결과.",
-      "implications": "유가 상승은 일본 경제 전반에 물가 상승과 소비 감소 압력으로 작용할 수 있음.",
-      "source": "Dai-ichi Life Research Institute Inc.",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHB1qtgjYpgX1eJj8-PbysGnmEqX10MxXslGH3BrNxpCikJHzzwNOZVfFdDRLsMqHOcj86wPHh0neTMSKIccmJKG7kwBLJ2J9eO1s9UkeocLrLSW7C7h_4G_eQb5MjYxwSqTOXTdB_0b1nGef-xkoDa1w=="
-    },
-    {
-      "id": "h8",
-      "cat": "일본 / 매크로",
-      "title": "일본 2026회계연도 예산안, 중의원 통과 임박",
-      "summary": "2026회계연도 일본 예산안이 중의원 통과 예견됨.",
-      "detail": "주로 집권 여당의 지지로 참의원으로 송부될 예정.",
-      "implications": "정부의 재정정책이 경제 성장과 관련 프로젝트에 직접적인 영향을 미칠 수 있음.",
-      "source": "Nippon.com",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGLNIAYC5RlQfPXZt47o3iji5cfgrbDf7kVLYnU7TOW5qxQ-kHmGBmKWqW0AwAbJyU19-TGFVFVZ0c5-DLnfYgccPqb3C44B7dmGuzAF57R-8g_9IuTUFM5k-WrHt6JpwupeJbIZG8i5mvNiKPmJMdrqSiHA0RoLhTrSwtGc759yOP-"
-    },
-    {
-      "id": "h9",
-      "cat": "미국 / 매크로",
-      "title": "미국 증시, 유가 급등 및 전쟁 우려로 하락",
-      "summary": "미국 증시가 유가 급등과 이란 전쟁 우려 확산으로 하락.",
-      "detail": "위험 회피 매도세로 인해 주요 지수 하락.",
-      "implications": "국제 정세 불안은 글로벌 투자 시장에 부정적 영향을 미칠 수 있으며, 이는 안전자산 선호도를 증가시킬 수 있음.",
-      "source": "Reuters",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHfBL55199NigZZIYfkjVj0wWpuInwch826VctrnMYFJsyvaglhjP2VEWyCGLU1S8q8fpuKroy26DUYiHFgQACkZfuaDoX4ayaiOhbmqhq1u6UTjRo4vWe-SZH66tZHzviclmvIUJQQekOLjcYOiJSI9eMZDnNWC4RPzW8-E_IENAP_-rlejh8YABGP"
+      "cat": "딜",
+      "title": "히사미츠 제약, MBO 및 주식 통합 발표",
+      "summary": "히사미츠 제약이 MBO와 주식 통합을 발표하며 상장 폐지 예정.",
+      "detail": "임시 주주총회 소집과 정관 개정을 발표.",
+      "implications": "PE/RE 투자자들은 제약 산업의 구조조정 기회 주시.",
+      "source": "MarketScreener",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFwhdYT2wsvSUYJooUgS5-v0O05GKQ4lPvkQwcXnaYWWbX4YMoK4puiWMPHvGFPb0sG5E1FzMtoJd7m_2h5SCeZgn4pVuBBuJ0yojy0YPXw5oTe5ElXdY23qHG9aO233CF6ST86qVsPC9tsjY4Q_bHA278DKzC6KxYE2pgQhocAhgvzgri5i6mo245RJ1_T8qyPPToo-ai5JPvs1ypBY0HTUupjSHVTq1LP6wLVj5XXL0P_gJkGM5IUpeExDP4eDQm5VNNjDmWoCWbVAqDeuUV"
     }
   ],
   "market": {
     "jgb10y": {
-      "v": "—",
-      "d": "—",
+      "v": "2.25%",
+      "d": "2026-03-13",
       "t": 0
     },
     "usdjpy": {
-      "v": "159.68",
-      "d": "—",
+      "v": "159.43",
+      "d": "2026-03-13",
       "t": 0
     },
     "nikkei": {
-      "v": "54,000",
-      "d": "—",
+      "v": "53,819.61",
+      "d": "2026-03-13",
       "t": 0
     },
     "sp500": {
       "v": "6,672.62",
-      "d": "-1.52%",
+      "d": "2026-03-12",
       "t": 0
     },
     "wti": {
-      "v": "95.24",
-      "d": "-0.51%",
+      "v": "$95.24",
+      "d": "2026-03-13",
       "t": 0
     },
     "usdkrw": {
-      "v": "—",
-      "d": "—",
+      "v": "1,494.9",
+      "d": "2026-03-13",
       "t": 0
     }
   },
   "deals": [
     {
       "id": "d1",
-      "title": "오릭스, 미국 에너지 인프라 서비스 자회사 매각",
-      "value": "N/A",
+      "title": "PAG 및 KKR, 삿포로 부동산 인수",
+      "value": "$30bn",
       "type": "M&A",
-      "summary": "오릭스는 미국 자회사를 특수목적회사에 매각, 이는 기업 가치 향상을 겨냥한 매각임.",
-      "source": "Nihon M&A Center",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGWxJGa__eIN0lgRc-k3tjZXt-i82zOSEjHv76tIowU4u3zKi5pgv-w8x9hjJRGzQaxLf7pXXlAx89Uk5EVF25Ahosilthk7T1X7bD0ePA_4Nag8htphM9B8-Ff4lL7I7qaLcEQAQCRaZhdR-A=="
+      "summary": "PAG와 KKR가 삿포로 부동산 지분 100%를 인수하는 계약 체결.",
+      "source": "PAG, KKR, Mingtiandi",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHC_XFtgZUNRAlLt_BfBEN-BQsSJOb71ncTfzct-fLR53_w8oWeDm9ec3aDA10gL3js_vsdvTb3PNd1YbOrwrr82ElXeZ9Jxd9oFtT9eZCuGTRKWTviKg2TjAe29c5h_NzXEg5-qv5T_k4RcWmr_i_JIHEbqROdOXqMvXvalhf8z-wI_uvG5inklUrAU_y2g6ty"
     },
     {
       "id": "d2",
-      "title": "베인캐피탈, 아시아 펀드 105억 달러 조성",
-      "value": "$105bn",
-      "type": "Fundraising",
-      "summary": "베인캐피탈이 아시아 PE 펀드 105억 달러 및 일본 미들캡 펀드 20억 달러 조성.",
-      "source": "Yahoo! Finance (Reuters)",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHfBL55199NigZZIYfkjVj0wWpuInwch826VctrnMYFJsyvaglhjP2VEWyCGLU1S8q8fpuKroy26DUYiHFgQACkZfuaDoX4ayaiOhbmqhq1u6UTjRo4vWe-SZH66tZHzviclmvIUJQQekOLjcYOiJSI9eMZDnNWC4RPzW8-E_IENAP_-rlejh8YABGP"
+      "title": "히사미츠 제약 MBO 및 상장 폐지",
+      "value": "N/A",
+      "type": "Equity",
+      "summary": "히사미츠 제약이 MBO와 상장 폐지를 결정.",
+      "source": "MarketScreener",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFwhdYT2wsvSUYJooUgS5-v0O05GKQ4lPvkQwcXnaYWWbX4YMoK4puiWMPHvGFPb0sG5E1FzMtoJd7m_2h5SCeZgn4pVuBBuJ0yojy0YPXw5oTe5ElXdY23qHG9aO233CF6ST86qVsPC9tsjY4Q_bHA278DKzC6KxYE2pgQhocAhgvzgri5i6mo245RJ1_T8qyPPToo-ai5JPvs1ypBY0HTUupjSHVTq1LP6wLVj5XXL0P_gJkGM5IUpeExDP4eDQm5VNNjDmWoCWbVAqDeuUV"
     }
   ],
   "watch": [
     {
       "n": 1,
-      "text": "글로벌 인플레이션 및 금리 인상 흐름"
+      "text": "일본은행 금리 정책과 중동 정세 변화."
     },
     {
       "n": 2,
-      "text": "일본 니케이 225 변동성"
+      "text": "혼다의 전기차 전략 변화와 그 후속 조치."
     },
     {
       "n": 3,
-      "text": "원유 가격 상승과 중동 정세"
+      "text": "PAG 및 KKR의 대형 부동산 거래 진행 상황."
     }
   ],
   "serverGenerated": true,
