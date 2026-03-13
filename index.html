@@ -509,6 +509,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="inp-row"><input class="api-inp" id="si-openai" type="password" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
+  <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
   <!-- ── LOADING ── -->
@@ -737,7 +738,6 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-'use strict';
 // ─── STORAGE (sandbox-safe) ───────────────────────────────────────────────────
 const _mem = {};
 let _ls = false;
@@ -1469,18 +1469,24 @@ async function analyzePaste() {
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
 function saveSetup() {
-  const g  = document.getElementById('si-gemini').value.trim();
-  const cl = document.getElementById('si-claude').value.trim();
-  const o  = document.getElementById('si-openai').value.trim();
-  if (!cl && !o) {
-    alert('Claude 또는 OpenAI 키 중 하나는 필요합니다');
-    return;
+  try {
+    var gVal  = document.getElementById('si-gemini').value.trim();
+    var clVal = document.getElementById('si-claude').value.trim();
+    var oVal  = document.getElementById('si-openai').value.trim();
+    if (!clVal && !oVal) {
+      alert('Claude 또는 OpenAI 키 중 하나는 필요합니다');
+      return;
+    }
+    // Save using raw localStorage to avoid any S/K dependency issues
+    if (gVal)  { try { localStorage.setItem('db_gemini', gVal); } catch(e) {} }
+    if (clVal) { try { localStorage.setItem('db_claude', clVal); } catch(e) {} }
+    if (oVal)  { try { localStorage.setItem('db_openai', oVal); } catch(e) {} }
+    window.location.reload();
+  } catch(err) {
+    var errDiv=document.getElementById('su-err');
+    if(errDiv){errDiv.textContent='오류: '+err.message;errDiv.style.display='block';}
+    else { alert('saveSetup error: ' + err.message); }
   }
-  if (g)  S.set(K.gemini, g);
-  if (cl) S.set(K.claude, cl);
-  if (o)  S.set(K.openai, o);
-  // Simplest & safest: reload so init() runs fresh with keys in storage
-  window.location.reload();
 }
 
 function saveKeys() {
