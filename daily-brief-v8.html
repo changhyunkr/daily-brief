@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Daily Brief">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="light dark">
+<title>Daily Brief</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — Apple HIG Compliant
+   Font: -apple-system (SF Pro on iOS, system-ui elsewhere)
+   Grid: 8pt base unit
+   Touch targets: 44pt minimum
+   Type scale: Apple Dynamic Type
+═══════════════════════════════════════════════════════════════ */
+:root {
+  /* Spacing — 8pt grid */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px;
+  --tap: 44px;
+  --r1: 8px; --r2: 12px; --r3: 16px; --r4: 20px;
+  --sat: env(safe-area-inset-top, 44px);
+  --sab: env(safe-area-inset-bottom, 20px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  /* Accent */
+  --accent:        #C49A35;
+  --accent-bg:     rgba(196,154,53,.12);
+  --accent-border: rgba(196,154,53,.35);
+  --sys-green: #34C759;
+  --sys-red:   #FF3B30;
+  --sys-blue:  #007AFF;
+}
+
+/* ── DARK MODE (default) ── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #000000;
+    --bg-elev1:  #1C1C1E;
+    --bg-elev2:  #2C2C2E;
+    --bg-elev3:  #3A3A3C;
+    --sep:       rgba(84,84,88,.65);
+    --sep-strong: rgba(84,84,88,.9);
+    --label:     #FFFFFF;
+    --label2:    rgba(235,235,245,.6);
+    --label3:    rgba(235,235,245,.3);
+    --label4:    rgba(235,235,245,.16);
+    --nav-blur:  rgba(0,0,0,.72);
+    --tab-blur:  rgba(28,28,30,.92);
+    --sheet-bg:  #1C1C1E;
+    --accent:    #D4A843;
+    --accent-bg: rgba(212,168,67,.12);
+    --accent-border: rgba(212,168,67,.35);
+  }
+}
+
+/* ── LIGHT MODE ── */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:        #F2F2F7;
+    --bg-elev1:  #FFFFFF;
+    --bg-elev2:  #F2F2F7;
+    --bg-elev3:  #E5E5EA;
+    --sep:       rgba(60,60,67,.18);
+    --sep-strong: rgba(60,60,67,.35);
+    --label:     #000000;
+    --label2:    rgba(60,60,67,.6);
+    --label3:    rgba(60,60,67,.36);
+    --label4:    rgba(60,60,67,.18);
+    --nav-blur:  rgba(242,242,247,.85);
+    --tab-blur:  rgba(255,255,255,.9);
+    --sheet-bg:  #FFFFFF;
+    --accent:    #A07820;
+    --accent-bg: rgba(160,120,32,.1);
+    --accent-border: rgba(160,120,32,.3);
+    --sys-green: #34C759;
+    --sys-red:   #FF3B30;
+  }
+}
+
+/* ── BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  height: 100%; background: var(--bg); color-scheme: light dark;
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  color: var(--label);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── SHELL ── */
+.shell { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+
+/* ── SETUP SCREEN ── */
+.setup {
+  position: fixed; inset: 0; z-index: 500; background: var(--bg); color: var(--label);
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: calc(var(--sat) + var(--s5)) var(--s4) calc(var(--sab) + var(--s5));
+}
+.setup.hidden { display: none; }
+.setup-eyebrow { font-size: 13px; font-weight: 500; letter-spacing: .06em; color: var(--accent); text-transform: uppercase; margin-bottom: var(--s4); }
+.setup-h { font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: var(--s2); letter-spacing: -.4px; }
+.setup-p { font-size: 15px; color: var(--label2); line-height: 1.6; margin-bottom: var(--s6); }
+.setup-group { background: var(--bg-elev1); border-radius: var(--r3); overflow: hidden; margin-bottom: var(--s4); }
+.setup-row { padding: var(--s3) var(--s4); border-bottom: .5px solid var(--sep); display: flex; align-items: center; gap: var(--s3); }
+.setup-row:last-child { border-bottom: none; }
+.setup-row-ico { width: 32px; height: 32px; border-radius: var(--r1); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.ico-gemini { background: linear-gradient(135deg,#4285F4,#34A853); }
+.ico-claude { background: linear-gradient(135deg,#CC785C,#E8927C); }
+.ico-openai { background: linear-gradient(135deg,#10a37f,#0d8a6b); }
+.setup-row-body { flex: 1; min-width: 0; }
+.setup-row-label { font-size: 15px; font-weight: 500; margin-bottom: 2px; }
+.setup-row-sub { font-size: 12px; color: var(--label3); }
+.badge-free { display: inline-block; font-size: 10px; font-weight: 600; color: var(--sys-green); background: rgba(48,209,88,.15); padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
+.badge-opt { display: inline-block; font-size: 10px; font-weight: 600; color: var(--label3); background: var(--bg-elev2); padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
+.setup-inp {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-size: 15px; font-family: 'SF Mono', 'Menlo', monospace;
+  color: var(--label); padding: var(--s3) var(--s4);
+  letter-spacing: .02em;
+}
+.setup-inp::placeholder { color: var(--label4); }
+.setup-btn {
+  width: 100%; height: 50px; border-radius: var(--r3);
+  border: none; background: var(--accent);
+  color: #000; font-size: 17px; font-weight: 600;
+  cursor: pointer; margin-top: var(--s2); letter-spacing: -.2px;
+  transition: opacity .15s;
+}
+.setup-btn:active { opacity: .75; }
+.cost-table { background: var(--bg-elev1); border-radius: var(--r3); overflow: hidden; margin-bottom: var(--s5); }
+.cost-row { display: flex; align-items: center; justify-content: space-between; padding: var(--s3) var(--s4); border-bottom: .5px solid var(--sep); }
+.cost-row:last-child { border-bottom: none; }
+.cost-name { font-size: 15px; color: var(--label2); }
+.cost-val { font-size: 15px; font-variant-numeric: tabular-nums; }
+.cost-free { color: var(--sys-green); font-weight: 500; }
+.cost-low { color: var(--accent); font-weight: 500; }
+.cost-dim { color: var(--label3); }
+
+/* ── LOADING ── */
+.loading {
+  position: fixed; inset: 0; z-index: 400; background: var(--bg); color: var(--label);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--s5); padding: var(--s8);
+}
+.loading.hidden { display: none; }
+.load-wordmark { font-size: 13px; font-weight: 600; letter-spacing: .15em; color: var(--label3); text-transform: uppercase; }
+.load-steps { width: 100%; max-width: 300px; }
+.load-step { display: flex; align-items: center; gap: var(--s3); padding: var(--s3) 0; opacity: .25; transition: opacity .4s; }
+.load-step.active { opacity: 1; }
+.load-step.done { opacity: .5; }
+.step-dot { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--sep-strong); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.step-dot.spin { border-color: var(--accent); border-top-color: transparent; animation: spin .7s linear infinite; }
+.step-dot.done { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.step-txt { font-size: 14px; color: var(--label2); }
+.load-cost { font-size: 12px; color: var(--label3); font-variant-numeric: tabular-nums; }
+
+/* ── NAVIGATION BAR ── */
+.nav-bar {
+  display: flex; align-items: flex-end;
+  padding: calc(var(--sat) + var(--s2)) var(--s4) var(--s3);
+  background: var(--nav-blur, rgba(0,0,0,.72));
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: .5px solid var(--sep);
+  flex-shrink: 0; position: relative; z-index: 10;
+}
+.nav-title { font-size: 17px; font-weight: 600; letter-spacing: -.3px; flex-shrink: 0; color: var(--label); }
+.nav-date-group { flex: 1; display: flex; align-items: center; justify-content: center; gap: var(--s2); }
+.nav-arr {
+  width: var(--tap); height: var(--tap); display: flex; align-items: center; justify-content: center;
+  background: transparent; border: none; cursor: pointer; color: var(--accent); font-size: 20px;
+  border-radius: 50%; transition: background .1s; flex-shrink: 0;
+}
+.nav-arr:active { background: var(--bg-elev2); }
+.nav-arr:disabled { color: var(--label4); cursor: default; }
+.nav-arr:disabled:active { background: transparent; }
+.nav-date-label { font-size: 15px; font-weight: 500; color: var(--label2); min-width: 96px; text-align: center; letter-spacing: -.2px; }
+
+/* ── MARKET STRIP ── */
+.market-strip {
+  display: flex; overflow-x: auto; scrollbar-width: none;
+  background: var(--bg-elev1); border-bottom: .5px solid var(--sep);
+  flex-shrink: 0;
+}
+.market-strip::-webkit-scrollbar { display: none; }
+.mkt-item { padding: var(--s2) var(--s4); flex-shrink: 0; border-right: .5px solid var(--sep); min-width: 72px; }
+.mkt-lbl { font-size: 11px; font-weight: 500; color: var(--label3); letter-spacing: .04em; text-transform: uppercase; margin-bottom: 3px; }
+.mkt-val { font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -.3px; }
+.mkt-chg { font-size: 12px; font-variant-numeric: tabular-nums; margin-top: 1px; }
+.up { color: var(--sys-green); }
+.dn { color: var(--sys-red); }
+.na { color: var(--label3); }
+
+/* ── CATEGORY CHIPS ── */
+.cat-scroll {
+  display: flex; gap: var(--s2); padding: var(--s3) var(--s4);
+  overflow-x: auto; scrollbar-width: none;
+  background: var(--bg); border-bottom: .5px solid var(--sep);
+  flex-shrink: 0;
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-chip {
+  height: 32px; padding: 0 var(--s3);
+  border-radius: 16px; border: .5px solid var(--sep-strong);
+  background: var(--bg-elev1); color: var(--label2);
+  font-size: 14px; font-weight: 500; white-space: nowrap;
+  cursor: pointer; flex-shrink: 0; transition: all .15s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.cat-chip.on { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent); }
+.cat-chip:active { opacity: .7; }
+
+/* ── CONTENT PANES ── */
+.content { flex: 1; overflow: hidden; position: relative; }
+.pane { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; display: none; }
+.pane.active { display: block; }
+.pane::-webkit-scrollbar { display: none; }
+
+/* ── SECTION HEADER (iOS grouped style) ── */
+.sec-header {
+  padding: var(--s3) var(--s4) var(--s1);
+  font-size: 13px; font-weight: 500; color: var(--label3);
+  text-transform: uppercase; letter-spacing: .06em;
+  background: var(--bg); position: sticky; top: 0; z-index: 2;
+}
+
+/* ── HEADLINE CARDS (inset grouped list) ── */
+.cards-wrap { padding: 0 0 var(--s4); }
+.card-group { margin: var(--s3) var(--s4); background: var(--bg-elev1); border-radius: var(--r3); overflow: hidden; }
+.news-row {
+  display: flex; align-items: flex-start; gap: var(--s3);
+  padding: var(--s3) var(--s4); min-height: var(--tap);
+  border-bottom: .5px solid var(--sep); cursor: pointer;
+  transition: background .1s; position: relative;
+}
+.news-row:last-child { border-bottom: none; }
+.news-row:active { background: var(--bg-elev2); }
+.news-row-body { flex: 1; min-width: 0; }
+.news-cat {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 600; letter-spacing: .05em;
+  padding: 2px 7px; border-radius: 5px; margin-bottom: var(--s1);
+  text-transform: uppercase;
+}
+.cat-글로벌 { color: #1976D2; background: rgba(25,118,210,.1); }
+@media (prefers-color-scheme: dark) {
+  .cat-글로벌 { color: #64B5F6; background: rgba(100,181,246,.12); }
+}
+.cat-일본   { color: #FFAB76; background: rgba(255,171,118,.12); }
+.cat-미국   { color: #81C784; background: rgba(129,199,132,.12); }
+.cat-한국   { color: #CE93D8; background: rgba(206,147,216,.12); }
+.cat-아시아 { color: #FFD54F; background: rgba(255,213,79,.12); }
+.cat-매크로 { color: #80CBC4; background: rgba(128,203,196,.12); }
+.cat-딜    { color: var(--accent); background: var(--accent-bg); }
+.cat-화제   { color: #F48FB1; background: rgba(244,143,177,.12); }
+.news-title { font-size: 16px; font-weight: 600; line-height: 1.4; color: var(--label); letter-spacing: -.2px; margin-bottom: 3px; }
+.news-summary { font-size: 14px; line-height: 1.5; color: var(--label2); }
+.news-row-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: var(--s1); padding-top: 2px; }
+.news-source { font-size: 11px; color: var(--label3); }
+.chevron { color: var(--label4); font-size: 16px; }
+
+/* ── DEAL CARDS ── */
+.deal-card {
+  margin: 0 var(--s4) var(--s3);
+  background: var(--bg-elev1); border-radius: var(--r3);
+  padding: var(--s4); cursor: pointer; transition: background .1s;
+}
+.deal-card:active { background: var(--bg-elev2); }
+.deal-type-badge {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  color: var(--accent); background: var(--accent-bg);
+  border-radius: 5px; padding: 2px 7px; margin-bottom: var(--s2);
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.deal-title { font-size: 16px; font-weight: 600; color: var(--label); line-height: 1.4; margin-bottom: var(--s1); letter-spacing: -.2px; }
+.deal-value { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: var(--s2); font-variant-numeric: tabular-nums; }
+.deal-summary { font-size: 14px; color: var(--label2); line-height: 1.5; }
+.deal-source { font-size: 12px; color: var(--label3); margin-top: var(--s2); }
+
+/* ── KEY WATCH ── */
+.watch-row {
+  display: flex; align-items: flex-start; gap: var(--s3);
+  padding: var(--s3) var(--s4); min-height: var(--tap);
+  border-bottom: .5px solid var(--sep); cursor: pointer; transition: background .1s;
+}
+.watch-row:last-child { border-bottom: none; }
+.watch-row:active { background: var(--bg-elev2); }
+.watch-n { font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0; padding-top: 1px; min-width: 20px; }
+.watch-text { font-size: 15px; color: var(--label2); line-height: 1.55; }
+
+/* ── PLAYER BAR (brief pane, sticky bottom) ── */
+.player-bar {
+  display: none; position: sticky; bottom: 0; z-index: 5;
+  background: var(--tab-blur, rgba(28,28,30,.92));
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-top: .5px solid var(--sep);
+  padding: var(--s2) var(--s4) calc(var(--s2) + 0px);
+  align-items: center; gap: var(--s3);
+}
+.player-bar.show { display: flex; }
+.pb-controls { display: flex; align-items: center; gap: var(--s2); flex-shrink: 0; }
+.pb-btn {
+  width: var(--tap); height: var(--tap); border-radius: 50%; border: none;
+  background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .1s;
+}
+.pb-btn:active { background: var(--bg-elev2); }
+.pb-btn svg { width: 20px; height: 20px; fill: var(--label2); }
+.pb-play svg { width: 22px; height: 22px; fill: var(--accent); }
+.pb-info { flex: 1; min-width: 0; cursor: pointer; }
+.pb-title { font-size: 13px; font-weight: 500; color: var(--label2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 4px; }
+.pb-prog { height: 2px; background: var(--bg-elev3); border-radius: 1px; }
+.pb-fill { height: 100%; background: var(--accent); border-radius: 1px; width: 0%; transition: width .9s linear; }
+.pb-spd {
+  height: var(--tap); padding: 0 var(--s3);
+  background: var(--bg-elev2); border: none; border-radius: var(--r1);
+  color: var(--label2); font-size: 13px; font-weight: 500;
+  cursor: pointer; flex-shrink: 0; transition: background .1s;
+  font-variant-numeric: tabular-nums;
+}
+.pb-spd:active { background: var(--bg-elev3); }
+
+/* ── PODCAST PANE ── */
+.pod-header { padding: var(--s5) var(--s4) var(--s4); border-bottom: .5px solid var(--sep); }
+.pod-eyebrow { font-size: 12px; font-weight: 600; color: var(--label3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: var(--s1); }
+.pod-title { font-size: 22px; font-weight: 700; letter-spacing: -.4px; color: var(--label); margin-bottom: var(--s1); line-height: 1.25; }
+.pod-date { font-size: 14px; color: var(--label3); }
+.len-picker { display: flex; gap: var(--s2); margin-top: var(--s4); }
+.len-btn {
+  flex: 1; padding: var(--s3) var(--s2); border-radius: var(--r2);
+  border: .5px solid var(--sep-strong); background: var(--bg-elev1);
+  cursor: pointer; transition: all .15s; text-align: center;
+}
+.len-btn.on { background: var(--accent-bg); border-color: var(--accent-border); }
+.len-btn:active { opacity: .75; }
+.len-btn-label { display: block; font-size: 15px; font-weight: 600; color: var(--label); margin-bottom: 2px; }
+.len-btn-sub { display: block; font-size: 12px; color: var(--label3); }
+.len-btn.on .len-btn-label { color: var(--accent); }
+
+/* FULL PLAYER */
+.full-player { padding: var(--s4) var(--s4) 0; border-bottom: .5px solid var(--sep); }
+.progress-area { margin-bottom: var(--s4); }
+.prog-track {
+  width: 100%; height: 4px; background: var(--bg-elev3);
+  border-radius: 2px; cursor: pointer; position: relative;
+  overflow: visible; margin-bottom: var(--s2);
+}
+.prog-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0%; transition: width .9s linear; pointer-events: none; }
+.prog-thumb {
+  position: absolute; top: 50%; width: 14px; height: 14px;
+  background: #fff; border-radius: 50%; transform: translate(-50%,-50%);
+  left: 0%; transition: left .9s linear;
+  box-shadow: 0 1px 4px rgba(0,0,0,.4);
+}
+.time-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--label3); font-variant-numeric: tabular-nums; }
+.controls-row { display: flex; align-items: center; justify-content: center; gap: var(--s5); margin-bottom: var(--s4); }
+.ctrl-btn {
+  width: var(--tap); height: var(--tap); border: none; background: transparent;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1px; transition: opacity .1s; border-radius: 50%;
+}
+.ctrl-btn:active { opacity: .6; }
+.ctrl-btn svg { width: 22px; height: 22px; fill: var(--label); }
+.ctrl-btn span { font-size: 10px; font-weight: 600; color: var(--label3); }
+.ctrl-play-btn {
+  width: 64px; height: 64px; border-radius: 50%; border: none;
+  background: var(--accent); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .1s; box-shadow: 0 4px 16px rgba(212,168,67,.35);
+}
+.ctrl-play-btn:active { opacity: .8; }
+.ctrl-play-btn svg { width: 26px; height: 26px; fill: #000; }
+.options-row { display: flex; gap: var(--s2); align-items: center; padding-bottom: var(--s4); overflow-x: auto; scrollbar-width: none; }
+.options-row::-webkit-scrollbar { display: none; }
+.spd-btn {
+  height: 32px; padding: 0 var(--s3); border-radius: 16px;
+  border: .5px solid var(--sep-strong); background: var(--bg-elev1);
+  color: var(--label2); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all .15s; white-space: nowrap; flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.spd-btn.on { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent); }
+.spd-btn:active { opacity: .7; }
+.voice-sel {
+  flex: 1; min-width: 0; height: 32px; padding: 0 var(--s3);
+  border-radius: 16px; border: .5px solid var(--sep-strong);
+  background: var(--bg-elev1); color: var(--label2);
+  font-size: 13px; -webkit-appearance: none; outline: none;
+}
+
+/* POD SECTION LIST */
+.pod-sec-group { margin: var(--s3) var(--s4); background: var(--bg-elev1); border-radius: var(--r3); overflow: hidden; }
+.pod-sec-row {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: 0 var(--s4); min-height: var(--tap);
+  border-bottom: .5px solid var(--sep); cursor: pointer; transition: background .1s;
+}
+.pod-sec-row:last-child { border-bottom: none; }
+.pod-sec-row:active { background: var(--bg-elev2); }
+.pod-sec-row.playing { background: var(--accent-bg); }
+.pod-sec-n { font-size: 13px; font-weight: 600; color: var(--label3); width: 22px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.pod-sec-row.playing .pod-sec-n { color: var(--accent); }
+.pod-sec-name { flex: 1; font-size: 15px; color: var(--label2); font-weight: 400; }
+.pod-sec-row.playing .pod-sec-name { color: var(--accent); font-weight: 500; }
+.pod-sec-dur { font-size: 13px; color: var(--label3); font-variant-numeric: tabular-nums; }
+
+/* ── SEARCH PANE ── */
+.search-wrap { padding: var(--s3) var(--s4); }
+.search-bar {
+  display: flex; align-items: center; gap: var(--s2);
+  background: var(--bg-elev1); border-radius: var(--r2);
+  padding: 0 var(--s3); height: 44px; margin-bottom: var(--s4); border: .5px solid var(--sep);
+}
+.search-ico { color: var(--label3); font-size: 16px; flex-shrink: 0; }
+.search-inp {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-size: 16px; color: var(--label); caret-color: var(--accent);
+  -webkit-appearance: none;
+}
+.search-inp::placeholder { color: var(--label3); }
+.search-btn {
+  height: 32px; padding: 0 var(--s3); border-radius: var(--r1);
+  border: none; background: var(--accent-bg);
+  color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0;
+}
+.search-btn:active { opacity: .7; }
+.search-result {
+  padding: var(--s3) var(--s4); border-bottom: .5px solid var(--sep);
+  cursor: pointer; transition: background .1s;
+}
+.search-result:active { background: var(--bg-elev1); }
+.sr-date { font-size: 12px; color: var(--label3); margin-bottom: 3px; }
+.sr-title { font-size: 15px; color: var(--label); line-height: 1.4; margin-bottom: 3px; font-weight: 500; }
+.sr-preview { font-size: 13px; color: var(--label2); line-height: 1.4; }
+
+/* ── SETTINGS PANE ── */
+.set-wrap { padding: var(--s3) var(--s4) calc(var(--sab) + var(--s8)); }
+.set-group { background: var(--bg-elev1); border-radius: var(--r3); overflow: hidden; margin-bottom: var(--s4); }
+.set-hdr { font-size: 13px; font-weight: 500; color: var(--label3); text-transform: uppercase; letter-spacing: .06em; padding: var(--s3) var(--s4) var(--s2); }
+.set-row {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: 0 var(--s4); min-height: var(--tap);
+  border-bottom: .5px solid var(--sep); cursor: pointer;
+}
+.set-row:last-child { border-bottom: none; }
+.set-row:active { background: var(--bg-elev2); }
+.set-row-label { flex: 1; font-size: 16px; color: var(--label); }
+.set-row-val { font-size: 15px; color: var(--label3); font-variant-numeric: tabular-nums; }
+.set-inp-row { padding: 0 var(--s4); border-bottom: .5px solid var(--sep); min-height: var(--tap); display: flex; align-items: center; }
+.set-inp-row:last-child { border-bottom: none; }
+.set-inp {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-size: 15px; color: var(--label); padding: var(--s3) 0;
+  font-family: 'SF Mono', 'Menlo', monospace; letter-spacing: .02em;
+  min-height: var(--tap);
+}
+.set-inp::placeholder { color: var(--label4); font-family: -apple-system, sans-serif; }
+.set-btn {
+  width: 100%; min-height: var(--tap); border-radius: var(--r3);
+  border: none; background: var(--bg-elev1);
+  color: var(--accent); font-size: 16px; font-weight: 500;
+  cursor: pointer; transition: opacity .15s; margin-bottom: var(--s2);
+}
+.set-btn:active { opacity: .7; }
+.set-btn.danger { color: var(--sys-red); }
+
+/* iOS Toggle */
+.ios-toggle { width: 51px; height: 31px; border-radius: 16px; background: var(--bg-elev3); position: relative; cursor: pointer; transition: background .2s; flex-shrink: 0; -webkit-appearance: none; border: none; }
+.ios-toggle.on { background: var(--sys-green); }
+.ios-toggle::after { content: ''; position: absolute; width: 27px; height: 27px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: transform .2s; box-shadow: 0 2px 4px rgba(0,0,0,.3); }
+.ios-toggle.on::after { transform: translateX(20px); }
+
+/* ── BOTTOM SHEET ── */
+.ov { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 100; opacity: 0; pointer-events: none; transition: opacity .25s; }
+.ov.open { opacity: 1; pointer-events: all; }
+.sheet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 101;
+  background: var(--sheet-bg, var(--bg-elev1)); border-radius: var(--r4) var(--r4) 0 0;
+  border-top: .5px solid var(--sep-strong);
+  transform: translateY(100%); transition: transform .32s cubic-bezier(.4,0,.2,1);
+  max-height: 88vh; display: flex; flex-direction: column;
+  padding-bottom: var(--sab);
+}
+.sheet.open { transform: translateY(0); }
+.sheet-drag { padding: var(--s3) 0 0; display: flex; justify-content: center; flex-shrink: 0; }
+.sheet-handle { width: 36px; height: 5px; background: var(--sep-strong); border-radius: 3px; }
+.sheet-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: var(--s2) var(--s4) var(--s4); }
+.sheet-scroll::-webkit-scrollbar { display: none; }
+.sh-cat { margin: var(--s3) 0 var(--s3); display: inline-flex; }
+.sh-title { font-size: 20px; font-weight: 700; line-height: 1.35; color: var(--label); margin-bottom: var(--s3); letter-spacing: -.3px; }
+.sh-body { font-size: 16px; line-height: 1.7; color: var(--label2); margin-bottom: var(--s4); }
+.sh-imp {
+  background: var(--bg-elev2); border-radius: var(--r2);
+  padding: var(--s3) var(--s4); margin-bottom: var(--s4);
+  border-left: 3px solid var(--accent);
+}
+.sh-imp-lbl { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; margin-bottom: var(--s1); }
+.sh-imp-txt { font-size: 15px; color: var(--label2); line-height: 1.6; }
+.sh-footer { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--s3); }
+.sh-source { font-size: 13px; color: var(--label3); }
+.sh-link-btn {
+  height: 34px; padding: 0 var(--s4); border-radius: 17px;
+  border: .5px solid var(--accent-border); background: var(--accent-bg);
+  color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.sh-close {
+  width: 100%; min-height: var(--tap); border-radius: var(--r3);
+  border: none; background: var(--bg-elev2); color: var(--label2);
+  font-size: 16px; font-weight: 500; cursor: pointer; transition: background .1s;
+}
+.sh-close:active { background: var(--bg-elev3); }
+
+/* ── TAB BAR ── */
+.tab-bar {
+  display: flex; background: var(--tab-blur, rgba(28,28,30,.92));
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-top: .5px solid var(--sep);
+  padding: var(--s2) 0 var(--sab);
+  flex-shrink: 0;
+}
+.tab-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 3px; min-height: var(--tap);
+  background: transparent; border: none; cursor: pointer;
+  padding: 0; transition: opacity .1s;
+}
+.tab-btn:active { opacity: .6; }
+.tab-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+.tab-icon svg { width: 24px; height: 24px; fill: var(--label3); transition: fill .15s; }
+.tab-btn.on .tab-icon svg { fill: var(--accent); }
+.tab-label { font-size: 10px; font-weight: 500; color: var(--label3); letter-spacing: .02em; transition: color .15s; }
+.tab-btn.on .tab-label { color: var(--accent); }
+
+/* ── EMPTY STATE ── */
+.empty-state { padding: 60px var(--s6); text-align: center; }
+.empty-icon { font-size: 40px; margin-bottom: var(--s4); }
+.empty-text { font-size: 16px; color: var(--label2); line-height: 1.6; margin-bottom: var(--s5); }
+.empty-action {
+  display: inline-block; height: var(--tap); padding: 0 var(--s6);
+  border-radius: var(--r3); border: none;
+  background: var(--accent); color: #000;
+  font-size: 16px; font-weight: 600; cursor: pointer;
+  line-height: var(--tap); transition: opacity .15s;
+}
+.empty-action:active { opacity: .75; }
+
+/* ── TOAST ── */
+#_toast {
+  position: fixed; bottom: calc(var(--sab) + 90px); left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: var(--bg-elev2); border-radius: 20px;
+  padding: 10px var(--s4); font-size: 14px; font-weight: 500;
+  color: var(--label); z-index: 400; white-space: nowrap;
+  opacity: 0; transition: opacity .25s, transform .25s;
+  pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,.5);
+}
+#_toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── SCHEDULE UI ── */
+.time-picker {
+  height: var(--tap); padding: 0 var(--s4); background: transparent;
+  border: none; outline: none; font-size: 17px; font-weight: 500;
+  color: var(--label); width: 100%; -webkit-appearance: none;
+}
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE — iPad (768px+) & Desktop (1024px+)
+══════════════════════════════════════════════════ */
+
+/* ── iPad (768px - 1023px) ── */
+@media (min-width: 768px) {
+  /* Wider market strip cells */
+  .mkt-item { min-width: 100px; padding: var(--s3) var(--s5); }
+  .mkt-val { font-size: 17px; }
+
+  /* 2-column headline grid */
+  .card-group { display: grid; grid-template-columns: 1fr 1fr; }
+  .news-row { border-right: .5px solid var(--sep); border-bottom: .5px solid var(--sep); }
+  .news-row:nth-child(2n) { border-right: none; }
+  .news-row:last-child, .news-row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+
+  /* Bigger text */
+  .news-title { font-size: 15px; }
+  .deal-title { font-size: 15px; }
+
+  /* Deal cards in 2-col grid */
+  .cards-wrap { padding: 0 0 var(--s6); }
+  .deal-card { display: inline-block; width: calc(50% - var(--s5)); vertical-align: top; }
+
+  /* Tabs wider */
+  .tab-btn { min-height: 52px; }
+  .tab-icon svg { width: 26px; height: 26px; }
+  .tab-label { font-size: 11px; }
+
+  /* Nav bar */
+  .nav-title { font-size: 20px; }
+  .nav-date-label { font-size: 17px; min-width: 120px; }
+
+  /* Player controls bigger */
+  .ctrl-play-btn { width: 72px; height: 72px; }
+  .ctrl-play-btn svg { width: 30px; height: 30px; }
+}
+
+/* ── Desktop (1024px+) ── */
+@media (min-width: 1024px) {
+  /* Full desktop layout: left sidebar + main content */
+  .shell { flex-direction: row; max-width: 1280px; margin: 0 auto; }
+
+  /* Sidebar (left) */
+  .tab-bar {
+    flex-direction: column;
+    width: 220px; min-width: 220px;
+    border-top: none; border-right: .5px solid var(--sep);
+    padding: calc(var(--sat) + var(--s6)) 0 var(--s6);
+    height: 100vh; height: 100dvh;
+    position: sticky; top: 0;
+  }
+  .tab-btn {
+    flex-direction: row; justify-content: flex-start;
+    padding: 0 var(--s5); height: 48px; gap: var(--s3);
+    border-radius: var(--r2); margin: 2px var(--s3);
+  }
+  .tab-btn.on { background: var(--accent-bg); }
+  .tab-icon { width: 22px; height: 22px; flex-shrink: 0; }
+  .tab-icon svg { width: 20px; height: 20px; }
+  .tab-label { font-size: 15px; font-weight: 500; }
+
+  /* Main area grows */
+  .content-wrapper {
+    display: flex; flex-direction: column; flex: 1;
+    min-width: 0; overflow: hidden;
+  }
+
+  /* Nav bar stays top */
+  .nav-bar { position: sticky; top: 0; z-index: 20; }
+
+  /* Wider layout */
+  .card-group { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* Market strip full width */
+  .market-strip { justify-content: flex-start; }
+  .mkt-item { flex: 1; max-width: 160px; }
+
+  /* Podcast pane side-by-side */
+  .pod-layout { display: flex; gap: 0; }
+  .pod-left { flex: 0 0 380px; border-right: .5px solid var(--sep); }
+  .pod-right { flex: 1; overflow-y: auto; }
+
+  /* Bigger base font */
+  body { font-size: 15px; }
+  .news-title { font-size: 15px; }
+  .news-summary { font-size: 13px; }
+
+  /* Setup/Loading centered */
+  .setup, .loading { max-width: 480px; left: 50%; transform: translateX(-50%); }
+}
+
+/* ── Notch / Dynamic Island safe areas ── */
+@supports (padding-top: env(safe-area-inset-top)) {
+  @media (min-width: 1024px) {
+    .nav-bar { padding-top: var(--s4); }
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div class="setup hidden" id="setupScreen">
+  <div class="setup-eyebrow">Daily Brief</div>
+  <div class="setup-h">시작하기</div>
+  <div class="setup-p">API 키를 설정하면 매일 아침 4:30 JST에 자동으로 브리핑이 준비됩니다. 키는 이 기기에만 저장됩니다.</div>
+
+  <div class="cost-table">
+    <div class="cost-row"><span class="cost-name">Gemini Flash (뉴스 수집)</span><span class="cost-val cost-free">무료</span></div>
+    <div class="cost-row"><span class="cost-name">Claude Sonnet (분석)</span><span class="cost-val cost-low">~$1–2/월</span></div>
+    <div class="cost-row"><span class="cost-name">OpenAI GPT-4o (폴백)</span><span class="cost-val cost-dim">선택사항</span></div>
+  </div>
+
+  <div class="setup-group">
+    <div class="setup-row">
+      <div class="setup-row-ico ico-gemini">G</div>
+      <div class="setup-row-body">
+        <div class="setup-row-label">Gemini API 키<span class="badge-free">무료</span></div>
+        <div class="setup-row-sub">aistudio.google.com → Get API key</div>
+      </div>
+    </div>
+    <input class="setup-inp" id="si-gemini" type="password" placeholder="AIza..." autocomplete="off" spellcheck="false">
+    <div class="setup-row" style="border-top:.5px solid var(--sep)">
+      <div class="setup-row-ico ico-claude">A</div>
+      <div class="setup-row-body">
+        <div class="setup-row-label">Claude API 키</div>
+        <div class="setup-row-sub">console.anthropic.com → API Keys</div>
+      </div>
+    </div>
+    <input class="setup-inp" id="si-claude" type="password" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
+    <div class="setup-row" style="border-top:.5px solid var(--sep)">
+      <div class="setup-row-ico ico-openai">O</div>
+      <div class="setup-row-body">
+        <div class="setup-row-label">OpenAI API 키<span class="badge-opt">선택</span></div>
+        <div class="setup-row-sub">platform.openai.com → API Keys</div>
+      </div>
+    </div>
+    <input class="setup-inp" id="si-openai" type="password" placeholder="sk-proj-..." autocomplete="off" spellcheck="false">
+  </div>
+  <button class="setup-btn" onclick="saveSetup()">시작하기</button>
+</div>
+
+<!-- LOADING -->
+<div class="loading hidden" id="loadingScreen">
+  <div class="load-wordmark">Daily Brief</div>
+  <div class="load-steps">
+    <div class="load-step" id="ls0"><div class="step-dot" id="li0"></div><span class="step-txt">Gemini로 뉴스 수집 중</span></div>
+    <div class="load-step" id="ls1"><div class="step-dot" id="li1"></div><span class="step-txt">AI 분석 및 구조화</span></div>
+    <div class="load-step" id="ls2"><div class="step-dot" id="li2"></div><span class="step-txt">마켓 데이터 정리</span></div>
+    <div class="load-step" id="ls3"><div class="step-dot" id="li3"></div><span class="step-txt">브리핑 완성</span></div>
+  </div>
+  <div class="load-cost" id="loadCost">예상 비용: ~$0.04</div>
+</div>
+
+<!-- MAIN APP -->
+<div class="shell" id="mainApp" style="display:none">
+
+  <div class="content-wrapper">
+  <!-- NAV BAR -->
+  <div class="nav-bar">
+    <div class="nav-title">Brief</div>
+    <div class="nav-date-group">
+      <button class="nav-arr" id="prevBtn" onclick="navDate(-1)">‹</button>
+      <div class="nav-date-label" id="dateLbl">—</div>
+      <button class="nav-arr" id="nextBtn" onclick="navDate(1)" disabled>›</button>
+    </div>
+    <div style="width:52px"></div>
+  </div>
+
+  <!-- MARKET STRIP -->
+  <div class="market-strip">
+    <div class="mkt-item"><div class="mkt-lbl">JGB 10Y</div><div class="mkt-val na" id="mv0">—</div><div class="mkt-chg na" id="mc0">—</div></div>
+    <div class="mkt-item"><div class="mkt-lbl">$/¥</div><div class="mkt-val na" id="mv1">—</div><div class="mkt-chg na" id="mc1">—</div></div>
+    <div class="mkt-item"><div class="mkt-lbl">Nikkei</div><div class="mkt-val na" id="mv2">—</div><div class="mkt-chg na" id="mc2">—</div></div>
+    <div class="mkt-item"><div class="mkt-lbl">S&amp;P</div><div class="mkt-val na" id="mv3">—</div><div class="mkt-chg na" id="mc3">—</div></div>
+    <div class="mkt-item"><div class="mkt-lbl">WTI</div><div class="mkt-val na" id="mv4">—</div><div class="mkt-chg na" id="mc4">—</div></div>
+    <div class="mkt-item"><div class="mkt-lbl">$/₩</div><div class="mkt-val na" id="mv5">—</div><div class="mkt-chg na" id="mc5">—</div></div>
+  </div>
+
+  <!-- CATEGORY CHIPS -->
+  <div class="cat-scroll" id="catScroll">
+    <button class="cat-chip on" onclick="filterCat('all',this)">전체</button>
+    <button class="cat-chip" onclick="filterCat('글로벌',this)">🌐 글로벌</button>
+    <button class="cat-chip" id="catBtn-일본" onclick="filterCat('일본',this)">🇯🇵 일본</button>
+    <button class="cat-chip" id="catBtn-미국" onclick="filterCat('미국',this)">🇺🇸 미국</button>
+    <button class="cat-chip" id="catBtn-한국" onclick="filterCat('한국',this)" style="display:none">🇰🇷 한국</button>
+    <button class="cat-chip" onclick="filterCat('아시아',this)">🌏 아시아</button>
+    <button class="cat-chip" onclick="filterCat('매크로',this)">📊 매크로</button>
+    <button class="cat-chip" id="catBtn-딜" onclick="filterCat('딜',this)">💼 딜</button>
+    <button class="cat-chip" id="catBtn-화제" onclick="filterCat('화제',this)">🔥 화제</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- BRIEF PANE -->
+    <div class="pane active" id="pane-brief">
+      <div class="cards-wrap" id="cardsList">
+        <div class="empty-state"><div class="empty-icon">📰</div><div class="empty-text">브리핑을 불러오는 중...</div></div>
+      </div>
+      <!-- STICKY PLAYER BAR -->
+      <div class="player-bar" id="briefPlayer">
+        <div class="pb-controls">
+          <button class="pb-btn" onclick="skip(-15)" title="-15초">
+            <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+          </button>
+          <button class="pb-btn pb-play" onclick="togglePlay()">
+            <svg id="bpPlayIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <button class="pb-btn" onclick="skip(15)" title="+15초">
+            <svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg>
+          </button>
+        </div>
+        <div class="pb-info" onclick="switchPane('pod');event.stopPropagation()">
+          <div class="pb-title" id="bpName">팟캐스트 ›</div>
+          <div class="pb-prog"><div class="pb-fill" id="bpFill"></div></div>
+        </div>
+        <button class="pb-spd" id="bpSpdBtn" onclick="cycleBriefSpd(this)">1.0×</button>
+      </div>
+    </div>
+
+    <!-- PODCAST PANE -->
+    <div class="pane" id="pane-pod">
+      <div class="pod-header">
+        <div class="pod-eyebrow">팟캐스트</div>
+        <div class="pod-title" id="podTitle">오늘의 Daily Brief</div>
+        <div class="pod-date" id="podDate">—</div>
+        <div style="font-size:12px;color:var(--accent);margin-top:4px" id="ttsMode"></div>
+        <div class="len-picker">
+          <button class="len-btn on" onclick="pickLen('short',this)">
+            <span class="len-btn-label">쇼트</span><span class="len-btn-sub">~3분</span>
+          </button>
+          <button class="len-btn" onclick="pickLen('medium',this)">
+            <span class="len-btn-label">미디엄</span><span class="len-btn-sub">~10분</span>
+          </button>
+          <button class="len-btn" onclick="pickLen('long',this)">
+            <span class="len-btn-label">롱폼</span><span class="len-btn-sub">~20분</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="full-player">
+        <div class="progress-area">
+          <div class="prog-track" id="progTrack" onclick="seekProg(event)">
+            <div class="prog-fill" id="progFill"></div>
+            <div class="prog-thumb" id="progThumb"></div>
+          </div>
+          <div class="time-labels"><span id="curT">0:00</span><span id="totT">--:--</span></div>
+        </div>
+        <div class="controls-row">
+          <button class="ctrl-btn" onclick="skip(-30)">
+            <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+            <span>30</span>
+          </button>
+          <button class="ctrl-play-btn" id="ctrlPlay" onclick="togglePlay()">
+            <svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <button class="ctrl-btn" onclick="skip(30)">
+            <svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg>
+            <span>30</span>
+          </button>
+        </div>
+        <div class="options-row">
+          <span style="font-size:13px;color:var(--label3);white-space:nowrap;flex-shrink:0">배속</span>
+          <button class="spd-btn" onclick="setSpd(.9,this)">0.9×</button>
+          <button class="spd-btn on" onclick="setSpd(1,this)">1.0×</button>
+          <button class="spd-btn" onclick="setSpd(1.2,this)">1.2×</button>
+          <button class="spd-btn" onclick="setSpd(1.5,this)">1.5×</button>
+          <button class="spd-btn" onclick="setSpd(1.8,this)">1.8×</button>
+          <select class="voice-sel" id="voiceSel" onchange="pickVoice()" title="✦ = OpenAI 고품질 / 나머지 = 기기 내장"></select>
+        </div>
+      </div>
+
+      <div style="height:var(--s2)"></div>
+      <div class="pod-sec-group" id="podSecs">
+        <div class="empty-state"><div class="empty-icon">🎙</div><div class="empty-text">길이를 선택하면 팟캐스트가 자동 생성됩니다</div></div>
+      </div>
+    </div>
+
+    <!-- SEARCH PANE -->
+    <div class="pane" id="pane-search">
+      <div class="search-wrap">
+        <div class="search-bar">
+          <span class="search-ico">🔍</span>
+          <input class="search-inp" id="srchInp" type="search" placeholder="뉴스 검색 또는 새 토픽 생성..." autocomplete="off">
+          <button class="search-btn" onclick="doSearch()">검색</button>
+        </div>
+
+        <!-- Nikkei / Paywalled Article Paste -->
+        <div style="margin-bottom:var(--s4)">
+          <div style="font-size:13px;font-weight:600;color:var(--label3);text-transform:uppercase;letter-spacing:.06em;padding:var(--s3) 0 var(--s2)">닛케이 · 유료 기사 붙여넣기</div>
+          <div style="background:var(--bg-elev1);border-radius:var(--r3);overflow:hidden;border:.5px solid var(--sep)">
+            <div style="padding:var(--s3) var(--s4);border-bottom:.5px solid var(--sep)">
+              <div style="font-size:13px;color:var(--label2);line-height:1.6;margin-bottom:var(--s2)">닛케이전자판, 닛케이후도산마켓 등 로그인 필요 기사를 복사해서 붙여넣으면 AI가 분석해 브리핑에 추가합니다.</div>
+              <div style="font-size:11px;color:var(--label3)">지원: 닛케이전자판 · 닛케이후도산마켓 · FT · Bloomberg · Nikkei Asia</div>
+            </div>
+            <textarea id="pasteArea" style="width:100%;min-height:100px;background:transparent;border:none;outline:none;padding:var(--s3) var(--s4);font-size:14px;color:var(--label);line-height:1.6;resize:vertical;font-family:-apple-system,sans-serif" placeholder="기사 전문을 여기에 붙여넣기..."></textarea>
+            <div style="display:flex;gap:var(--s2);padding:var(--s2) var(--s4) var(--s3);border-top:.5px solid var(--sep)">
+              <button onclick="analyzePastedArticle()" style="flex:1;height:36px;border-radius:var(--r2);border:none;background:var(--accent);color:#000;font-size:14px;font-weight:600;cursor:pointer">AI 분석 + 브리핑 추가</button>
+              <button onclick="document.getElementById('pasteArea').value=''" style="height:36px;padding:0 var(--s3);border-radius:var(--r2);border:.5px solid var(--sep-strong);background:transparent;color:var(--label2);font-size:13px;cursor:pointer">지우기</button>
+            </div>
+          </div>
+          <div id="pasteResult" style="margin-top:var(--s3)"></div>
+        </div>
+
+        <div id="srchResults">
+          <div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-text">과거 브리핑 검색<br>또는 새 토픽 AI 생성</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PANE -->
+    <div class="pane" id="pane-settings">
+      <div class="set-wrap">
+        <div class="set-hdr">GitHub 서버 설정</div>
+        <div class="set-group">
+          <div class="set-inp-row"><input class="set-inp" id="set-github" placeholder="https://raw.githubusercontent.com/USER/REPO/main" spellcheck="false"></div>
+          <button class="set-btn" onclick="saveGithubRepo()">GitHub URL 저장</button>
+        </div>
+
+        <div class="set-hdr">API 키</div>
+        <div class="set-group">
+          <div class="set-inp-row"><input class="set-inp" id="set-gemini" type="password" placeholder="Gemini: AIza..." spellcheck="false"></div>
+          <div class="set-inp-row"><input class="set-inp" id="set-claude" type="password" placeholder="Claude: sk-ant-api03-..." spellcheck="false"></div>
+          <div class="set-inp-row"><input class="set-inp" id="set-openai" type="password" placeholder="OpenAI: sk-proj-... (선택)" spellcheck="false"></div>
+          <button class="set-btn" onclick="saveKeys()">키 저장</button>
+        </div>
+
+        <div class="set-hdr">스케줄</div>
+        <div class="set-group">
+          <div class="set-inp-row">
+            <input type="time" id="schedTime" value="06:00" class="time-picker">
+          </div>
+          <div style="padding: var(--s2) var(--s4) var(--s3);">
+            <div style="font-size:13px;color:var(--label3);line-height:1.6;margin-bottom:var(--s3)">이 시간 이후 앱을 열면 이미 완성된 브리핑이 표시됩니다. 밤 9시 이후 열면 내일 브리핑을 미리 생성합니다.</div>
+            <button class="set-btn" style="margin-bottom:var(--s2)" onclick="saveSchedule()">스케줄 저장</button>
+            <button class="set-btn" onclick="preGenTomorrow()">내일 브리핑 미리 생성 →</button>
+            <div style="font-size:13px;color:var(--accent);margin-top:var(--s2)" id="nextSchedLabel"></div>
+          </div>
+        </div>
+
+        <div class="set-hdr">탭 및 심화 모드</div>
+        <div class="set-group">
+          <div class="set-row" onclick="togCat('autoGen')"><span class="set-row-label">앱 시작 시 자동 생성</span><button class="ios-toggle on" id="tog-autoGen"></button></div>
+          <div class="set-row" onclick="togCat('japanMode')"><span class="set-row-label">🇯🇵 일본 PE/RE 심화 탭</span><button class="ios-toggle on" id="tog-japanMode"></button></div>
+          <div class="set-row" onclick="togCat('koreaMode')"><span class="set-row-label">🇰🇷 한국 탭 표시</span><button class="ios-toggle" id="tog-koreaMode"></button></div>
+          <div class="set-row" onclick="togCat('usMode')"><span class="set-row-label">🇺🇸 미국 탭 표시</span><button class="ios-toggle on" id="tog-usMode"></button></div>
+          <div class="set-row" onclick="togCat('dealMode')"><span class="set-row-label">💼 딜 탭 표시</span><button class="ios-toggle on" id="tog-dealMode"></button></div>
+          <div class="set-row" onclick="togCat('trendMode')"><span class="set-row-label">🔥 화제 탭 표시</span><button class="ios-toggle on" id="tog-trendMode"></button></div>
+          <div class="set-row" onclick="togSetting('podAutoGen')"><span class="set-row-label">브리핑 후 팟캐스트 자동 생성</span><button class="ios-toggle" id="tog-podAutoGen"></button></div>
+        </div>
+
+        <div class="set-hdr">저장 현황</div>
+        <div class="set-group">
+          <div class="set-row"><span class="set-row-label">저장된 브리핑</span><span class="set-row-val" id="storedCnt">0일</span></div>
+          <div class="set-row"><span class="set-row-label">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
+          <div class="set-row"><span class="set-row-label">파이프라인</span><span class="set-row-val" style="font-size:12px">Gemini → Claude</span></div>
+        </div>
+        <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- TAB BAR -->
+  <nav class="tab-bar">
+    <button class="tab-btn on" id="tbb-brief" onclick="switchPane('brief')">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+      <span class="tab-label">브리핑</span>
+    </button>
+    <button class="tab-btn" id="tbb-pod" onclick="switchPane('pod')">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg></div>
+      <span class="tab-label">팟캐스트</span>
+    </button>
+    <button class="tab-btn" id="tbb-search" onclick="switchPane('search')">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
+      <span class="tab-label">검색</span>
+    </button>
+    <button class="tab-btn" id="tbb-settings" onclick="switchPane('settings')">
+      <div class="tab-icon"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
+      <span class="tab-label">설정</span>
+    </button>
+  </nav>
+
+  </div><!-- /content-wrapper -->
+</div><!-- /mainApp -->
+
+<!-- OVERLAY + SHEET -->
+<div class="ov" id="ov" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-drag"><div class="sheet-handle"></div></div>
+  <div class="sheet-scroll" id="sheetBody"></div>
+</div>
+
+<script>
+// ─── KEYS ────────────────────────────────────────────────────────────────────
+const K = {
+  gemini: 'db3_gemini', claude: 'db3_claude', openai: 'db3_openai',
+  settings: 'db3_settings', brief: d => 'db3_brief_' + d,
+  pod: (d,l) => 'db3_pod_' + d + '_' + l, custom: 'db3_custom',
+  schedTime: 'db3_schedtime', lastPreGen: 'db3_lastpregen',
+  githubRepo: 'db3_githubrepo'
+};
+// GitHub raw content base URL — set after user configures repo
+function getGithubBase(){ return gk(K.githubRepo) || ''; }
+function briefingUrl(date){ const b=getGithubBase(); return b ? b.replace(/\/$/,'')+'/data/briefing-'+date+'.json' : null; }
+function latestUrl(){ const b=getGithubBase(); return b ? b.replace(/\/$/,'')+'/data/latest.json' : null; }
+// Storage with in-memory fallback for sandboxed environments
+const _mem = {};
+let _lsOk = false;
+try { localStorage.setItem('_t','1'); localStorage.removeItem('_t'); _lsOk = true; } catch(e) {}
+function gk(k){ try{ return _lsOk ? localStorage.getItem(k) : (_mem[k]||null); }catch{ return _mem[k]||null; } }
+function sk(k,v){ try{ if(_lsOk) localStorage.setItem(k,v); else _mem[k]=v; }catch{ _mem[k]=v; } }
+function rk(k){ try{ if(_lsOk) localStorage.removeItem(k); else delete _mem[k]; }catch{} }
+function jget(k){ try{ const s=gk(k); return s?JSON.parse(s):null; }catch{ return null; } }
+function jset(k,v){ try{ sk(k,JSON.stringify(v)); }catch(e){ console.warn('Storage full',e); } }
+const _isSandbox = !_lsOk;
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let curDate = today();
+let curBrief = null;
+let curCat = 'all';
+let podSecs = [], podIdx = 0;
+let spd = 1.0, elapsed = 0, totalSec = 0;
+let playing = false, paused = false;
+let timerRef = null;
+let voices = [], selVoice = null;
+let curLen = 'short';
+let settings = { autoGen:true, japanMode:true, podAutoGen:false };
+let callCount = 0;
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+async function init(){
+  loadSettings();
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+
+  if(!gk(K.claude) && !gk(K.openai)){
+    if(_isSandbox){
+      // Sandboxed iframe — show demo mode
+      showApp();
+      updateDateUI();
+      renderBrief(DEMO_BRIEF);
+      setStatus('demo','데모 모드 · 실제 사용은 GitHub Pages에서','demo');
+      return;
+    }
+    document.getElementById('setupScreen').classList.remove('hidden');
+    return;
+  }
+
+  showApp();
+  updateDateUI();
+  updateStoredCnt();
+  loadScheduleUI();
+  checkSchedule(); // evening pre-gen + next schedule label
+
+  // 1. Check local cache first (instant load)
+  const cached = jget(K.brief(curDate));
+  if(cached && !isStale(cached)){
+    renderBrief(cached);
+    setStatus('live', dateLabel(curDate)+' 서버생성 · '+cached.headlines.length+'개 기사', model(cached));
+    if(settings.podAutoGen){ await genPod(curDate, curLen); }
+    return;
+  }
+
+  // 2. Try fetching from GitHub (server pre-generated at 4:30 AM JST)
+  const remote = await fetchFromGithub(curDate);
+  if(remote){
+    jset(K.brief(curDate), remote);
+    renderBrief(remote);
+    setStatus('live', dateLabel(curDate)+' 서버생성 · '+remote.headlines.length+'개 기사', model(remote));
+    if(settings.podAutoGen){ await genPod(curDate, curLen); }
+    return;
+  }
+
+  // 3. Fall back to on-device generation
+  if(settings.autoGen){ await autoGen(curDate); }
+  else {
+    setStatus('','브리핑 없음 · 설정에서 자동생성 활성화','—');
+    renderEmpty('📰','오늘 브리핑이 없습니다','지금 생성',()=>autoGen(curDate));
+  }
+}
+
+// ─── REMOTE FETCH ─────────────────────────────────────────────────────────────
+async function fetchFromGithub(date){
+  const url = briefingUrl(date);
+  if(!url) return null;
+  try{
+    setStatus('spin-dot','서버에서 브리핑 다운로드 중...','github');
+    const res = await fetch(url+'?t='+Date.now(), { signal: AbortSignal.timeout(8000) });
+    if(!res.ok) return null;
+    const data = await res.json();
+    if(!data.headlines?.length) return null;
+    console.log('Remote briefing fetched from GitHub:', date);
+    return data;
+  }catch(e){
+    console.log('GitHub fetch failed (will generate locally):', e.message);
+    return null;
+  }
+}
+
+// ─── SCHEDULE LOGIC ───────────────────────────────────────────────────────────
+function checkSchedule(){
+  const schedTime = gk(K.schedTime) || '06:00';
+  const now = new Date();
+
+  // Evening pre-generation: if past 9pm, silently generate tomorrow in background
+  if(now.getHours() >= 21){
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tStr = tomorrow.toISOString().slice(0,10);
+    const lastPreGen = gk(K.lastPreGen);
+    if(lastPreGen !== tStr && !jget(K.brief(tStr))){
+      sk(K.lastPreGen, tStr);
+      setTimeout(() => silentPreGen(tStr), 4000);
+    }
+  }
+  updateNextSchedLabel(schedTime);
+}
+
+async function silentPreGen(date){
+  if(!gk(K.claude) && !gk(K.openai)) return;
+  if(jget(K.brief(date)) && !isStale(jget(K.brief(date)))) return;
+  try{
+    const raw = await fetchWithGemini(date);
+    const brief = await structureWithClaude(raw, date);
+    jset(K.brief(date), brief);
+    updateStoredCnt();
+    if(curDate === date){ renderBrief(brief); setStatus('live', dateLabel(date)+' 브리핑 · '+brief.headlines.length+'개 기사', model(brief)); }
+    showToast('📰 '+dateLabel(date)+' 브리핑 준비됨');
+  }catch(e){ console.warn('Pre-gen failed:', e.message); }
+}
+
+function saveSchedule(){
+  const t = document.getElementById('schedTime').value;
+  sk(K.schedTime, t);
+  updateNextSchedLabel(t);
+  showToast('✓ 매일 '+t+' 이후 열면 완성된 브리핑이 준비됩니다');
+}
+
+async function preGenTomorrow(){
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tStr = tomorrow.toISOString().slice(0,10);
+  const existing = jget(K.brief(tStr));
+  if(existing && !isStale(existing)){ showToast('✓ '+dateLabel(tStr)+' 브리핑 이미 준비됨'); return; }
+  showToast('⏳ 내일 브리핑 생성 시작...');
+  await silentPreGen(tStr);
+  showToast('✓ '+dateLabel(tStr)+' 브리핑 완료!');
+}
+
+function updateNextSchedLabel(schedTime){
+  const el = document.getElementById('nextSchedLabel');
+  if(!el) return;
+  const [h,m] = schedTime.split(':').map(Number);
+  const now = new Date();
+  const next = new Date(now);
+  next.setHours(h, m, 0, 0);
+  if(next <= now) next.setDate(next.getDate() + 1);
+  const diff = Math.round((next - now) / 60000);
+  const dh = Math.floor(diff/60), dm = diff%60;
+  el.textContent = schedTime + ' · ' + (dh > 0 ? dh+'시간 '+dm+'분 후' : dm+'분 후');
+}
+
+function loadScheduleUI(){
+  const t = gk(K.schedTime) || '06:00';
+  const el = document.getElementById('schedTime');
+  if(el) el.value = t;
+  updateNextSchedLabel(t);
+}
+
+function showToast(msg){
+  let t = document.getElementById('_toast');
+  if(!t){
+    t = document.createElement('div'); t.id='_toast';
+    t.style.cssText='position:fixed;bottom:calc(var(--sb,20px) + 90px);left:50%;transform:translateX(-50%) translateY(10px);background:var(--bg3);border:1px solid var(--b2);border-radius:20px;padding:10px 18px;font-size:13px;color:var(--t1);font-family:monospace;z-index:300;white-space:nowrap;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(t._tmr);
+  t._tmr = setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)'; }, 3000);
+}
+
+function showApp(){
+  document.getElementById('setupScreen').classList.add('hidden');
+  document.getElementById('loadingScreen').classList.add('hidden');
+  document.getElementById('mainApp').style.display='flex';
+}
+
+// ─── AUTO GENERATE ────────────────────────────────────────────────────────────
+async function autoGen(date){
+  document.getElementById('mainApp').style.display='flex';
+  document.getElementById('loadingScreen').classList.remove('hidden'); document.getElementById('mainApp').style.display='none';
+  setStatus('spin-dot','브리핑 생성 중...','...');
+
+  try{
+    stepActive(0);
+    const raw = await fetchWithGemini(date);
+    stepDone(0); stepActive(1);
+
+    const brief = await structureWithClaude(raw, date);
+    stepDone(1); stepActive(2);
+
+    jset(K.brief(date), brief);
+    await sleep(300);
+    stepDone(2); stepActive(3);
+    await sleep(300);
+    stepDone(3);
+    await sleep(400);
+
+    document.getElementById('loadingScreen').classList.add('hidden');
+    renderBrief(brief);
+    setStatus('live', dateLabel(date)+' 브리핑 · '+brief.headlines.length+'개 기사', model(brief));
+    updateStoredCnt();
+    if(settings.podAutoGen) genPod(date, curLen);
+  }catch(e){
+    document.getElementById('loadingScreen').classList.add('hidden');
+    setStatus('','오류: '+e.message.slice(0,60),'—');
+    renderEmpty('❌','생성 실패\n'+e.message,'다시 시도',()=>autoGen(date));
+  }
+}
+
+// ─── STEP 1: GEMINI NEWS FETCH ────────────────────────────────────────────────
+async function fetchWithGemini(date){
+  const gkey = gk(K.gemini);
+  if(!gkey) return await fallbackSearch(date);
+
+  const prompt = `Today is ${date}. Search and collect today's most important news for a Japan-focused PE/Real Estate investor. 
+
+Search for these topics:
+1. Japan: BOJ policy, J-REIT activity, Tokyo real estate, PE deals, corporate governance, Japanese economy
+2. Global macro: Fed policy, interest rates, inflation, USD, oil prices
+3. US: key economic data, S&P 500 drivers, major political/policy developments  
+4. Asia: China economy, Korea market, SE Asia business news
+5. Major global M&A and PE deals
+6. Must-know trending news and cultural moments
+
+For EACH topic found, provide:
+- Headline (Korean, max 60 chars)
+- Category: 글로벌|일본|미국|아시아|매크로|딜|화제
+- 2-sentence Korean summary
+- 3-4 sentence Korean analysis with investment implications
+- Source name and URL
+
+Also provide market data if found: JGB 10Y rate, USD/JPY, Nikkei, S&P500, WTI oil, USD/KRW.
+
+Format as plain text with clear sections. Include 12-16 stories total.`;
+
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${gkey}`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      contents:[{role:'user',parts:[{text:prompt}]}],
+      tools:[{google_search:{}}],
+      generationConfig:{temperature:0.3,maxOutputTokens:8192}
+    })
+  });
+  if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error('Gemini: '+(e.error?.message||res.status)); }
+  const j = await res.json();
+  const text = j.candidates?.[0]?.content?.parts?.filter(p=>p.text).map(p=>p.text).join('\n') || '';
+  if(!text) throw new Error('Gemini 응답 없음');
+  return text;
+}
+
+async function fallbackSearch(date){
+  // If no Gemini key, use Claude's web_search
+  return `날짜: ${date}\n[Gemini 키 없음 - Claude 웹서치 폴백]`;
+}
+
+// ─── STEP 2: CLAUDE STRUCTURE ─────────────────────────────────────────────────
+async function structureWithClaude(rawNews, date){
+  const ckey = gk(K.claude);
+  const jp = settings.japanMode;
+  
+  const useSearch = !gk(K.gemini); // use Claude search if no Gemini
+  
+  const prompt = `${useSearch ? 'Search the web for today\'s top news, then ' : ''}Structure this news data into a daily investment brief JSON.
+${useSearch ? '' : 'Raw news collected by Gemini:\n\n' + rawNews.slice(0,6000)}
+
+Date: ${date}
+
+Return ONLY valid JSON (no markdown, no explanation):
+{
+  "date":"${date}",
+  "generatedAt":${Date.now()},
+  "model":"gemini+claude",
+  "headlines":[
+    {
+      "id":"h1",
+      "cat":"글로벌",
+      "title":"Korean title max 55 chars",
+      "summary":"2-sentence Korean summary",
+      "detail":"3-4 sentence Korean analysis",
+      "implications":"${jp?'PE/부동산 투자 임플리케이션':'Investment implications'} in Korean",
+      "source":"Reuters",
+      "url":"https://example.com"
+    }
+  ],
+  "market":{
+    "jgb10y":{"v":"1.52%","d":"+3bp","t":1},
+    "usdjpy":{"v":"148.2","d":"-0.4","t":-1},
+    "nikkei":{"v":"38,450","d":"+0.4%","t":1},
+    "sp500":{"v":"5,680","d":"-0.2%","t":-1},
+    "wti":{"v":"$72.4","d":"-0.8%","t":-1},
+    "usdkrw":{"v":"1,340","d":"+2","t":-1}
+  },
+  "deals":[
+    {"id":"d1","title":"딜 제목","value":"JPY Xbn","type":"카브아웃","summary":"2-3줄 요약","source":"Nikkei Asia","url":"https://example.com"}
+  ],
+  "watch":[
+    {"n":1,"text":"Key watch #1 in Korean"},
+    {"n":2,"text":"Key watch #2"},
+    {"n":3,"text":"Key watch #3"}
+  ]
+}
+
+Categories: 글로벌|일본|미국|아시아|매크로|딜|화제
+Include 12-16 headlines, 2-5 deals. t=1 means up, -1 down, 0 flat.`;
+
+  if(ckey){
+    const body = { model:'claude-sonnet-4-20250514', max_tokens:4096,
+      messages:[{role:'user',content:prompt}] };
+    if(useSearch) body.tools=[{type:'web_search_20250305',name:'web_search'}];
+
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':ckey,
+        'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify(body)
+    });
+    if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error('Claude: '+(e.error?.message||res.status)); }
+    const j = await res.json();
+    const text = j.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    callCount++;
+    return parseJSON(text);
+  }
+
+  // OpenAI fallback
+  const okey = gk(K.openai);
+  if(okey){
+    const res = await fetch('https://api.openai.com/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},
+      body:JSON.stringify({model:'gpt-4o',max_tokens:4096,messages:[{role:'user',content:prompt}]})
+    });
+    if(!res.ok) throw new Error('OpenAI: '+res.status);
+    const j = await res.json();
+    callCount++;
+    return parseJSON(j.choices[0].message.content);
+  }
+  throw new Error('API 키 없음');
+}
+
+function parseJSON(text){
+  const clean = text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+  const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
+  if(s===-1) throw new Error('JSON 파싱 실패');
+  return JSON.parse(clean.slice(s,e+1));
+}
+
+// ─── PODCAST GENERATION ───────────────────────────────────────────────────────
+async function genPod(date, len){
+  const cached = gk(K.pod(date,len));
+  if(cached){ parsePodScript(cached); return; }
+
+  const brief = jget(K.brief(date));
+  if(!brief){ return; }
+
+  const lengths = {short:'3분 (약 450자, 간결하게)',medium:'10분 (약 1500자, 적당히)',long:'20분 (약 3000자, 심화)'};
+  const secNames = {
+    short:['오프닝','마켓 체크','Top 이슈 3','Key Watch'],
+    medium:['오프닝','마켓 체크','주요 이슈','PE/RE 임플리케이션','투자 아이디어','Key Watch'],
+    long:['오프닝','마켓 딥다이브','글로벌 이슈','일본 포커스','PE/RE 분석','딜 하이라이트','투자 아이디어','Key Watch·클로징']
+  };
+
+  const podSecs2 = document.getElementById('podSecs');
+  podSecs2.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-t">스크립트 생성 중...</div></div>';
+
+  const briefData = JSON.stringify({headlines:brief.headlines.slice(0,10),market:brief.market,deals:brief.deals?.slice(0,4),watch:brief.watch});
+
+  const prompt = `당신은 일본 PE/부동산 펀드 매니저를 위한 모닝 브리핑 팟캐스트 스크립트를 작성합니다.
+
+브리핑 데이터:
+${briefData.slice(0,5000)}
+
+길이: ${lengths[len]}
+
+=== 반드시 지켜야 할 규칙 ===
+1. 모든 숫자는 한국어로 읽히도록 풀어 쓰세요:
+   - 53,746.50 → "오만 삼천칠백사십육점오"
+   - -1.3% → "일점삼 퍼센트 하락" 또는 "마이너스 일점삼 퍼센트"
+   - +3bp → "삼 베이시스 포인트 상승"
+   - $72.4 → "칠십이점사 달러"
+   - ¥126bn → "일천이백육십억 엔"
+   - 148.2 (USD/JPY) → "백사십팔점이 엔"
+2. 영문 약어는 풀어 쓰세요:
+   - BOJ → "일본은행" 또는 "일은"
+   - JGB → "일본국채"
+   - REIT/리츠 → "리츠"
+   - PE → "사모펀드" 또는 "PE펀드"
+   - M&A → "인수합병"
+   - GDP → "국내총생산"
+   - CPI → "소비자물가지수"
+3. 쉼표(,) 사용 금지 — 대신 자연스러운 문장으로 풀어 쓰세요.
+4. 자연스럽고 분석적인 나레이션 — 아나운서 말투가 아닌 시니어 애널리스트가 전화로 브리핑하는 느낌
+5. 각 섹션 앞에 ==섹션명== 구분자 삽입:
+${secNames[len].map(s=>'=='+s+'==').join('\n')}
+
+스크립트만 반환하세요. JSON, 설명, 마크다운 불필요.`;
+
+  try{
+    const ckey = gk(K.claude);
+    const okey = gk(K.openai);
+    let script = '';
+
+    if(ckey){
+      const res = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':ckey,
+          'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:len==='long'?3000:len==='medium'?2000:800,messages:[{role:'user',content:prompt}]})
+      });
+      if(res.ok){ const j=await res.json(); script=j.content.filter(b=>b.type==='text').map(b=>b.text).join(''); callCount++; }
+    } else if(okey){
+      const res = await fetch('https://api.openai.com/v1/chat/completions',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},
+        body:JSON.stringify({model:'gpt-4o',max_tokens:len==='long'?3000:len==='medium'?2000:800,messages:[{role:'user',content:prompt}]})
+      });
+      if(res.ok){ const j=await res.json(); script=j.choices[0].message.content; callCount++; }
+    }
+
+    if(script){ sk(K.pod(date,len),script); parsePodScript(script); }
+    else { podSecs2.innerHTML='<div class="empty"><div class="empty-ico">❌</div><div class="empty-t">스크립트 생성 실패</div></div>'; }
+  }catch(e){
+    document.getElementById('podSecs').innerHTML=`<div class="empty"><div class="empty-ico">❌</div><div class="empty-t">${esc(e.message)}</div></div>`;
+  }
+}
+
+function parsePodScript(txt){
+  podSecs=[];
+  const parts = txt.trim().split(/==([^=]+)==/);
+  if(parts[0].trim()) podSecs.push({name:'인트로',text:parts[0].trim()});
+  for(let i=1;i<parts.length;i+=2){
+    const body=parts[i+1]?parts[i+1].trim():'';
+    if(body) podSecs.push({name:parts[i].trim(),text:body});
+  }
+  podIdx=0;
+  totalSec=Math.ceil(podSecs.reduce((s,x)=>s+x.text.length,0)/6.5/spd);
+  document.getElementById('totT').textContent=fmt(totalSec);
+  renderPodSecs();
+  const bp=document.getElementById('briefPlayer');
+  if(bp){ bp.classList.add('show'); document.getElementById('bpName').textContent=dateLabel(curDate)+' 팟캐스트 ›'; }
+  document.getElementById('podDate').textContent=dateLabel(curDate);
+}
+
+function renderPodSecs(){
+  const el=document.getElementById('podSecs');
+  if(!podSecs.length) return;
+  el.className='pod-sec-group';
+  el.innerHTML=podSecs.map((s,i)=>`
+    <div class="pod-sec-row${i===podIdx?' playing':''}" onclick="jumpPod(${i})">
+      <span class="pod-sec-n">${String(i+1).padStart(2,'0')}</span>
+      <span class="pod-sec-name">${esc(s.name)}</span>
+      <span class="pod-sec-dur">${fmt(Math.ceil(s.text.length/6.5/spd))}</span>
+    </div>`).join('');
+}
+
+// ─── TTS — OpenAI TTS primary, Web Speech fallback ───────────────────────────
+// Audio state
+let audioEl = null;         // HTML5 Audio element for OpenAI TTS
+let audioUrl = null;        // Current blob URL
+let useOpenAITts = true;    // Prefer OpenAI TTS when key available
+let ttsGenerating = false;
+
+// Web Speech fallback state
+function loadVoices(){
+  voices=speechSynthesis.getVoices();
+  const sel=document.getElementById('voiceSel');
+  if(!sel) return;
+  sel.innerHTML='';
+  // OpenAI voice options
+  if(gk(K.openai)){
+    ['nova (자연스러운 여성)','alloy (차분한 남성)','shimmer (밝은 여성)','echo (깊은 남성)','onyx (중후한 남성)'].forEach((v,i)=>{
+      const o=document.createElement('option'); o.value='oai:'+v.split(' ')[0]; o.textContent='✦ '+v; sel.appendChild(o);
+    });
+  }
+  // Web Speech fallback
+  const pool=voices.filter(v=>v.lang.startsWith('ko'));
+  pool.forEach(v=>{ const o=document.createElement('option'); o.value=voices.indexOf(v); o.textContent=v.name; sel.appendChild(o); });
+  if(gk(K.openai)){ sel.value='oai:nova'; useOpenAITts=true; updateTtsMode(); }
+  else if(pool.length){ selVoice=pool[0]; sel.value=voices.indexOf(pool[0]); updateTtsMode(); }
+}
+function updateTtsMode(){
+  const el=document.getElementById('ttsMode');
+  if(!el) return;
+  if(useOpenAITts && gk(K.openai)){
+    el.textContent='✦ OpenAI TTS — 고품질 음성';
+    el.style.color='var(--accent)';
+  } else {
+    el.textContent='기기 내장 음성 (품질 제한)';
+    el.style.color='var(--label3)';
+  }
+}
+
+function pickVoice(){
+  const v=document.getElementById('voiceSel').value;
+  if(v.startsWith('oai:')){
+    useOpenAITts=true; selVoice=null;
+    currentOaiVoice=v.replace('oai:','');
+  } else {
+    useOpenAITts=false;
+    const i=parseInt(v); if(!isNaN(i)) selVoice=voices[i];
+  }
+  updateTtsMode();
+}
+let currentOaiVoice='nova';
+
+// ── Number → Korean speech text ──
+function numToKorean(n){
+  // Handles integers up to 99,999
+  if(isNaN(n)||n===null) return String(n);
+  const abs=Math.abs(Math.floor(n));
+  const units=['','일','이','삼','사','오','육','칠','팔','구'];
+  const places=['','십','백','천'];
+  let result='';
+  if(abs===0) return '영';
+  if(abs>=10000){
+    const man=Math.floor(abs/10000);
+    result+=numToKorean(man)+'만';
+  }
+  const rem=abs%10000;
+  const th=Math.floor(rem/1000); if(th) result+=(th===1?'':units[th])+'천';
+  const hu=Math.floor((rem%1000)/100); if(hu) result+=(hu===1?'':units[hu])+'백';
+  const te=Math.floor((rem%100)/10); if(te) result+=(te===1?'':units[te])+'십';
+  const on=rem%10; if(on) result+=units[on];
+  return result||'영';
+}
+
+function convertFinanceText(txt){
+  // Full number conversion for TTS
+  return txt
+    // Remove Japanese punctuation
+    .replace(/[。．]/g,'.')
+    .replace(/[、，「」『』【】〔〕《》〈〉・]/g,' ')
+    // +/- before numbers
+    .replace(/\+(\d)/g,'플러스 $1')
+    .replace(/(?<![0-9])-(\d)/g,'마이너스 $1')
+    // Comma-separated numbers with decimal: 53,746.50
+    .replace(/([0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?)/g, m=>{
+      const noComma=m.replace(/,/g,'');
+      const parts=noComma.split('.');
+      const intPart=numToKorean(parseInt(parts[0]));
+      if(parts[1]){
+        const dec=parts[1].split('').map(d=>numToKorean(parseInt(d))).join('');
+        return intPart+'점'+dec;
+      }
+      return intPart;
+    })
+    // Plain decimals: 1.3
+    .replace(/(\d+)\.(\d+)/g,(m,a,b)=>{
+      const dec=b.split('').map(d=>numToKorean(parseInt(d))).join('');
+      return numToKorean(parseInt(a))+'점'+dec;
+    })
+    // Plain integers
+    .replace(/(\d+)/g,m=>numToKorean(parseInt(m)))
+    // Units
+    .replace(/퍼센트|%/g,'퍼센트')
+    .replace(/bp/gi,'베이시스 포인트')
+    .replace(/BOJ/g,'일본은행')
+    .replace(/JGB/g,'일본국채')
+    .replace(/Fed/gi,'연준')
+    .replace(/PE/g,'사모펀드')
+    .replace(/RE/g,'부동산')
+    .replace(/JST/g,'일본 시각')
+    .replace(/M&A/g,'엠앤에이')
+    .replace(/IPO/g,'기업공개')
+    .replace(/GDP/g,'지디피')
+    .replace(/CPI/g,'소비자물가')
+    .replace(/REIT/g,'리츠')
+    .replace(/[A-Z]{2,}/g, m=>m.split('').join(' '))
+    .replace(/\s+/g,' ').trim();
+}
+
+// ── OpenAI TTS ──
+async function generateOpenAIAudio(scriptText){
+  const okey=gk(K.openai);
+  if(!okey||!useOpenAITts) return null;
+  ttsGenerating=true;
+  showTtsStatus('음성 생성 중... (~10-30초)');
+  try{
+    const voice=currentOaiVoice||'nova';
+    const res=await fetch('https://api.openai.com/v1/audio/speech',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},
+      body:JSON.stringify({ model:'tts-1', voice, input:scriptText, speed:spd||1.0, response_format:'mp3' })
+    });
+    if(!res.ok){const e=await res.json().catch(()=>({})); throw new Error(e.error?.message||res.status);}
+    const blob=await res.blob();
+    ttsGenerating=false;
+    hideTtsStatus();
+    return URL.createObjectURL(blob);
+  }catch(e){
+    ttsGenerating=false;
+    hideTtsStatus();
+    console.warn('OpenAI TTS failed:',e.message);
+    return null;
+  }
+}
+
+function showTtsStatus(msg){
+  let el=document.getElementById('ttsStatus');
+  if(!el){
+    el=document.createElement('div');
+    el.id='ttsStatus';
+    el.style.cssText='padding:12px 16px;font-size:14px;color:var(--label3);text-align:center;background:var(--bg-elev1);border-bottom:.5px solid var(--sep)';
+    const podHead=document.querySelector('.pod-header');
+    if(podHead) podHead.after(el);
+  }
+  el.textContent=msg; el.style.display='block';
+}
+function hideTtsStatus(){ const el=document.getElementById('ttsStatus'); if(el) el.style.display='none'; }
+
+// ── Audio playback ──
+function setupAudio(url){
+  if(audioEl){ audioEl.pause(); try{URL.revokeObjectURL(audioEl.src);}catch{} audioEl=null; }
+  audioEl=new Audio(url);
+  audioEl.playbackRate=spd;
+  audioEl.ontimeupdate=()=>{
+    if(!audioEl) return;
+    elapsed=Math.floor(audioEl.currentTime);
+    totalSec=Math.floor(audioEl.duration)||totalSec;
+    updateProg();
+    // Highlight current section
+    let acc=0;
+    for(let i=0;i<podSecs.length;i++){
+      const secSec=Math.ceil(podSecs[i].text.length/6.5/spd);
+      if(elapsed<acc+secSec){ if(podIdx!==i){ podIdx=i; renderPodSecs(); } break; }
+      acc+=secSec;
+    }
+  };
+  audioEl.onended=()=>{ playing=false; paused=false; setIco(true); elapsed=0; updateProg(); };
+  audioEl.onerror=e=>{ console.warn('Audio error',e); showToast('재생 오류 — Web Speech로 전환'); useOpenAITts=false; speakFrom(podIdx); };
+}
+
+function setSpd(s,btn){
+  spd=s;
+  document.querySelectorAll('.spd-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(audioEl) audioEl.playbackRate=s;
+  if(!audioEl && podSecs.length){
+    totalSec=Math.ceil(podSecs.reduce((a,x)=>a+x.text.length,0)/6.5/spd);
+    document.getElementById('totT').textContent=fmt(totalSec);
+  }
+  if(playing && !audioEl){ const i=podIdx; stopAll(); speakFrom(i); }
+}
+
+async function togglePlay(){
+  if(!podSecs.length){ switchPane('pod'); return; }
+
+  if(audioEl){
+    // HTML5 Audio mode
+    if(playing){
+      if(paused){ audioEl.play(); paused=false; setIco(false); }
+      else{ audioEl.pause(); paused=true; setIco(true); }
+    } else {
+      audioEl.currentTime=elapsed||0;
+      await audioEl.play();
+      playing=true; paused=false; setIco(false);
+    }
+    return;
+  }
+
+  // Web Speech fallback
+  if(playing){
+    if(paused){speechSynthesis.resume();paused=false;setIco(false);}
+    else{speechSynthesis.pause();paused=true;setIco(true);}
+  } else { speakFrom(podIdx); }
+}
+
+async function speakFrom(idx){
+  stopAll();
+  podIdx=idx;
+
+  // Build full script text from idx onwards for OpenAI TTS
+  if(useOpenAITts && gk(K.openai)){
+    const fullText=podSecs.slice(idx).map(s=>s.name+'.
+'+s.text).join('
+
+');
+    const url=await generateOpenAIAudio(fullText);
+    if(url){
+      setupAudio(url);
+      audioEl.currentTime=0;
+      await audioEl.play();
+      playing=true; paused=false; setIco(false);
+      return;
+    }
+    // Fallback
+    useOpenAITts=false;
+    showToast('OpenAI TTS 실패 — Web Speech로 재생');
+  }
+  speakSec(idx);
+}
+
+function speakSec(idx){
+  if(idx>=podSecs.length){ stopAll(); elapsed=0; updateProg(); return; }
+  podIdx=idx; renderPodSecs();
+  const clean=convertFinanceText(podSecs[idx].text);
+  const u=new SpeechSynthesisUtterance(clean);
+  u.lang='ko-KR'; u.rate=Math.min(spd,1.5); u.pitch=1;
+  if(selVoice) u.voice=selVoice;
+  u.onend=()=>speakSec(idx+1);
+  u.onerror=e=>{ if(e.error!=='interrupted') console.warn('TTS error',e.error); };
+  speechSynthesis.speak(u);
+  playing=true; paused=false; setIco(false); startTimer();
+}
+
+function stopAll(){
+  if(audioEl){ audioEl.pause(); playing=false; paused=false; setIco(true); return; }
+  speechSynthesis.cancel();
+  playing=false; paused=false; clearInterval(timerRef); setIco(true);
+}
+
+function skip(d){
+  elapsed=Math.max(0,Math.min(elapsed+d,totalSec));
+  if(audioEl){
+    audioEl.currentTime=elapsed;
+    updateProg();
+    return;
+  }
+  const i=secAt(elapsed);
+  if(playing) speakFrom(i);
+  else{ podIdx=i; renderPodSecs(); }
+  updateProg();
+}
+
+function jumpPod(i){
+  let s=0;
+  for(let j=0;j<i;j++) s+=Math.ceil(podSecs[j].text.length/6.5/spd);
+  elapsed=s;
+  if(audioEl){ audioEl.currentTime=s; if(!playing){audioEl.play();playing=true;paused=false;setIco(false);} return; }
+  if(playing) speakFrom(i);
+  else{ podIdx=i; renderPodSecs(); }
+  updateProg();
+}
+
+function secAt(s){ let acc=0,r=0; for(let i=0;i<podSecs.length;i++){ const l=Math.ceil(podSecs[i].text.length/6.5/spd); if(acc+l>s){r=i;break;} acc+=l;r=i; } return r; }
+function seekProg(e){ const b=document.getElementById('progTrack'); const p=Math.max(0,Math.min(1,e.offsetX/b.offsetWidth)); elapsed=Math.floor(p*totalSec); if(audioEl){ audioEl.currentTime=elapsed; updateProg(); return; } const i=secAt(elapsed); if(playing) speakFrom(i); else{ podIdx=i; renderPodSecs(); } updateProg(); }
+function startTimer(){ clearInterval(timerRef); timerRef=setInterval(()=>{ if(!audioEl){elapsed++; updateProg(); if(elapsed>=totalSec) clearInterval(timerRef);} },1000); }
+function updateProg(){
+  const p=totalSec>0?Math.min(100,elapsed/totalSec*100):0;
+  const pct=p+'%';
+  const pf=document.getElementById('progFill'); if(pf) pf.style.width=pct;
+  const pt=document.getElementById('progThumb'); if(pt) pt.style.left=pct;
+  const ct=document.getElementById('curT'); if(ct) ct.textContent=fmt(elapsed);
+  const tt=document.getElementById('totT');
+  if(tt && audioEl && audioEl.duration) tt.textContent=fmt(Math.floor(audioEl.duration));
+  const bf=document.getElementById('bpFill'); if(bf) bf.style.width=pct;
+}
+function setIco(isPlay){
+  const ico=isPlay?'<path d="M8 5v14l11-7z"/>':'<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+  ['playIco','bpPlayIco'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=ico; });
+  const bp=document.getElementById('briefPlayer');
+  if(bp) bp.classList.toggle('show', podSecs.length>0);
+}
+
+function cycleBriefSpd(btn){
+  const steps=[0.9,1.0,1.2,1.5,1.8];
+  const cur=steps.indexOf(spd);
+  const next=steps[(cur+1)%steps.length];
+  spd=next;
+  btn.textContent=next.toFixed(1)+'×';
+  // sync with podcast tab speed buttons
+  document.querySelectorAll('.spd-btn').forEach(b=>{
+    b.classList.toggle('on', parseFloat(b.textContent)===next);
+  });
+  if(podSecs.length){ totalSec=Math.ceil(podSecs.reduce((a,x)=>a+x.text.length,0)/6.5/spd); document.getElementById('totT').textContent=fmt(totalSec); }
+  if(playing){ const i=podIdx; stopAll(); speakFrom(i); }
+}
+
+function togCat(key){
+  settings[key]=!settings[key];
+  const el=document.getElementById('tog-'+key);
+  if(el) el.classList.toggle('on',settings[key]);
+  jset(K.settings,settings);
+  updateCatTabs();
+}
+function togSetting(key){
+  settings[key]=!settings[key];
+  const el=document.getElementById('tog-'+key);
+  if(el) el.classList.toggle('on',settings[key]);
+  jset(K.settings,settings);
+}
+
+function updateCatTabs(){
+  // Japan tab
+  const jBtn=document.getElementById('catBtn-일본');
+  if(jBtn) jBtn.style.display=settings.japanMode===false?'none':'';
+  // Korea tab
+  const kBtn=document.getElementById('catBtn-한국');
+  if(kBtn) kBtn.style.display=settings.koreaMode?'':'none';
+  // US tab
+  const uBtn=document.getElementById('catBtn-미국');
+  if(uBtn) uBtn.style.display=settings.usMode===false?'none':'';
+  // Deal tab
+  const dBtn=document.getElementById('catBtn-딜');
+  if(dBtn) dBtn.style.display=settings.dealMode===false?'none':'';
+  // Trend tab
+  const tBtn=document.getElementById('catBtn-화제');
+  if(tBtn) tBtn.style.display=settings.trendMode===false?'none':'';
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────────────────
+function renderBrief(data){
+  curBrief=data;
+  renderMarket(data.market);
+  renderCards(data.headlines, curCat);
+  document.getElementById('podDate').textContent=dateLabel(data.date);
+}
+
+function renderMarket(m){
+  if(!m) return;
+  [[m.jgb10y,0],[m.usdjpy,1],[m.nikkei,2],[m.sp500,3],[m.wti,4],[m.usdkrw,5]].forEach(([f,i])=>{
+    if(!f) return;
+    const ve=document.getElementById('mv'+i), ce=document.getElementById('mc'+i);
+    if(ve){ ve.textContent=f.v; ve.className='mkt-v '+(f.t===1?'up':f.t===-1?'dn':'na'); }
+    if(ce){ ce.textContent=f.d; ce.className='mkt-c '+(f.t===1?'up':f.t===-1?'dn':'na'); }
+  });
+}
+
+function renderCards(hl, filter){
+  const el=document.getElementById('cardsList');
+  const items=filter&&filter!=='all'?hl.filter(h=>h.cat===filter):hl;
+  if(!items?.length){
+    el.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">해당 카테고리 기사 없음</div></div>';
+    return;
+  }
+
+  // Group headlines by category for iOS grouped list style
+  let html='<div class="cards-wrap">';
+
+  // Main headlines - inset grouped list
+  html+='<div class="sec-header">헤드라인</div>';
+  html+='<div class="card-group">';
+  html+=items.map(h=>`
+    <div class="news-row" onclick="openSheet('h','${esc(h.id)}')">
+      <div class="news-row-body">
+        <span class="news-cat cat-${esc(h.cat)}">${esc(h.cat)}</span>
+        <div class="news-title">${esc(h.title)}</div>
+        <div class="news-summary">${esc(h.summary||'')}</div>
+      </div>
+      <div class="news-row-right">
+        <span class="news-source">${esc(h.source||'')}</span>
+        <span class="chevron">›</span>
+      </div>
+    </div>`).join('');
+  html+='</div>';
+
+  // Deals
+  if((!filter||filter==='all'||filter==='딜') && curBrief?.deals?.length){
+    html+='<div class="sec-header">딜 하이라이트</div>';
+    html+=curBrief.deals.map(d=>`
+      <div class="deal-card" onclick="openSheet('d','${esc(d.id)}')">
+        <div class="deal-type-badge">${esc(d.type||'딜')}</div>
+        <div class="deal-title">${esc(d.title)}</div>
+        <div class="deal-value">${esc(d.value||'')}</div>
+        <div class="deal-summary">${esc(d.summary||'')}</div>
+        <div class="deal-source">${esc(d.source||'')}</div>
+      </div>`).join('');
+  }
+
+  // Key Watch
+  if((!filter||filter==='all') && curBrief?.watch?.length){
+    html+='<div class="sec-header">Key Watch</div>';
+    html+='<div class="card-group">';
+    html+=curBrief.watch.map(w=>`
+      <div class="watch-row">
+        <span class="watch-n">#${w.n}</span>
+        <span class="watch-text">${esc(w.text)}</span>
+      </div>`).join('');
+    html+='</div>';
+  }
+
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function filterCat(cat,btn){ curCat=cat; document.querySelectorAll('.cat').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); if(curBrief) renderCards(curBrief.headlines,cat); }
+
+function renderEmpty(ico,txt,btnTxt,cb){
+  document.getElementById('cardsList').innerHTML=`<div class="empty-state"><div class="empty-icon">${ico}</div><div class="empty-text">${esc(txt)}</div><button class="empty-action" id="emptyBtn">${esc(btnTxt)}</button></div>`;
+  document.getElementById('emptyBtn')?.addEventListener('click',cb);
+}
+
+// ─── SHEET ─────────────────────────────────────────────────────────────────────
+function openSheet(type, id){
+  if(!curBrief) return;
+  const item = type==='h'?curBrief.headlines.find(h=>h.id===id):curBrief.deals.find(d=>d.id===id);
+  if(!item) return;
+  const body=document.getElementById('sheetBody');
+  body.innerHTML=`
+    <span class="tag t-${esc(item.cat||'딜')} sh-cat">${esc(item.cat||item.type||'딜')}</span>
+    <div class="sh-title">${esc(item.title)}</div>
+    <div class="sh-text">${esc(item.detail||item.summary||'')}</div>
+    ${item.implications?`<div class="sh-imp"><div class="sh-imp-lbl">투자 임플리케이션</div><div class="sh-imp-txt">${esc(item.implications)}</div></div>`:''}
+    <div class="sh-src">
+      <span class="sh-src-name">출처: ${esc(item.source||'')}</span>
+      ${item.url?.startsWith('http')?`<a class="sh-link" href="${item.url}" target="_blank">원문 ↗</a>`:''}
+    </div>
+    <button class="sh-close" onclick="closeSheet()">닫기</button>`;
+  document.getElementById('ov').classList.add('open');
+  document.getElementById('sheet').classList.add('open');
+}
+function closeSheet(){ document.getElementById('ov').classList.remove('open'); document.getElementById('sheet').classList.remove('open'); }
+
+// ─── DATE NAV ───────────────────────────────────────────────────────────────────
+function navDate(d){ const dt=new Date(curDate+'T00:00:00'); dt.setDate(dt.getDate()+d); const nd=dt.toISOString().slice(0,10); if(nd>today()) return; curDate=nd; updateDateUI(); stopAll(); elapsed=0; podSecs=[]; curBrief=null; document.getElementById('podSecs').innerHTML='<div class="empty"><div class="empty-ico">📅</div><div class="empty-t">날짜 변경됨<br>팟캐스트 탭에서 재생성</div></div>'; const c=jget(K.brief(nd)); if(c){ renderBrief(c); setStatus('live',dateLabel(nd)+' 저장됨 · '+c.headlines.length+'개','cache'); } else { renderEmpty('📰',dateLabel(nd)+' 브리핑 없음','지금 생성',()=>autoGen(nd)); setStatus('','저장 없음','—'); } }
+function updateDateUI(){ document.getElementById('dateLbl').textContent=dateLabel(curDate); document.getElementById('nextBtn').disabled=curDate>=today(); document.getElementById('podDate').textContent=dateLabel(curDate); }
+
+// ─── SEARCH ─────────────────────────────────────────────────────────────────────
+// ── Nikkei / Paywalled Article Analyzer ────────────────────────────────────
+async function analyzePastedArticle(){
+  const txt = document.getElementById('pasteArea').value.trim();
+  if(!txt){ showToast('기사 텍스트를 붙여넣어 주세요'); return; }
+  if(txt.length < 100){ showToast('텍스트가 너무 짧습니다. 기사 전문을 붙여넣어 주세요'); return; }
+
+  const res = document.getElementById('pasteResult');
+  res.innerHTML = '<div class="empty-state"><div class="empty-icon">⏳</div><div class="empty-text">분석 중...</div></div>';
+
+  const ckey=gk(K.claude), okey=gk(K.openai);
+  const jpMode = settings.japanMode !== false;
+
+  const prompt = `다음 기사를 분석해서 JSON으로 반환하세요.
+
+기사:
+---
+${txt.slice(0, 6000)}
+---
+
+반드시 아래 JSON 형식만 반환 (마크다운 없이):
+{
+  "title": "55자 이내 한국어 헤드라인",
+  "cat": "글로벌|일본|미국|아시아|매크로|딜|화제|한국 중 하나",
+  "summary": "2문장 한국어 요약. 핵심 수치 포함.",
+  "detail": "3-4문장 분석. 배경과 맥락 포함.",
+  "implications": "${jpMode ? 'PE/부동산 투자 관점의 구체적 임플리케이션' : '투자 관점 시사점'}",
+  "source": "출처 매체명",
+  "keyNumbers": ["숫자1", "숫자2"],
+  "urgency": "high|medium|low"
+}`;
+
+  try{
+    let raw = '';
+    if(ckey){
+      const r = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+      });
+      if(r.ok){ const j=await r.json(); raw=j.content.filter(b=>b.type==='text').map(b=>b.text).join(''); }
+    } else if(okey){
+      const r = await fetch('https://api.openai.com/v1/chat/completions',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},
+        body:JSON.stringify({model:'gpt-4o',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+      });
+      if(r.ok){ const j=await r.json(); raw=j.choices[0].message.content; }
+    }
+
+    if(!raw) throw new Error('API 응답 없음');
+    const item = parseJSON(raw);
+    item.id = 'paste_' + Date.now();
+    item.url = '';
+
+    // Add to current briefing
+    if(curBrief){
+      curBrief.headlines = curBrief.headlines || [];
+      curBrief.headlines.unshift(item);
+      // Save updated briefing
+      jset(K.brief(curDate), curBrief);
+      renderCards(curBrief.headlines, curCat);
+      showToast('✓ 브리핑에 추가됐습니다');
+    }
+
+    // Show result
+    const urgColor = item.urgency==='high'?'var(--sys-red)':item.urgency==='medium'?'var(--accent)':'var(--label3)';
+    const urgLabel = item.urgency==='high'?'긴급':'일반';
+    res.innerHTML = '<div style="background:var(--bg-elev1);border-radius:var(--r3);padding:var(--s4);border:.5px solid var(--sep)">' +
+      '<div style="display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s3)">' +
+        '<span class="news-cat cat-'+esc(item.cat)+'">'+esc(item.cat)+'</span>' +
+        '<span style="font-size:11px;color:'+urgColor+';font-weight:600">'+urgLabel+'</span>' +
+      '</div>' +
+      '<div style="font-size:16px;font-weight:600;color:var(--label);margin-bottom:var(--s2);line-height:1.4">'+esc(item.title)+'</div>' +
+      '<div style="font-size:14px;color:var(--label2);line-height:1.6;margin-bottom:var(--s3)">'+esc(item.summary)+'</div>' +
+      '<div style="background:var(--bg-elev2);border-radius:var(--r2);padding:var(--s3);border-left:3px solid var(--accent)">' +
+        '<div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--s1)">임플리케이션</div>' +
+        '<div style="font-size:13px;color:var(--label2);line-height:1.6">'+esc(item.implications)+'</div>' +
+      '</div>' +
+    '</div>';
+    document.getElementById('pasteArea').value = '';
+  } catch(e){
+    res.innerHTML = '<div class="empty-state"><div class="empty-icon">❌</div><div class="empty-text">'+esc(e.message)+'</div></div>';
+  }
+}
+
+async function doSearch(){
+  const q=document.getElementById('srchInp').value.trim(); if(!q) return;
+  const res=document.getElementById('srchResults');
+  const matches=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i); if(!k.startsWith('db3_brief_')) continue;
+    try{ const d=JSON.parse(localStorage.getItem(k)); if(JSON.stringify(d).toLowerCase().includes(q.toLowerCase())) matches.push(d); }catch{}
+  }
+  let html='';
+  if(matches.length){
+    html+=`<div class="sec-header" style="position:relative">과거 브리핑 (${matches.length}건)</div>`;
+    html+=matches.slice(0,8).map(m=>{ const hl=m.headlines?.find(h=>JSON.stringify(h).toLowerCase().includes(q.toLowerCase())); return `<div class="search-result" onclick="loadDate('${m.date}')"><div class="sr-date">${dateLabel(m.date)}</div><div class="sr-title">${esc(hl?.title||m.date+' 브리핑')}</div><div class="sr-preview">${esc(hl?.summary||'')}</div></div>`; }).join('');
+  }
+  html+=`<div class="sec-lbl" style="margin-top:8px">AI 생성</div><div class="empty"><button class="empty-btn" onclick="genCustom('${q.replace(/'/g,"\\'")}')">「${esc(q)}」분석 생성 →</button></div>`;
+  res.innerHTML=html||'<div class="empty"><div class="empty-t">결과 없음</div></div>';
+}
+
+function loadDate(date){ curDate=date; updateDateUI(); const c=jget(K.brief(date)); if(c){ renderBrief(c); switchPane('brief'); setStatus('live',dateLabel(date)+' · '+c.headlines.length+'개','cache'); } }
+
+async function genCustom(q){
+  const res=document.getElementById('srchResults');
+  res.innerHTML=`<div class="empty"><div class="empty-ico">⏳</div><div class="empty-t">「${esc(q)}」분석 중...</div></div>`;
+  const ckey=gk(K.claude), okey=gk(K.openai);
+  const prompt=`Use web search to find the latest news about "${q}" and write a comprehensive Korean briefing (4-5 paragraphs) covering: 현재 상황, 주요 내용과 데이터, 투자/비즈니스 임플리케이션, 주목 포인트. Include actual sources.`;
+  try{
+    let text='';
+    if(ckey){
+      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})});
+      if(r.ok){ const j=await r.json(); text=j.content.filter(b=>b.type==='text').map(b=>b.text).join(''); callCount++; }
+    } else if(okey){
+      const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1500,messages:[{role:'user',content:prompt}]})});
+      if(r.ok){ const j=await r.json(); text=j.choices[0].message.content; callCount++; }
+    }
+    const customs=jget(K.custom)||[]; customs.unshift({date:today(),q,text,ts:Date.now()}); jset(K.custom,customs.slice(0,30));
+    res.innerHTML=`<div class="sec-lbl">「${esc(q)}」</div><div style="padding:14px 16px;font-size:15px;color:var(--t2);line-height:1.85">${esc(text).replace(/\n/g,'<br>')}</div><div style="padding:0 16px 16px"><button class="empty-btn" onclick="genCustomPod('${q.replace(/'/g,"\\'")}')">팟캐스트로 듣기 ↗</button></div>`;
+  }catch(e){ res.innerHTML=`<div class="empty"><div class="empty-t">${esc(e.message)}</div></div>`; }
+}
+
+async function genCustomPod(q){
+  switchPane('pod');
+  const custom=(jget(K.custom)||[]).find(c=>c.q===q);
+  if(!custom) return;
+  const ckey=gk(K.claude), okey=gk(K.openai);
+  const prompt=`Create a 5-minute Korean podcast script about "${q}": ${custom.text.slice(0,2000)}\n\nUse ==섹션명== markers. Natural analyst narration.`;
+  document.getElementById('podSecs').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-t">팟캐스트 생성 중...</div></div>';
+  try{
+    let script='';
+    if(ckey){ const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})}); if(r.ok){const j=await r.json();script=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');callCount++;} }
+    else if(okey){ const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1000,messages:[{role:'user',content:prompt}]})}); if(r.ok){const j=await r.json();script=j.choices[0].message.content;callCount++;} }
+    if(script){ parsePodScript(script); document.getElementById('podTitle').textContent=q; }
+  }catch(e){ document.getElementById('podSecs').innerHTML=`<div class="empty"><div class="empty-t">${esc(e.message)}</div></div>`; }
+}
+
+// ─── SETTINGS ────────────────────────────────────────────────────────────────
+function saveSetup(){
+  const g=document.getElementById('si-gemini').value.trim();
+  const c=document.getElementById('si-claude').value.trim();
+  const o=document.getElementById('si-openai').value.trim();
+  if(!c && !o){ alert('Claude 또는 OpenAI API 키 중 하나는 필요합니다'); return; }
+  if(g) sk(K.gemini,g); if(c) sk(K.claude,c); if(o) sk(K.openai,o);
+  document.getElementById('setupScreen').classList.add('hidden');
+  showApp(); updateDateUI(); 
+// ── DEMO DATA (shown in sandbox/iframe mode) ──────────────────────────────────
+const DEMO_BRIEF = {
+  date: new Date().toISOString().slice(0,10),
+  generatedAt: Date.now(),
+  model: 'demo',
+  headlines: [
+    { id:"d1", cat:"일본", title:"BOJ, 3월 회의서 금리 동결 — 다음 인상 6월 전망", summary:"일본은행이 3월 정례회의에서 기준금리를 0.5%로 동결했다. 우에다 총재는 임금 상승 지속 여부를 확인 후 점진적 인상 기조를 유지할 것이라 밝혔다.", detail:"BOJ는 만장일치로 금리 동결을 결정했으며, 이는 시장 예상에 부합하는 결과다. 우에다 총재는 기자회견에서 2025년 춘투 임금 협상 결과가 인상 판단의 핵심 변수임을 재확인했다. JGB 10년물은 결정 직후 1.48%로 소폭 하락했다.", implications:"단기 캡레이트 압박 완화. 6월 인상 시나리오 대비 부동산 리파이낸싱 타임라인 점검 필요.", source:"Nikkei Asia", url:"https://asia.nikkei.com" },
+    { id:"d2", cat:"딜", title:"KKR, 도쿄 물류 포트폴리오 JPY 3,200억에 취득 합의", summary:"KKR이 스즈키 물류의 도쿄 광역권 내 14개 창고 포트폴리오를 약 JPY 3,200억에 인수하는 계약을 체결했다. 거래는 2분기 완료 예정이다.", detail:"이번 딜은 2026년 일본 물류 PE 거래 중 최대 규모다. KKR은 이커머스 성장과 콜드체인 수요 증가를 배경으로 value-add 전략을 추진할 계획이다. 캡레이트는 약 4.1%로 알려졌다.", implications:"도쿄 물류 캡레이트 추가 압축 신호. 대형 포트폴리오 취득 경쟁 심화 예상. 유사 자산 보유자의 매각 타이밍 검토 필요.", source:"Bloomberg", url:"https://bloomberg.com" },
+    { id:"d3", cat:"미국", title:"Fed, 3월 FOMC서 금리 동결 — 연내 2회 인하 전망 유지", summary:"연준이 기준금리를 5.25~5.5%로 동결했다. 점도표는 2026년 연내 2회 인하 전망을 유지했으며, 파월 의장은 인플레이션 둔화를 확인 중이라 밝혔다.", detail:"S&P 500은 결정 직후 0.8% 상승했다. 10년 국채 수익률은 4.28%로 하락했다. 시장은 6월 첫 인하를 70% 확률로 반영 중이다.", implications:"달러 약세 → 엔화 강세 압력 → 외국인 투자자의 일본 부동산 취득 메리트 변화 주목.", source:"Reuters", url:"https://reuters.com" },
+    { id:"d4", cat:"화제", title:"WBC 일본 대표팀, 준결승 진출 — 오타니 2홈런 활약", summary:"일본 야구 국가대표팀이 WBC 8강에서 미국을 5-3으로 꺾고 4강에 진출했다. 오타니 쇼헤이가 2홈런을 포함한 맹활약을 펼쳤다.", detail:"일본의 4강 진출로 관련 스포츠 소비·관광 수요가 급증할 전망이다. 다음 경기는 한국과의 준결승으로 예정됐다.", implications:"도쿄 호텔 단기 수요 상승 가능. J-REIT 호스피탈리티 자산 단기 실적 플러스 요인.", source:"Nikkei", url:"https://nikkei.com" },
+    { id:"d5", cat:"매크로", title:"일본 2월 CPI 전년비 3.1% — 에너지 제외 근원 2.8%", summary:"일본 통계청이 발표한 2월 소비자물가지수가 전년동월비 3.1% 상승했다. 식료품과 서비스 물가 상승이 주도했다.", detail:"근원 CPI(에너지·식료품 제외)는 2.8%로 BOJ 목표치 2%를 상회하는 흐름이 지속되고 있다. 이는 BOJ의 점진적 금리 인상 기조를 뒷받침하는 데이터다.", implications:"임대료 패스스루 협상력 강화. 물가연동형 임대 계약 자산의 상대적 매력 증가.", source:"MIC Japan", url:"https://stat.go.jp" },
+    { id:"d6", cat:"글로벌", title:"트럼프, 일본산 자동차 추가 관세 25% 부과 검토 발표", summary:"트럼프 대통령이 일본산 자동차에 대해 25%의 추가 관세를 검토한다고 밝혔다. 발효 시 토요타·혼다 등 주요 제조사에 직접 타격이 예상된다.", detail:"일본 정부는 즉각 반발했으며, 이시바 총리는 협상을 통한 해결을 촉구했다. 토요타 주가는 도쿄 장에서 3.2% 급락했다.", implications:"제조업 주요 지역(아이치, 가나가와) 물류·산업 부동산 임차 수요 약화 리스크. 자동차 관련 carve-out 딜 증가 가능.", source:"Financial Times", url:"https://ft.com" },
+    { id:"d7", cat:"아시아", title:"중국 PBOC, 지준율 0.5%p 인하 — 경기부양 신호", summary:"중국 인민은행이 지급준비율을 0.5%포인트 인하해 시중에 약 1조 위안의 유동성을 공급한다고 발표했다.", detail:"이번 조치는 올해 첫 번째 지준율 인하로, 부동산 시장 안정화와 내수 진작이 목적이다. 상하이 종합지수는 1.5% 상승 마감했다.", implications:"중국 자본의 일본 부동산 유입 확대 가능성. 아시아 PE 펀드의 일본 배분 비중 확대 트렌드 지속.", source:"Xinhua", url:"https://xinhua.net" }
+  ],
+  market: {
+    jgb10y: { v:"1.48%", d:"-2bp", t:-1 },
+    usdjpy: { v:"148.5", d:"-0.3", t:-1 },
+    nikkei: { v:"38,240", d:"-0.6%", t:-1 },
+    sp500:  { v:"5,698", d:"+0.8%", t:1 },
+    wti:    { v:"$71.8", d:"-0.4%", t:-1 },
+    usdkrw: { v:"1,338", d:"+1", t:-1 }
+  },
+  deals: [
+    { id:"dd1", title:"KKR — 스즈키 물류 도쿄 포트폴리오", value:"JPY 3,200억", type:"플랫폼빌드", summary:"도쿄 광역권 14개 물류 창고. 캡레이트 약 4.1%. value-add 전략. 2분기 완료 예정.", source:"Bloomberg", url:"https://bloomberg.com" },
+    { id:"dd2", title:"Japan Hotel REIT — 오사카 그랜드 하얏트 취득", value:"JPY 480억", type:"J-REIT 취득", summary:"인바운드 수요 회복세에 편승한 호스피탈리티 자산 확대. 감정가 대비 92%에 취득.", source:"REIT관련공시", url:"https://japan-reit.com" },
+    { id:"dd3", title:"Blackstone — 후쿠오카 콜드체인 개발 프로젝트", value:"JPY 950억", type:"개발딜", summary:"후쿠오카 물류단지 내 콜드체인 시설 신규 개발. 5년 고정 임대차 계약 선체결 완료.", source:"Nikkei RE", url:"https://nikkei.com" }
+  ],
+  watch: [
+    { n:1, text:"BOJ 6월 회의 전 임금 통계 발표 — 근원 CPI와 함께 다음 인상 시그널 확인" },
+    { n:2, text:"트럼프 관세 발효 여부 및 일미 협상 일정 — 제조업 지역 부동산 수요에 직접 영향" },
+    { n:3, text:"KKR 물류 딜 클로징 이후 도쿄 물류 캡레이트 재가격 흐름 모니터링" }
+  ]
+};
+
+init().catch(e => {
+  console.error('Init failed:', e);
+  document.getElementById('loadingScreen').classList.add('hidden');
+  document.getElementById('setupScreen').classList.remove('hidden');
+  const msg = document.createElement('div');
+  msg.style.cssText = 'padding:16px;font-size:13px;color:var(--sys-red);background:rgba(255,59,48,.1);border-radius:8px;margin-top:12px';
+  msg.textContent = '오류: ' + (e.message || String(e));
+  document.querySelector('.setup-p')?.after(msg);
+});
+}
+function saveGithubRepo(){
+  const url = document.getElementById('set-github').value.trim().replace(/\/$/,'');
+  if(!url){ alert('URL을 입력해주세요'); return; }
+  sk(K.githubRepo, url);
+  showToast('✓ GitHub 저장됨 · 앱 재시작 시 서버 브리핑을 먼저 확인합니다');
+}
+function saveKeys(){
+  const g=document.getElementById('set-gemini').value.trim();
+  const c=document.getElementById('set-claude').value.trim();
+  const o=document.getElementById('set-openai').value.trim();
+  if(g) sk(K.gemini,g); if(c) sk(K.claude,c); if(o) sk(K.openai,o);
+  alert('저장됐습니다');
+}
+function loadSettings(){
+  const s=jget(K.settings); if(s) settings={...settings,...s};
+  document.querySelectorAll('.toggle').forEach(t=>{ const k=t.id.replace('tog-',''); t.classList.toggle('on',settings[k]!==false); });
+  const gk2=gk(K.gemini), ck=gk(K.claude), ok=gk(K.openai), ghk=gk(K.githubRepo);
+  if(gk2) document.getElementById('set-gemini').value=gk2;
+  if(ck) document.getElementById('set-claude').value=ck;
+  if(ok) document.getElementById('set-openai').value=ok;
+  if(ghk) document.getElementById('set-github').value=ghk;
+  // Initialize default cat settings if not set
+  if(settings.usMode===undefined) settings.usMode=true;
+  if(settings.dealMode===undefined) settings.dealMode=true;
+  if(settings.trendMode===undefined) settings.trendMode=true;
+  if(settings.koreaMode===undefined) settings.koreaMode=false;
+  setTimeout(updateCatTabs, 100);
+}
+function togSetting(key){ settings[key]=!settings[key]; document.getElementById('tog-'+key)?.classList.toggle('on',settings[key]); jset(K.settings,settings); }
+function updateStoredCnt(){ let n=0; for(let i=0;i<localStorage.length;i++) if(localStorage.key(i).startsWith('db3_brief_')) n++; const el=document.getElementById('storedCnt'); if(el) el.textContent=n+'일'; const ec=document.getElementById('estCost'); if(ec) ec.textContent='~$'+(n*0.04).toFixed(2)+'/월'; }
+function clearOld(){ if(!confirm('30일 이전 삭제?')) return; const cut=new Date(); cut.setDate(cut.getDate()-30); let n=0; const keys=[]; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(!k.startsWith('db3_')) continue; const m=k.match(/(\d{4}-\d{2}-\d{2})/); if(m&&new Date(m[1])<cut){ keys.push(k); } } keys.forEach(k=>{localStorage.removeItem(k);n++;}); updateStoredCnt(); alert(n+'개 삭제됐습니다'); }
+
+// ─── PANE NAV ─────────────────────────────────────────────────────────────────
+function switchPane(id){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tbb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pane-'+id)?.classList.add('active');
+  document.getElementById('tbb-'+id)?.classList.add('on');
+  if(id==='pod' && !podSecs.length && jget(K.brief(curDate))) genPod(curDate, curLen);
+}
+function pickLen(len,btn){ curLen=len; document.querySelectorAll('.len-btn').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); stopAll(); elapsed=0; podSecs=[]; updateProg(); genPod(curDate,len); }
+
+// ─── LOADING UI ───────────────────────────────────────────────────────────────
+function stepActive(n){ const s=document.getElementById('ls'+n); const ico=document.getElementById('li'+n); if(s){ s.classList.add('active'); ico.className='step-ico spin'; } }
+function stepDone(n){ const s=document.getElementById('ls'+n); const ico=document.getElementById('li'+n); if(s){ s.classList.add('done'); s.classList.remove('active'); ico.className='step-ico check'; ico.textContent='✓'; } }
+
+// ─── STATUS ───────────────────────────────────────────────────────────────────
+function setStatus(type,msg,mod){ /* status managed internally */ console.log('[status]', type, msg); }
+function model(d){ return d.model||'—'; }
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function today(){ return new Date().toISOString().slice(0,10); }
+function dateLabel(d){ return new Date(d+'T00:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'}); }
+function isStale(d){ return !d.generatedAt || Date.now()-d.generatedAt > 12*3600*1000; }
+function fmt(s){ return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+// ─── KEYBOARD ─────────────────────────────────────────────────────────────────
+document.getElementById('srchInp').addEventListener('keydown',e=>{ if(e.key==='Enter') doSearch(); });
+
+// ─── START ────────────────────────────────────────────────────────────────────
+
+// ── DEMO DATA (shown in sandbox/iframe mode) ──────────────────────────────────
+const DEMO_BRIEF = {
+  date: new Date().toISOString().slice(0,10),
+  generatedAt: Date.now(),
+  model: 'demo',
+  headlines: [
+    { id:"d1", cat:"일본", title:"BOJ, 3월 회의서 금리 동결 — 다음 인상 6월 전망", summary:"일본은행이 3월 정례회의에서 기준금리를 0.5%로 동결했다. 우에다 총재는 임금 상승 지속 여부를 확인 후 점진적 인상 기조를 유지할 것이라 밝혔다.", detail:"BOJ는 만장일치로 금리 동결을 결정했으며, 이는 시장 예상에 부합하는 결과다. 우에다 총재는 기자회견에서 2025년 춘투 임금 협상 결과가 인상 판단의 핵심 변수임을 재확인했다. JGB 10년물은 결정 직후 1.48%로 소폭 하락했다.", implications:"단기 캡레이트 압박 완화. 6월 인상 시나리오 대비 부동산 리파이낸싱 타임라인 점검 필요.", source:"Nikkei Asia", url:"https://asia.nikkei.com" },
+    { id:"d2", cat:"딜", title:"KKR, 도쿄 물류 포트폴리오 JPY 3,200억에 취득 합의", summary:"KKR이 스즈키 물류의 도쿄 광역권 내 14개 창고 포트폴리오를 약 JPY 3,200억에 인수하는 계약을 체결했다. 거래는 2분기 완료 예정이다.", detail:"이번 딜은 2026년 일본 물류 PE 거래 중 최대 규모다. KKR은 이커머스 성장과 콜드체인 수요 증가를 배경으로 value-add 전략을 추진할 계획이다. 캡레이트는 약 4.1%로 알려졌다.", implications:"도쿄 물류 캡레이트 추가 압축 신호. 대형 포트폴리오 취득 경쟁 심화 예상. 유사 자산 보유자의 매각 타이밍 검토 필요.", source:"Bloomberg", url:"https://bloomberg.com" },
+    { id:"d3", cat:"미국", title:"Fed, 3월 FOMC서 금리 동결 — 연내 2회 인하 전망 유지", summary:"연준이 기준금리를 5.25~5.5%로 동결했다. 점도표는 2026년 연내 2회 인하 전망을 유지했으며, 파월 의장은 인플레이션 둔화를 확인 중이라 밝혔다.", detail:"S&P 500은 결정 직후 0.8% 상승했다. 10년 국채 수익률은 4.28%로 하락했다. 시장은 6월 첫 인하를 70% 확률로 반영 중이다.", implications:"달러 약세 → 엔화 강세 압력 → 외국인 투자자의 일본 부동산 취득 메리트 변화 주목.", source:"Reuters", url:"https://reuters.com" },
+    { id:"d4", cat:"화제", title:"WBC 일본 대표팀, 준결승 진출 — 오타니 2홈런 활약", summary:"일본 야구 국가대표팀이 WBC 8강에서 미국을 5-3으로 꺾고 4강에 진출했다. 오타니 쇼헤이가 2홈런을 포함한 맹활약을 펼쳤다.", detail:"일본의 4강 진출로 관련 스포츠 소비·관광 수요가 급증할 전망이다. 다음 경기는 한국과의 준결승으로 예정됐다.", implications:"도쿄 호텔 단기 수요 상승 가능. J-REIT 호스피탈리티 자산 단기 실적 플러스 요인.", source:"Nikkei", url:"https://nikkei.com" },
+    { id:"d5", cat:"매크로", title:"일본 2월 CPI 전년비 3.1% — 에너지 제외 근원 2.8%", summary:"일본 통계청이 발표한 2월 소비자물가지수가 전년동월비 3.1% 상승했다. 식료품과 서비스 물가 상승이 주도했다.", detail:"근원 CPI(에너지·식료품 제외)는 2.8%로 BOJ 목표치 2%를 상회하는 흐름이 지속되고 있다. 이는 BOJ의 점진적 금리 인상 기조를 뒷받침하는 데이터다.", implications:"임대료 패스스루 협상력 강화. 물가연동형 임대 계약 자산의 상대적 매력 증가.", source:"MIC Japan", url:"https://stat.go.jp" },
+    { id:"d6", cat:"글로벌", title:"트럼프, 일본산 자동차 추가 관세 25% 부과 검토 발표", summary:"트럼프 대통령이 일본산 자동차에 대해 25%의 추가 관세를 검토한다고 밝혔다. 발효 시 토요타·혼다 등 주요 제조사에 직접 타격이 예상된다.", detail:"일본 정부는 즉각 반발했으며, 이시바 총리는 협상을 통한 해결을 촉구했다. 토요타 주가는 도쿄 장에서 3.2% 급락했다.", implications:"제조업 주요 지역(아이치, 가나가와) 물류·산업 부동산 임차 수요 약화 리스크. 자동차 관련 carve-out 딜 증가 가능.", source:"Financial Times", url:"https://ft.com" },
+    { id:"d7", cat:"아시아", title:"중국 PBOC, 지준율 0.5%p 인하 — 경기부양 신호", summary:"중국 인민은행이 지급준비율을 0.5%포인트 인하해 시중에 약 1조 위안의 유동성을 공급한다고 발표했다.", detail:"이번 조치는 올해 첫 번째 지준율 인하로, 부동산 시장 안정화와 내수 진작이 목적이다. 상하이 종합지수는 1.5% 상승 마감했다.", implications:"중국 자본의 일본 부동산 유입 확대 가능성. 아시아 PE 펀드의 일본 배분 비중 확대 트렌드 지속.", source:"Xinhua", url:"https://xinhua.net" }
+  ],
+  market: {
+    jgb10y: { v:"1.48%", d:"-2bp", t:-1 },
+    usdjpy: { v:"148.5", d:"-0.3", t:-1 },
+    nikkei: { v:"38,240", d:"-0.6%", t:-1 },
+    sp500:  { v:"5,698", d:"+0.8%", t:1 },
+    wti:    { v:"$71.8", d:"-0.4%", t:-1 },
+    usdkrw: { v:"1,338", d:"+1", t:-1 }
+  },
+  deals: [
+    { id:"dd1", title:"KKR — 스즈키 물류 도쿄 포트폴리오", value:"JPY 3,200억", type:"플랫폼빌드", summary:"도쿄 광역권 14개 물류 창고. 캡레이트 약 4.1%. value-add 전략. 2분기 완료 예정.", source:"Bloomberg", url:"https://bloomberg.com" },
+    { id:"dd2", title:"Japan Hotel REIT — 오사카 그랜드 하얏트 취득", value:"JPY 480억", type:"J-REIT 취득", summary:"인바운드 수요 회복세에 편승한 호스피탈리티 자산 확대. 감정가 대비 92%에 취득.", source:"REIT관련공시", url:"https://japan-reit.com" },
+    { id:"dd3", title:"Blackstone — 후쿠오카 콜드체인 개발 프로젝트", value:"JPY 950억", type:"개발딜", summary:"후쿠오카 물류단지 내 콜드체인 시설 신규 개발. 5년 고정 임대차 계약 선체결 완료.", source:"Nikkei RE", url:"https://nikkei.com" }
+  ],
+  watch: [
+    { n:1, text:"BOJ 6월 회의 전 임금 통계 발표 — 근원 CPI와 함께 다음 인상 시그널 확인" },
+    { n:2, text:"트럼프 관세 발효 여부 및 일미 협상 일정 — 제조업 지역 부동산 수요에 직접 영향" },
+    { n:3, text:"KKR 물류 딜 클로징 이후 도쿄 물류 캡레이트 재가격 흐름 모니터링" }
+  ]
+};
+
+init().catch(e => {
+  console.error('Init failed:', e);
+  document.getElementById('loadingScreen').classList.add('hidden');
+  document.getElementById('setupScreen').classList.remove('hidden');
+  const msg = document.createElement('div');
+  msg.style.cssText = 'padding:16px;font-size:13px;color:var(--sys-red);background:rgba(255,59,48,.1);border-radius:8px;margin-top:12px';
+  msg.textContent = '오류: ' + (e.message || String(e));
+  document.querySelector('.setup-p')?.after(msg);
+});
+</script>
+</body>
+</html>
