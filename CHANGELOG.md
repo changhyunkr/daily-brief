@@ -113,3 +113,16 @@
 - Schedule + evening pre-gen
 - Search + custom AI topic
 - Tab visibility toggles
+
+## v10.0 (2026-03-14)
+### Fixed
+- Only 3 articles bug: structureClaude prompt now explicitly enforces 14-18 headlines, 4-6 deals
+- OpenAI system prompt added: "never return partial results"
+- max_tokens raised to 6000 for briefing generation
+
+### Added
+- **딥다이브**: 기사 탭 → 시트에서 "딥다이브 분석" → 6섹션 심층 분석 (배경/수치/이해관계자/임플리케이션/리스크/후속)
+- **AI 질문 탭**: 오늘 브리핑 컨텍스트를 가진 대화형 AI 채팅
+- **토픽 팟캐스트**: 기사/딥다이브에서 바로 해당 토픽 팟캐스트 생성
+- 시트 하단에 딥다이브/팟캐스트/AI질문 버튼 3개
+- Chat tab 추가 (탭바 5번째)

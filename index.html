@@ -411,6 +411,44 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
   box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ── DEEP DIVE / AI CHAT ── */
+.dd-panel{padding:var(--s4)}
+.dd-back{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s4);
+  background:transparent;border:none;color:var(--accent);font-size:15px;
+  font-weight:500;cursor:pointer;padding:0}
+.dd-back svg{width:18px;height:18px;fill:var(--accent)}
+.dd-section{margin-bottom:var(--s5)}
+.dd-sec-lbl{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:var(--s2)}
+.dd-body{font-size:16px;color:var(--t2);line-height:1.8}
+.dd-loading{display:flex;align-items:center;gap:var(--s3);padding:var(--s5) 0;
+  font-size:14px;color:var(--t3)}
+.dd-spinner{width:18px;height:18px;border:2px solid var(--sep2);
+  border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+
+/* AI Chat */
+.chat-wrap{display:flex;flex-direction:column;height:100%}
+.chat-msgs{flex:1;overflow-y:auto;padding:var(--s3) var(--s4);-webkit-overflow-scrolling:touch}
+.chat-msgs::-webkit-scrollbar{display:none}
+.chat-msg{margin-bottom:var(--s4)}
+.chat-msg.user .chat-bubble{background:var(--accent);color:#000;margin-left:auto;border-radius:var(--r3) var(--r3) var(--r1) var(--r3)}
+.chat-msg.ai .chat-bubble{background:var(--e1);color:var(--t1);margin-right:auto;border-radius:var(--r3) var(--r3) var(--r3) var(--r1)}
+.chat-bubble{max-width:85%;padding:var(--s3) var(--s4);font-size:15px;line-height:1.7;display:inline-block}
+.chat-msg.user{text-align:right}
+.chat-msg.thinking .chat-bubble{color:var(--t3);font-style:italic}
+.chat-bar{display:flex;gap:var(--s2);padding:var(--s3) var(--s4);
+  border-top:.5px solid var(--sep);background:var(--blur-tab);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);flex-shrink:0}
+.chat-inp{flex:1;background:var(--e1);border:.5px solid var(--sep);border-radius:20px;
+  padding:var(--s2) var(--s4);font-size:15px;color:var(--t1);outline:none;
+  -webkit-appearance:none;max-height:100px}
+.chat-inp::placeholder{color:var(--t3)}
+.chat-send{width:36px;height:36px;border-radius:50%;border:none;
+  background:var(--accent);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;align-self:flex-end}
+.chat-send:active{opacity:.75}
+.chat-send svg{width:16px;height:16px;fill:#000}
+
 /* ── RESPONSIVE — iPad ── */
 @media(min-width:768px){
   .mkt-cell{min-width:100px;padding:var(--s3) var(--s5)}
@@ -579,6 +617,24 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
         <div id="podSecList"><div class="empty"><div class="empty-ico">🎙</div><div class="empty-txt">길이를 선택하면 팟캐스트가 자동 생성됩니다</div></div></div>
       </div>
 
+      <!-- DEEP DIVE -->
+      <div class="pane" id="pane-deepdive">
+        <div id="ddContent"><div class="empty"><div class="empty-ico">🔍</div><div class="empty-txt">기사를 탭하면 딥다이브 분석이 표시됩니다</div></div></div>
+      </div>
+
+      <!-- AI CHAT -->
+      <div class="pane" id="pane-chat">
+        <div class="chat-wrap">
+          <div class="chat-msgs" id="chatMsgs">
+            <div class="chat-msg ai"><div class="chat-bubble">안녕하세요! 오늘 브리핑이나 일본 PE/부동산, 글로벌 마켓에 대해 무엇이든 물어보세요.</div></div>
+          </div>
+          <div class="chat-bar">
+            <input class="chat-inp" id="chatInp" placeholder="질문하기..." autocomplete="off">
+            <button class="chat-send" onclick="sendChat()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+          </div>
+        </div>
+      </div>
+
       <!-- SEARCH -->
       <div class="pane" id="pane-search">
         <div class="srch-wrap">
@@ -656,6 +712,10 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
     <button class="tb-btn" id="tbb-pod" onclick="switchTab('pod')">
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg></div>
       <span class="tb-lbl">팟캐스트</span>
+    </button>
+    <button class="tb-btn" id="tbb-chat" onclick="switchTab('chat')">
+      <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+      <span class="tb-lbl">AI 질문</span>
     </button>
     <button class="tb-btn" id="tbb-search" onclick="switchTab('search')">
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
@@ -848,16 +908,33 @@ async function structureClaude(raw, date) {
   const useSearch = !raw;
   const jp = settings.japanMode !== false;
 
-  const schema = '{"date":"'+date+'","generatedAt":'+Date.now()+',"model":"auto","headlines":[{"id":"h1","cat":"일본","title":"55자 이내","summary":"2문장","detail":"3-4문장","implications":"PE/RE 관점","source":"Nikkei","url":"https://..."}],"market":{"jgb10y":{"v":"1.5%","d":"+2bp","t":1},"usdjpy":{"v":"148","d":"-0.3","t":-1},"nikkei":{"v":"38000","d":"-0.5%","t":-1},"sp500":{"v":"5700","d":"+0.3%","t":1},"wti":{"v":"$72","d":"-1%","t":-1},"usdkrw":{"v":"1340","d":"+2","t":-1}},"deals":[{"id":"d1","title":"딜명","value":"JPY Xbn","type":"카브아웃","summary":"요약","source":"Bloomberg","url":"https://..."}],"watch":[{"n":1,"text":"관전포인트1"},{"n":2,"text":"관전포인트2"},{"n":3,"text":"관전포인트3"}]}';
+  const rules = "Rules: Korean headlines max 55 chars. Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. MUST include 3+일본, 2+미국, 1+글로벌, 1+매크로, 4+딜(M&A/PE/RE/activist/earnings/fund), 2+화제(sports/AI/geopolitics/trending). implications=specific " + (jp?"PE/부동산":"투자") + " action point. Real URLs. No Japanese punctuation.";
+
+  const countRule = "CRITICAL: Return EXACTLY 14-18 headline objects and 4-6 deal objects. Count before responding. Fewer than 14 headlines = wrong answer.";
+
+  const schema = '{"date":"' + date + '","generatedAt":' + Date.now() + ',"model":"auto","headlines":[{"id":"h1","cat":"일본","title":"헤드라인","summary":"2문장","detail":"3-4문장","implications":"임플리케이션","source":"Nikkei","url":"https://..."},{"id":"h2","cat":"미국","title":"...","summary":"...","detail":"...","implications":"...","source":"Bloomberg","url":"https://..."}],"market":{"jgb10y":{"v":"1.52%","d":"+3bp","t":1},"usdjpy":{"v":"148.2","d":"-0.4","t":-1},"nikkei":{"v":"38,240","d":"-0.6%","t":-1},"sp500":{"v":"5,698","d":"+0.8%","t":1},"wti":{"v":"$71.8","d":"-0.4%","t":-1},"usdkrw":{"v":"1,338","d":"+1","t":-1}},"deals":[{"id":"d1","title":"딜명","value":"JPY Xbn","type":"카브아웃","summary":"요약","source":"Bloomberg","url":"https://..."},{"id":"d2","title":"딜2","value":"$Xbn","type":"TOB","summary":"요약","source":"Reuters","url":"https://..."}],"watch":[{"n":1,"text":"관전1"},{"n":2,"text":"관전2"},{"n":3,"text":"관전3"}]}';
 
   const prompt = (useSearch
-    ? `Search the web for today (${date} JST) top news for Japan PE/RE investor.`
-    : `Structure this news into briefing JSON.\n\nNews:\n${(raw||'').slice(0,8000)}`)
-    + `\n\nRules: Korean headlines ≤55 chars. Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. Always include 딜 (4+ items) and 화제 (2+ items). ${jp?'implications = PE/부동산 투자 관점':'implications = 투자 관점'}. Real URLs. No Japanese punctuation in Korean.\n\nReturn ONLY JSON:\n${schema}\n\n14-18 headlines, 4-6 deals. t:1=up,-1=down,0=flat.`;
+    ? "Search RIGHT NOW for today (" + date + " JST) news: Japan BOJ JGB 日経不動産 PE deals TOB MBO, US S&P500 close Fed, global macro oil FX, M&A deals globally, sports WBC AI tech geopolitics. Find 15+ different stories."
+    : "Structure ALL of this news. Do not skip any stories.
+
+News (" + date + " JST):
+" + (raw||'').slice(0,9000))
+    + "
+
+" + rules + "
+" + countRule + "
+
+Return ONLY JSON (no markdown):
+" + schema;
 
   if (ckey) {
-    const body = { model:'claude-sonnet-4-20250514', max_tokens:5000, messages:[{role:'user',content:prompt}] };
-    if (useSearch) body.tools = [{type:'web_search_20250305',name:'web_search'}];
+    const body = {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 6000,
+      messages: [{role:'user', content: prompt}]
+    };
+    if (useSearch) body.tools = [{type:'web_search_20250305', name:'web_search'}];
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
@@ -871,7 +948,13 @@ async function structureClaude(raw, date) {
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},
-      body:JSON.stringify({model:'gpt-4o',max_tokens:5000,messages:[{role:'user',content:prompt}]})
+      body:JSON.stringify({
+        model:'gpt-4o', max_tokens:6000,
+        messages:[
+          {role:'system', content:'You are a senior Japan PE/RE investment analyst. Always return the FULL JSON with 14-18 headlines and 4-6 deals as instructed. Never return partial results.'},
+          {role:'user', content: prompt}
+        ]
+      })
     });
     if (!res.ok) throw new Error('OpenAI: '+res.status);
     const j = await res.json();
@@ -984,6 +1067,11 @@ function openSheet(type, id) {
       '<div class="sh-imp"><div class="sh-imp-lbl">투자 임플리케이션</div><div class="sh-imp-txt">'+esc(item.implications)+'</div></div>' : '') +
     '<div class="sh-footer"><span class="sh-src">'+esc(item.source||'')+'</span>' +
     (item.url && item.url.startsWith('http') ? '<a class="sh-link" href="'+item.url+'" target="_blank">원문 ↗</a>' : '') +
+    '</div>' +
+    '<div style="display:flex;flex-direction:column;gap:var(--s2);margin-bottom:var(--s3)">' +
+    '<button style="width:100%;height:44px;border-radius:var(--r2);border:none;background:var(--accent);color:#000;font-size:15px;font-weight:600;cursor:pointer" onclick="closeSheet();deepDive(''+type+'',''+esc(id)+'')">🔍 딥다이브 분석</button>' +
+    '<button style="width:100%;height:44px;border-radius:var(--r2);border:none;background:var(--e2);color:var(--accent);font-size:15px;font-weight:500;cursor:pointer" onclick="closeSheet();topicPodcast(''+esc(item.title)+'')">🎙 팟캐스트 생성</button>' +
+    '<button style="width:100%;height:44px;border-radius:var(--r2);border:none;background:var(--e2);color:var(--t2);font-size:15px;font-weight:500;cursor:pointer" onclick="closeSheet();askAbout(''+esc(item.title)+'')">💬 AI에게 질문</button>' +
     '</div>' +
     '<button class="sh-close" onclick="closeSheet()">닫기</button>';
 
@@ -1510,6 +1598,133 @@ function updateSchedLabel(t) {
 }
 
 // ─── NAV / TABS ───────────────────────────────────────────────────────────────
+
+// ─── DEEP DIVE ───────────────────────────────────────────────────────────────
+async function deepDive(type, id) {
+  const item = type==='h' ? curBrief?.headlines?.find(h=>h.id===id) : curBrief?.deals?.find(d=>d.id===id);
+  if (!item) return;
+  closeSheet();
+  switchTab('deepdive');
+  const el = document.getElementById('ddContent');
+  el.innerHTML = '<div class="dd-panel">' +
+    '<button class="dd-back" onclick="switchTab('brief')"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/></svg> 브리핑으로</button>' +
+    '<span class="ncat c-'+esc(item.cat||'딜')+'" style="margin-bottom:var(--s3);display:inline-flex">'+esc(item.cat||item.type||'딜')+'</span>' +
+    '<div style="font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:var(--s4);line-height:1.35">'+esc(item.title)+'</div>' +
+    '<div class="dd-loading" id="ddLoading"><div class="dd-spinner"></div><span>딥다이브 분석 중...</span></div>' +
+    '<div id="ddResult"></div>' +
+    '</div>';
+
+  const ckey=S.get(K.claude), okey=S.get(K.openai);
+  const prompt = '다음 기사를 심층 분석해 주세요 (한국어).
+
+제목: '+item.title+'
+요약: '+(item.summary||'')+'
+
+## 배경 및 맥락
+## 핵심 수치와 데이터
+## 시장 반응 및 이해관계자
+## PE/부동산 투자 임플리케이션
+## 리스크 및 반대 시나리오
+## 후속 주목 포인트
+
+각 섹션을 ## 헤더로 구분해 작성해주세요.';
+  try {
+    let text = '';
+    if (ckey) {
+      const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})});
+      if(r.ok){const j=await r.json();text=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');}
+    } else if (okey) {
+      const r = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:2000,messages:[{role:'user',content:prompt}]})});
+      if(r.ok){const j=await r.json();text=j.choices[0].message.content;}
+    }
+    document.getElementById('ddLoading').style.display='none';
+    const secs = text.split(/^##\s+/m).filter(Boolean);
+    let html = '';
+    secs.forEach(sec=>{const ln=sec.split('
+');html+='<div class="dd-section"><div class="dd-sec-lbl">'+esc(ln[0].trim())+'</div><div class="dd-body">'+esc(ln.slice(1).join('
+').trim()).replace(/
+/g,'<br>')+'</div></div>';});
+    if(!html) html='<div class="dd-section"><div class="dd-body">'+esc(text).replace(/
+/g,'<br>')+'</div></div>';
+    html += '<div style="display:flex;flex-direction:column;gap:var(--s2);margin:var(--s5) 0">' +
+      '<button class="empty-btn" style="width:100%;font-size:14px" onclick="topicPodcast(''+esc(item.title)+'')">🎙 이 기사로 팟캐스트 생성</button>' +
+      '<button class="empty-btn" style="width:100%;font-size:14px;background:transparent;border:.5px solid var(--accent-bdr)" onclick="askAbout(''+esc(item.title)+'')">💬 AI에게 더 물어보기</button>' +
+      '</div>';
+    document.getElementById('ddResult').innerHTML = '<div class="dd-panel">'+html+'</div>';
+  } catch(e) {
+    document.getElementById('ddLoading').style.display='none';
+    document.getElementById('ddResult').innerHTML = '<div class="dd-panel"><div style="color:var(--red);font-size:15px">오류: '+esc(e.message)+'</div></div>';
+  }
+}
+
+// ─── AI CHAT ──────────────────────────────────────────────────────────────────
+let chatHistory = [];
+async function sendChat() {
+  const inp = document.getElementById('chatInp');
+  const q = inp.value.trim(); if (!q) return;
+  inp.value = '';
+  appendMsg('user', q);
+  chatHistory.push({role:'user', content:q});
+  const thinkDiv = appendMsg('ai', '생각 중...', 'thinking');
+  const ckey=S.get(K.claude), okey=S.get(K.openai);
+  const ctx = curBrief ? '오늘 브리핑:
+'+(curBrief.headlines||[]).slice(0,5).map(h=>h.cat+': '+h.title).join('
+')+'
+
+' : '';
+  const sysmsg = ctx+'당신은 일본 PE/부동산 투자 전문 애널리스트입니다. 간결하고 구체적으로 한국어로 답변하세요.';
+  try {
+    let text = '';
+    if (ckey) {
+      const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sysmsg,tools:[{type:'web_search_20250305',name:'web_search'}],messages:chatHistory.slice(-8)})});
+      if(r.ok){const j=await r.json();text=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');}
+    } else if (okey) {
+      const r = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:800,messages:[{role:'system',content:sysmsg},...chatHistory.slice(-8)]})});
+      if(r.ok){const j=await r.json();text=j.choices[0].message.content;}
+    }
+    thinkDiv.remove();
+    appendMsg('ai', text||'응답 없음');
+    chatHistory.push({role:'assistant',content:text||''});
+    const msgs=document.getElementById('chatMsgs'); msgs.scrollTop=msgs.scrollHeight;
+  } catch(e) { thinkDiv.remove(); appendMsg('ai','오류: '+e.message); }
+}
+function appendMsg(role, text, cls) {
+  const el=document.getElementById('chatMsgs');
+  const d=document.createElement('div'); d.className='chat-msg '+role+(cls?' '+cls:'');
+  d.innerHTML='<div class="chat-bubble">'+esc(text).replace(/
+/g,'<br>')+'</div>';
+  el.appendChild(d); el.scrollTop=el.scrollHeight; return d;
+}
+function askAbout(topic){switchTab('chat');document.getElementById('chatInp').value=topic+'에 대해 더 자세히 알려줘';sendChat();}
+
+// ─── TOPIC PODCAST ────────────────────────────────────────────────────────────
+async function topicPodcast(topic) {
+  switchTab('pod');
+  document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">「'+esc(topic)+'」<br>팟캐스트 생성 중...</div></div>';
+  const ckey=S.get(K.claude), okey=S.get(K.openai);
+  const bctx = curBrief ? JSON.stringify({headlines:(curBrief.headlines||[]).slice(0,6),deals:(curBrief.deals||[]).slice(0,3)}).slice(0,2000) : '';
+  const prompt = '토픽: '+topic+'
+참고:
+'+bctx+'
+
+5분 분량 한국어 팟캐스트 스크립트.
+규칙: 모든 숫자를 한국어 음독으로, 자연스러운 애널리스트 스타일.
+섹션구분: ==배경== ==핵심 분석== ==투자 임플리케이션== ==결론==
+
+스크립트만 반환.';
+  try {
+    let script='';
+    if (ckey) {
+      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
+      if(r.ok){const j=await r.json();script=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');}
+    } else if (okey) {
+      const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
+      if(r.ok){const j=await r.json();script=j.choices[0].message.content;}
+    }
+    if(script){parsePod(script);document.getElementById('podH').textContent=topic;showToast('팟캐스트 준비됨 — 재생 버튼을 누르세요');}
+  } catch(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">❌</div><div class="empty-txt">'+esc(e.message)+'</div></div>';}
+}
+
 function switchTab(id) {
   document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('on'));
@@ -1537,6 +1752,8 @@ function showToast(msg){const t=document.getElementById('toast');if(!t)return;t.
 document.addEventListener('DOMContentLoaded', () => {
   const si = document.getElementById('srchInp');
   if (si) si.addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
+  const ci = document.getElementById('chatInp');
+  if (ci) ci.addEventListener('keydown', e => { if(e.key==='Enter' && !e.shiftKey){e.preventDefault();sendChat();} });
 });
 
 // ─── START ────────────────────────────────────────────────────────────────────
