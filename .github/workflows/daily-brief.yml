@@ -1,0 +1,43 @@
+name: Daily Brief Generator
+
+on:
+  schedule:
+    # 4:30 AM JST = 19:30 UTC (primary run - Japan morning papers + US close)
+    - cron: '30 19 * * *'
+    # 6:00 AM JST = 21:00 UTC (optional second run for any late-breaking news)
+    # - cron: '0 21 * * *'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed to commit the JSON file
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Daily Brief
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node generate.js
+
+      - name: Commit and push briefing
+        run: |
+          git config user.name "Daily Brief Bot"
+          git config user.email "bot@dailybrief.local"
+          git add data/
+          git diff --staged --quiet || git commit -m "briefing: $(date -u +'%Y-%m-%d') [auto]"
+          git pull --rebase origin main
+          git push
