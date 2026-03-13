@@ -7,6 +7,8 @@ import path from 'path';
 const GEMINI_KEY  = process.env.GEMINI_API_KEY;
 const CLAUDE_KEY  = process.env.CLAUDE_API_KEY;
 const OPENAI_KEY  = process.env.OPENAI_API_KEY;
+const NIKKEI_ID   = process.env.NIKKEI_ID || '';
+const NIKKEI_PW   = process.env.NIKKEI_PW || '';
 
 function jstDate() {
   const jst = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
@@ -14,8 +16,8 @@ function jstDate() {
 }
 
 const TODAY = jstDate();
-console.log(`\n=== Daily Brief Generator v2 ===`);
-console.log(`Date: ${TODAY} | APIs: Gemini=${!!GEMINI_KEY} Claude=${!!CLAUDE_KEY} OpenAI=${!!OPENAI_KEY}\n`);
+console.log(`\n=== Daily Brief Generator v3 ===`);
+console.log(`Date: ${TODAY} | APIs: Gemini=${!!GEMINI_KEY} Claude=${!!CLAUDE_KEY} OpenAI=${!!OPENAI_KEY} Nikkei=${!!NIKKEI_ID}\n`);
 
 async function fetchNewsWithGemini(date) {
   if (!GEMINI_KEY) return null;

@@ -448,6 +448,56 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 .chat-send:active{opacity:.75}
 .chat-send svg{width:16px;height:16px;fill:#000}
 
+/* ── NAV ACTION BUTTON ── */
+.nav-act{width:var(--tap);height:var(--tap);border:none;background:transparent;
+  color:var(--accent);cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-act:active{background:var(--e2)}
+.nav-act svg{width:22px;height:22px;fill:var(--accent)}
+.nav-act.spin svg{animation:spin .7s linear infinite}
+
+/* ── SCRIPT VIEWER ── */
+.script-panel{display:none;padding:var(--s4);margin:var(--s3) var(--s4);background:var(--e1);
+  border-radius:var(--r3);max-height:40vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.script-panel.show{display:block}
+.script-panel::-webkit-scrollbar{display:none}
+.script-text{font-size:14px;color:var(--t2);line-height:1.8;white-space:pre-wrap}
+.script-toggle{display:flex;gap:var(--s2);padding:var(--s2) var(--s4)}
+.script-tog-btn{flex:1;height:36px;border-radius:var(--r2);border:.5px solid var(--sep2);
+  background:var(--e1);color:var(--t2);font-size:13px;font-weight:500;cursor:pointer}
+.script-tog-btn.on{background:var(--accent-bg);border-color:var(--accent-bdr);color:var(--accent)}
+
+/* ── RICH ANALYSIS ── */
+.rich-wrap{padding:var(--s3) var(--s4)}
+.rich-section{margin-bottom:var(--s5)}
+.rich-sec-title{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:var(--s2);padding-bottom:var(--s1);border-bottom:1px solid var(--sep)}
+.rich-body{font-size:15px;color:var(--t2);line-height:1.75}
+.rich-table{width:100%;border-collapse:collapse;margin:var(--s3) 0;font-size:13px}
+.rich-table th{text-align:left;padding:var(--s2) var(--s3);background:var(--e2);
+  color:var(--t3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--sep)}
+.rich-table td{padding:var(--s2) var(--s3);border-bottom:.5px solid var(--sep);color:var(--t2);font-variant-numeric:tabular-nums}
+.rich-table tr:last-child td{border-bottom:none}
+.rich-kv{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin:var(--s3) 0}
+.rich-kv-item{background:var(--e1);border-radius:var(--r2);padding:var(--s3);border:.5px solid var(--sep)}
+.rich-kv-label{font-size:11px;color:var(--t3);margin-bottom:2px}
+.rich-kv-value{font-size:17px;font-weight:600;color:var(--t1);font-variant-numeric:tabular-nums}
+.rich-bar{height:6px;background:var(--e3);border-radius:3px;margin:var(--s2) 0;overflow:hidden}
+.rich-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+
+/* ── SOURCE MANAGEMENT ── */
+.src-item{display:flex;align-items:center;gap:var(--s3);padding:0 var(--s4);
+  min-height:var(--tap);border-bottom:.5px solid var(--sep)}
+.src-item:last-child{border-bottom:none}
+.src-name{flex:1;font-size:15px;color:var(--t1)}
+.src-url{font-size:11px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.src-del{width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,59,48,.12);
+  color:var(--red);font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.src-del:active{opacity:.6}
+.src-add-row{display:flex;gap:var(--s2);padding:var(--s2) var(--s4)}
+.src-add-inp{flex:1;background:transparent;border:none;outline:none;font-size:14px;color:var(--t1);padding:var(--s2) 0}
+.src-add-btn{height:32px;padding:0 var(--s3);border-radius:var(--r1);border:none;
+  background:var(--accent-bg);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0}
+
 /* ── RESPONSIVE — iPad ── */
 @media(min-width:768px){
   .mkt-cell{min-width:100px;padding:var(--s3) var(--s5)}
@@ -509,7 +559,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
-  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v14 · Built 2026-03-14 v14</div>
+  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v15 · Built 2026-03-14 v15</div>
   <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
@@ -535,7 +585,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
         <div class="nav-lbl" id="dateLbl">—</div>
         <button class="nav-arr" id="nextBtn" onclick="navDate(1)" disabled>›</button>
       </div>
-      <div class="nav-spacer"></div>
+      <button class="nav-act" id="rerunBtn" onclick="rerunToday()" title="새로고침"><svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
     </div>
 
     <!-- MARKET -->
@@ -606,16 +656,19 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <button class="ctrl-btn" onclick="pskip(30)"><svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg><span>30</span></button>
           </div>
           <div class="opts-row">
-            <button class="spd-btn" onclick="setSpd(.9,this)">0.9×</button>
-            <button class="spd-btn on" onclick="setSpd(1,this)">1.0×</button>
-            <button class="spd-btn" onclick="setSpd(1.2,this)">1.2×</button>
+            <button class="spd-btn on" onclick="setSpd(1,this)">1×</button>
             <button class="spd-btn" onclick="setSpd(1.5,this)">1.5×</button>
-            <button class="spd-btn" onclick="setSpd(1.8,this)">1.8×</button>
+            <button class="spd-btn" onclick="setSpd(2,this)">2×</button>
             <select class="voice-sel" id="voiceSel" onchange="pickVoice()"></select>
           </div>
         </div>
         <div class="tts-status" id="ttsStatus"></div>
+        <div class="script-toggle">
+          <button class="script-tog-btn on" id="togSections" onclick="togScriptView('sections')">섹션</button>
+          <button class="script-tog-btn" id="togScript" onclick="togScriptView('script')">스크립트 보기</button>
+        </div>
         <div id="podSecList"><div class="empty"><div class="empty-ico">🎙</div><div class="empty-txt">길이를 선택하면 팟캐스트가 자동 생성됩니다</div></div></div>
+        <div class="script-panel" id="scriptPanel"><div class="script-text" id="scriptText"></div></div>
       </div>
 
       <!-- DEEP DIVE -->
@@ -692,13 +745,28 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row" onclick="togSetting('trendMode')"><span class="set-row-lbl">🔥 화제 탭</span><button class="ios-tog on" id="tog-trendMode"></button></div>
             <div class="set-row" onclick="togSetting('podAutoGen')"><span class="set-row-lbl">브리핑 후 팟캐스트 자동생성</span><button class="ios-tog" id="tog-podAutoGen"></button></div>
           </div>
+          <div class="set-lbl">뉴스 소스</div>
+          <div class="set-grp">
+            <div id="srcList"></div>
+            <div class="src-add-row">
+              <input class="src-add-inp" id="srcAddInp" placeholder="소스 이름 또는 URL 추가...">
+              <button class="src-add-btn" onclick="addSource()">추가</button>
+            </div>
+          </div>
+          <div class="set-lbl">닛케이 로그인 (서버 스크래핑)</div>
+          <div class="set-grp">
+            <div class="set-inp-row"><input class="set-inp" id="set-nikkei-id" type="text" placeholder="닛케이 ID (이메일)"></div>
+            <div class="set-inp-row"><input class="set-inp" id="set-nikkei-pw" type="password" placeholder="닛케이 비밀번호"></div>
+            <div style="padding:var(--s2) var(--s4);font-size:12px;color:var(--t3);line-height:1.5">닛케이전자판·닛케이부동산마켓정보 계정. GitHub Secrets에 저장하면 매일 자동 스크래핑됩니다.</div>
+            <button class="set-btn" onclick="saveNikkei()">닛케이 설정 저장</button>
+          </div>
           <div class="set-lbl">현황</div>
           <div class="set-grp">
             <div class="set-row"><span class="set-row-lbl">저장된 브리핑</span><span class="set-row-val" id="storedCnt">0일</span></div>
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v14<br>Built 2026-03-14 v14</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v15<br>Built 2026-03-14 v15</div>
         </div>
       </div>
 
@@ -740,7 +808,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-/* Daily Brief v14 — clean ES5, no template literals, no const/let at top scope */
+/* Daily Brief v15 — clean ES5, no template literals, no const/let at top scope */
 
 /* ── STORAGE ─────────────────────────────────────────────── */
 var _mem = {};
@@ -791,7 +859,7 @@ function init(){
 function startApp(){
   var ma=document.getElementById('mainArea');if(ma){ma.style.display='flex';ma.style.flexDirection='column';}
   var tb=document.getElementById('tabbar');if(tb)tb.style.display='flex';
-  loadCfg();loadVoices();
+  loadCfg();loadVoices();loadSources();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
   updateDateUI();updateCounts();loadSchedUI();checkSched();
   var cached=sgj('db_brief_'+curDate);
@@ -810,6 +878,15 @@ function fetchGithub(date){
   return fetch(url).then(function(r){return r.ok?r.json():null;})
     .then(function(d){return d&&d.headlines&&d.headlines.length?d:null;})
     .catch(function(){return null;});
+}
+
+/* ── RERUN ──────────────────────────────────────────────── */
+function rerunToday(){
+  var btn=document.getElementById('rerunBtn');if(btn)btn.classList.add('spin');
+  sr('db_brief_'+curDate);curBrief=null;
+  showToast('브리핑 새로 생성 중...');
+  autoGen(curDate);
+  setTimeout(function(){if(btn)btn.classList.remove('spin');},3000);
 }
 
 /* ── LOADING STEPS ───────────────────────────────────────── */
@@ -944,17 +1021,28 @@ function filterCat(cat,btn){
 }
 
 /* ── SHEET ───────────────────────────────────────────────── */
+function fixUrl(url,title){
+  if(!url)return '';
+  if(url.indexOf('grounding-api-redirect')>=0||url.indexOf('aisearch.cloud.google')>=0){
+    return 'https://www.google.com/search?q='+encodeURIComponent(title);
+  }
+  return url;
+}
 function openSheet(type,id){
   if(!curBrief)return;
   var item=findById(type==='h'?curBrief.headlines:curBrief.deals,id);if(!item)return;
   var cls=catCls[item.cat||item.type||'딜']||'c-딜';
+  var realUrl=fixUrl(item.url,item.title);
   var html='<span class="ncat '+cls+'" style="margin:var(--s3) 0 var(--s2);display:inline-flex">'+esc(item.cat||item.type||'딜')+'</span>'
     +'<div class="sh-title">'+esc(item.title)+'</div>'
     +'<div class="sh-body">'+esc(item.detail||item.summary||'')+'</div>';
   if(item.implications)html+='<div class="sh-imp"><div class="sh-imp-lbl">투자 임플리케이션</div><div class="sh-imp-txt">'+esc(item.implications)+'</div></div>';
-  html+='<div class="sh-footer"><span class="sh-src">'+esc(item.source||'')+'</span>'+(item.url&&item.url.startsWith('http')?'<a class="sh-link" href="'+item.url+'" target="_blank">원문</a>':'')+'</div>';
-  html+='<div style="display:flex;gap:var(--s2);margin:var(--s4) 0"><button class="sh-close" style="background:var(--accent);color:#000" onclick="closeSheet();topicPodcast(\''+esc(item.title)+'\')">팟캐스트 생성</button>'
-    +'<button class="sh-close" onclick="closeSheet();askAbout(\''+esc(item.title)+'\')">AI에게 질문</button></div>'
+  html+='<div class="sh-footer"><span class="sh-src">'+esc(item.source||'')+'</span>'
+    +(realUrl?'<a class="sh-link" href="'+realUrl+'" target="_blank" rel="noopener">원문 검색</a>':'')+'</div>';
+  html+='<div style="display:flex;gap:var(--s2);margin:var(--s4) 0;flex-wrap:wrap">'
+    +'<button class="sh-close" style="flex:1;background:var(--accent);color:#000" onclick="closeSheet();genDeepDive(\''+esc(item.id)+'\')">딥다이브 분석</button>'
+    +'<button class="sh-close" style="flex:1" onclick="closeSheet();topicPodcast(\''+esc(item.title)+'\')">팟캐스트</button>'
+    +'<button class="sh-close" style="flex:1" onclick="closeSheet();askAbout(\''+esc(item.title)+'\')">AI 질문</button></div>'
     +'<button class="sh-close" onclick="closeSheet()">닫기</button>';
   document.getElementById('sheetBody').innerHTML=html;
   document.getElementById('ov').classList.add('show');document.getElementById('sheet').classList.add('show');
@@ -986,6 +1074,7 @@ function genPod(date,len){
 }
 
 function parsePod(txt){
+  curRawScript=txt;
   psecs=[];var parts=txt.trim().split(/==([^=]+)==/);
   if(parts[0].trim())psecs.push({name:'인트로',text:parts[0].trim()});
   for(var i=1;i<parts.length;i+=2){var body=parts[i+1]?parts[i+1].trim():'';if(body)psecs.push({name:parts[i].trim(),text:body});}
@@ -993,6 +1082,7 @@ function parsePod(txt){
   document.getElementById('totT').textContent=fmtT(totalSec);renderPsecs();
   document.getElementById('playerBar').classList.add('show');
   document.getElementById('pbTitle').textContent=dateLbl(curDate)+' 팟캐스트 >';
+  togScriptView('sections');
 }
 
 function renderPsecs(){
@@ -1026,7 +1116,7 @@ function toSpeech(txt){
 }
 
 function setSpd(s,btn){spd=s;var bs=document.querySelectorAll('.spd-btn');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');btn.classList.add('on');if(audioEl)audioEl.playbackRate=s;if(psecs.length){totalSec=Math.ceil(psecs.reduce(function(a,x){return a+x.text.length;},0)/6.5/s);document.getElementById('totT').textContent=fmtT(totalSec);}if(playing&&!audioEl){var idx=pidx;stopAll();speakFrom(idx);}}
-function pbCycleSpd(btn){var steps=[.9,1,1.2,1.5,1.8];spd=steps[(steps.indexOf(spd)+1)%steps.length];btn.textContent=spd.toFixed(1)+'x';if(audioEl)audioEl.playbackRate=spd;var bs=document.querySelectorAll('.spd-btn');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',parseFloat(bs[i].textContent)===spd);if(playing&&!audioEl){var idx=pidx;stopAll();speakFrom(idx);}}
+function pbCycleSpd(btn){var steps=[1,1.5,2];spd=steps[(steps.indexOf(spd)+1)%steps.length];btn.textContent=spd+'x';if(audioEl)audioEl.playbackRate=spd;var bs=document.querySelectorAll('.spd-btn');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',parseFloat(bs[i].textContent)===spd);if(playing&&!audioEl){var idx=pidx;stopAll();speakFrom(idx);}}
 
 function ptoggle(){
   if(!psecs.length){goTab('pod');return;}
@@ -1099,19 +1189,54 @@ function doSearch(){
   var allK=skeys().filter(function(k){return k.startsWith('db_brief_');});
   var matches=[];allK.forEach(function(k){try{var d=sgj(k);if(d&&JSON.stringify(d).toLowerCase().indexOf(q.toLowerCase())>=0)matches.push(d);}catch(e){}});
   var html='';
-  if(matches.length){html+='<div class="sec-hdr">과거 브리핑 ('+matches.length+'건)</div>';matches.slice(0,8).forEach(function(m){var hl=(m.headlines||[]).filter(function(h){return JSON.stringify(h).toLowerCase().indexOf(q.toLowerCase())>=0;})[0];html+='<div class="srch-r-item" onclick="loadDateBrief(\''+m.date+'\')"><div class="sri-date">'+dateLbl(m.date)+'</div><div class="sri-title">'+esc(hl&&hl.title||m.date+' 브리핑')+'</div><div class="sri-prev">'+esc(hl&&hl.summary||'')+'</div></div>';});}
-  html+='<div class="sec-hdr">AI 생성</div><div class="empty"><button class="empty-btn" id="_sgb">「'+esc(q)+'」분석 생성</button></div>';
-  res.innerHTML=html;var btn=document.getElementById('_sgb');if(btn)btn.addEventListener('click',function(){genCustom(q);});
+  if(matches.length){html+='<div class="sec-hdr">과거 브리핑 ('+matches.length+'건)</div>';matches.slice(0,5).forEach(function(m){var hl=(m.headlines||[]).filter(function(h){return JSON.stringify(h).toLowerCase().indexOf(q.toLowerCase())>=0;})[0];html+='<div class="srch-r-item" onclick="loadDateBrief(\''+m.date+'\')"><div class="sri-date">'+dateLbl(m.date)+'</div><div class="sri-title">'+esc(hl&&hl.title||m.date+' 브리핑')+'</div><div class="sri-prev">'+esc(hl&&hl.summary||'')+'</div></div>';});}
+  res.innerHTML=html+'<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">'+esc(q)+' 분석 생성 중...</div></div>';
+  genRichAnalysis(q);
 }
 function loadDateBrief(date){curDate=date;updateDateUI();var d=sgj('db_brief_'+date);if(d){renderBrief(d);goTab('brief');}}
-function genCustom(q){
-  var res=document.getElementById('srchResults');res.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">분석 중...</div></div>';
+
+function genRichAnalysis(q){
+  var res=document.getElementById('srchResults');
   var ckey=sg('db_claude'),okey=sg('db_openai');
-  var prompt='"'+q+'"에 대한 한국어 브리핑 4-5단락. 현황, 핵심 수치, 투자 임플리케이션 포함.';
+  var prompt='당신은 일본/한국 PE 및 부동산 투자 전문 애널리스트입니다.\n\n"'+q+'"에 대해 아래 형식의 JSON을 반환하세요:\n'
+    +'{"sections":[\n'
+    +'  {"title":"개요","body":"현재 상황 요약 2-3문장"},\n'
+    +'  {"title":"최근 결산 및 핵심 지표","body":"매출/영업이익/순이익 추이, key ratios","table":{"headers":["지표","FY2023","FY2024","YoY"],"rows":[["매출","XXX","XXX","+X%"]]}},\n'
+    +'  {"title":"주요 뉴스 및 동향","body":"최근 6개월 주요 이벤트, M&A, TOB, 카브아웃, 자산매각, LBO, MBO 등"},\n'
+    +'  {"title":"주주 및 지배구조","body":"대주주, 액티비스트 동향, 이사회 변경, 경영진 교체"},\n'
+    +'  {"title":"밸류에이션","body":"현재 시가총액, PER, PBR, EV/EBITDA 등","kv":[{"label":"시가총액","value":"XXX"},{"label":"PER","value":"XX.Xx"},{"label":"PBR","value":"X.Xx"},{"label":"EV/EBITDA","value":"XX.Xx"}]},\n'
+    +'  {"title":"투자 임플리케이션","body":"PE/RE 관점 분석, 리스크, 기회, 구체적 action point"}\n'
+    +']}\n상장기업이면 재무 데이터 포함. 비상장이면 가능한 정보로. JSON만 반환.';
+
   var p;
-  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
-  p.then(function(text){res.innerHTML='<div class="sec-hdr">「'+esc(q)+'」</div><div style="margin:0 var(--s4) var(--s4);padding:var(--s4);background:var(--e1);border-radius:var(--r3);font-size:15px;color:var(--t2);line-height:1.8">'+esc(text).replace(/\n/g,'<br>')+'</div><div style="padding:0 var(--s4) var(--s4)"><button class="empty-btn" id="_spb">팟캐스트로 듣기</button></div>';var sb=document.getElementById('_spb');if(sb)sb.addEventListener('click',function(){topicPodcast(q);});}).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  p.then(function(raw){
+    try{var data=parseJ(raw);renderRichAnalysis(res,q,data);}
+    catch(e){res.innerHTML='<div class="rich-wrap"><div class="sec-hdr">'+esc(q)+'</div><div style="padding:var(--s4);background:var(--e1);border-radius:var(--r3);font-size:15px;color:var(--t2);line-height:1.8">'+esc(raw).replace(/\n/g,'<br>')+'</div></div><div style="padding:var(--s3) var(--s4)"><button class="empty-btn" onclick="topicPodcast(\''+esc(q)+'\')">팟캐스트로 듣기</button></div>';}
+  }).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
+}
+
+function renderRichAnalysis(container,q,data){
+  var html='<div class="rich-wrap"><div class="sec-hdr">'+esc(q)+'</div>';
+  (data.sections||[]).forEach(function(sec){
+    html+='<div class="rich-section"><div class="rich-sec-title">'+esc(sec.title)+'</div><div class="rich-body">'+esc(sec.body||'').replace(/\n/g,'<br>')+'</div>';
+    if(sec.table&&sec.table.headers){
+      html+='<table class="rich-table"><thead><tr>';
+      sec.table.headers.forEach(function(h){html+='<th>'+esc(h)+'</th>';});
+      html+='</tr></thead><tbody>';
+      (sec.table.rows||[]).forEach(function(r){html+='<tr>';r.forEach(function(c){html+='<td>'+esc(c)+'</td>';});html+='</tr>';});
+      html+='</tbody></table>';
+    }
+    if(sec.kv&&sec.kv.length){
+      html+='<div class="rich-kv">';
+      sec.kv.forEach(function(item){html+='<div class="rich-kv-item"><div class="rich-kv-label">'+esc(item.label)+'</div><div class="rich-kv-value">'+esc(item.value)+'</div></div>';});
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  html+='<div style="display:flex;gap:var(--s2);margin-top:var(--s4)"><button class="empty-btn" style="flex:1" onclick="topicPodcast(\''+esc(q)+'\')">팟캐스트</button><button class="empty-btn" style="flex:1;background:var(--e1);color:var(--accent);border:1px solid var(--accent-bdr)" onclick="askAbout(\''+esc(q)+'\')">AI 질문</button></div></div>';
+  container.innerHTML=html;
 }
 
 /* ── PASTE ───────────────────────────────────────────────── */
@@ -1129,6 +1254,113 @@ function analyzePaste(){
 /* ── SETTINGS ────────────────────────────────────────────── */
 function saveGithub(){var v=document.getElementById('set-github').value.trim().replace(/\/$/,'');if(v){ss('db_github',v);showToast('GitHub URL 저장됨');}}
 function saveKeys(){var g=document.getElementById('set-gemini').value.trim(),cl=document.getElementById('set-claude').value.trim(),o=document.getElementById('set-openai').value.trim();if(g)ss('db_gemini',g);if(cl)ss('db_claude',cl);if(o)ss('db_openai',o);showToast('저장됐습니다');loadVoices();}
+function saveNikkei(){
+  var id=document.getElementById('set-nikkei-id').value.trim();
+  var pw=document.getElementById('set-nikkei-pw').value.trim();
+  if(id)ss('db_nikkei_id',id);if(pw)ss('db_nikkei_pw',pw);
+  showToast('닛케이 로그인 정보 저장됨 (GitHub Secrets에도 추가 필요)');
+}
+
+/* ── DEEP DIVE ──────────────────────────────────────────── */
+function genDeepDive(hid){
+  if(!curBrief)return;
+  var item=findById(curBrief.headlines,hid)||findById(curBrief.deals,hid);if(!item)return;
+  goTab('chat');
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var el=document.getElementById('chatMsgs');
+  el.innerHTML='';addMsg('ai','「'+item.title+'」딥다이브 분석 중...');
+  var prompt='당신은 일본 PE/부동산 투자 전문 시니어 애널리스트입니다.\n\n"'+item.title+'"에 대해 아래 형식의 딥다이브 분석 JSON을 반환하세요:\n'
+    +'{"sections":[\n'
+    +'  {"title":"배경 및 경위","body":"사건의 맥락, 배경, 타임라인"},\n'
+    +'  {"title":"핵심 수치 및 밸류에이션","body":"관련 재무데이터, 딜 사이즈, 밸류에이션 멀티플","table":{"headers":["지표","수치","비고"],"rows":[]},"kv":[{"label":"지표명","value":"수치"}]},\n'
+    +'  {"title":"이해관계자 분석","body":"관련 기업/주주/PE/액티비스트/경영진 포지션 분석"},\n'
+    +'  {"title":"딜 구조 및 전략적 의미","body":"M&A/TOB/카브아웃/LBO/MBO 구조, 시너지, 전략적 근거"},\n'
+    +'  {"title":"리스크 팩터","body":"규제, 실행, 밸류에이션, 매크로 리스크"},\n'
+    +'  {"title":"투자 임플리케이션 및 후속 액션","body":"PE/RE 관점 구체적 기회와 리스크, 모니터링 포인트, action item"}\n'
+    +']}\nJSON만 반환.';
+
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:4000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  p.then(function(raw){
+    el.innerHTML='';
+    try{
+      var data=parseJ(raw);
+      var html='<div class="rich-wrap" style="padding:var(--s4)"><div style="font-size:20px;font-weight:700;margin-bottom:var(--s4)">'+esc(item.title)+'</div>';
+      (data.sections||[]).forEach(function(sec){
+        html+='<div class="rich-section"><div class="rich-sec-title">'+esc(sec.title)+'</div><div class="rich-body">'+esc(sec.body||'').replace(/\n/g,'<br>')+'</div>';
+        if(sec.table&&sec.table.headers){
+          html+='<table class="rich-table"><thead><tr>';sec.table.headers.forEach(function(h){html+='<th>'+esc(h)+'</th>';});html+='</tr></thead><tbody>';
+          (sec.table.rows||[]).forEach(function(r){html+='<tr>';r.forEach(function(c){html+='<td>'+esc(c)+'</td>';});html+='</tr>';});html+='</tbody></table>';
+        }
+        if(sec.kv&&sec.kv.length){
+          html+='<div class="rich-kv">';sec.kv.forEach(function(kv){html+='<div class="rich-kv-item"><div class="rich-kv-label">'+esc(kv.label)+'</div><div class="rich-kv-value">'+esc(kv.value)+'</div></div>';});html+='</div>';
+        }
+        html+='</div>';
+      });
+      html+='<div style="display:flex;gap:var(--s2);margin-top:var(--s4)"><button class="empty-btn" style="flex:1" onclick="topicPodcast(\''+esc(item.title)+'\')">팟캐스트</button><button class="empty-btn" style="flex:1;background:var(--e1);color:var(--accent);border:1px solid var(--accent-bdr)" onclick="askAbout(\''+esc(item.title)+'\')">추가 질문</button></div></div>';
+      el.innerHTML=html;
+    }catch(e){
+      addMsg('ai',raw||'분석 결과를 파싱하지 못했습니다.');
+    }
+    chatHist=[{role:'assistant',content:'딥다이브 분석: '+item.title}];
+  }).catch(function(e){el.innerHTML='';addMsg('ai','딥다이브 오류: '+e.message);});
+}
+
+/* ── SCRIPT VIEWER ──────────────────────────────────────── */
+var curRawScript='';
+function togScriptView(mode){
+  var secEl=document.getElementById('podSecList');
+  var scrEl=document.getElementById('scriptPanel');
+  var togSec=document.getElementById('togSections');
+  var togScr=document.getElementById('togScript');
+  if(mode==='script'){
+    if(secEl)secEl.style.display='none';if(scrEl)scrEl.classList.add('show');
+    if(togSec)togSec.classList.remove('on');if(togScr)togScr.classList.add('on');
+    var stEl=document.getElementById('scriptText');
+    if(stEl&&curRawScript)stEl.textContent=curRawScript;
+  }else{
+    if(secEl)secEl.style.display='';if(scrEl)scrEl.classList.remove('show');
+    if(togSec)togSec.classList.add('on');if(togScr)togScr.classList.remove('on');
+  }
+}
+
+/* ── SOURCE MANAGEMENT ──────────────────────────────────── */
+var defaultSources=[
+  {name:'Nikkei Asia',url:'https://asia.nikkei.com'},
+  {name:'Nikkei (日経)',url:'https://www.nikkei.com'},
+  {name:'Nikkei RE (不動産)',url:'https://www.nikkei.com/realestate'},
+  {name:'Bloomberg',url:'https://www.bloomberg.com'},
+  {name:'Reuters',url:'https://www.reuters.com'},
+  {name:'DEAL Street Asia',url:'https://www.dealstreetasia.com'},
+  {name:'PE Hub',url:'https://www.pehub.com'},
+  {name:'CBRE Japan',url:'https://www.cbre.co.jp'},
+  {name:'JLL Japan',url:'https://www.joneslanglasalle.co.jp'}
+];
+function loadSources(){
+  var saved=sgj('db_sources');
+  var sources=saved||defaultSources;
+  renderSources(sources);
+}
+function renderSources(sources){
+  var el=document.getElementById('srcList');if(!el)return;
+  var html='';
+  sources.forEach(function(s,i){
+    html+='<div class="src-item"><span class="src-name">'+esc(s.name)+'</span><span class="src-url">'+esc(s.url)+'</span><button class="src-del" onclick="delSource('+i+')">×</button></div>';
+  });
+  el.innerHTML=html;
+}
+function addSource(){
+  var inp=document.getElementById('srcAddInp');var v=inp.value.trim();if(!v)return;
+  var sources=sgj('db_sources')||defaultSources.slice();
+  var isUrl=v.indexOf('http')===0||v.indexOf('www.')===0;
+  sources.push({name:isUrl?v.replace(/https?:\/\/(www\.)?/,'').split('/')[0]:v,url:isUrl?v:''});
+  ssj('db_sources',sources);renderSources(sources);inp.value='';showToast('소스 추가됨');
+}
+function delSource(idx){
+  var sources=sgj('db_sources')||defaultSources.slice();
+  sources.splice(idx,1);ssj('db_sources',sources);renderSources(sources);showToast('소스 삭제됨');
+}
 function loadCfg(){
   var saved=sgj('db_cfg');if(saved){for(var k in saved)cfg[k]=saved[k];}
   var togs=document.querySelectorAll('[id^="tog-"]');for(var i=0;i<togs.length;i++){var key=togs[i].id.replace('tog-','');if(key in cfg)togs[i].classList.toggle('on',cfg[key]!==false);}
@@ -1137,6 +1369,9 @@ function loadCfg(){
   var ec=document.getElementById('set-claude');if(ec&&cl)ec.value=cl;
   var eo=document.getElementById('set-openai');if(eo&&o)eo.value=o;
   var egh=document.getElementById('set-github');if(egh&&gh)egh.value=gh;
+  var nid=sg('db_nikkei_id'),npw=sg('db_nikkei_pw');
+  var eni=document.getElementById('set-nikkei-id');if(eni&&nid)eni.value=nid;
+  var enp=document.getElementById('set-nikkei-pw');if(enp&&npw)enp.value='••••••••';
   updateCatTabs();
 }
 function togSetting(key){cfg[key]=!cfg[key];var el=document.getElementById('tog-'+key);if(el)el.classList.toggle('on',cfg[key]);ssj('db_cfg',cfg);updateCatTabs();}
