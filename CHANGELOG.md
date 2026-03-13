@@ -1,34 +1,42 @@
 # Daily Brief — Changelog
 
-## v16.0 (2026-03-14) — PRO TOOLS
+## v17.0 (2026-03-14) — ANTI-HALLUCINATION
 
-### New: 도구 탭 (6번째 탭)
-- **📊 Comp Table**: 기업명 입력 → 동종 5-8개사 비교 테이블 자동 생성
-  - EV/EBITDA, PER, PBR, ROE, 배당수익률, 매출성장률
-  - 상대적 포지션 분석 + PE 관점 시사점
-- **💼 Deal Tracker**: 관심 딜 watchlist + 상태 추적
-  - Announced → 진행중 → Closed / 무산 상태 사이클
-  - 개별 AI 업데이트 (가격/구조/타임라인/규제 승인)
-  - 전체 일괄 업데이트
-- **📋 Weekly Memo**: 주간 투자위원회용 1페이지 메모 자동 생성
-  - 이번 주 모든 브리핑 + 워치리스트 데이터 종합
-  - Executive Summary / 매크로 / 일본 포커스 / 딜 / Watch
-- **🔔 Alert**: 키워드 기반 알림
-  - 키워드 등록 (예: 블랙스톤, データセンター)
-  - 매칭 기사 자동 하이라이트 (금색 좌측 보더 + 🔔 아이콘)
-  - 키워드 삭제 시 즉시 반영
+### Root Cause Analysis
+스크린샷의 "일본 부동산 펀드, 도쿄 오피스 빌딩 인수 JPY 40bn" 같은 헤드라인은 100% 허구.
+마켓 데이터 0%, 0bp도 가짜. 원인 3가지:
 
-### Changed
-- 탭바: 5탭 → 6탭 (브리핑/팟캐스트/AI질문/검색/도구/설정)
-- Enter 키 지원: Comp/Deal/Alert 입력창
+1. **강제 최소 개수**: "14-18 headlines 필수" → Gemini가 10개만 찾아도 Claude가 나머지를 지어냄
+2. **스키마 샘플 데이터**: 예시 `"v":"1.52%"` 를 Claude가 그대로 복사
+3. **검증 레이어 부재**: 0%, 제네릭 헤드라인이 그대로 통과
+
+### Fixed — Gemini Prompt (뉴스 수집)
+- "ONLY report news you ACTUALLY find. NEVER fabricate"
+- "5 real items > 20 fake items"
+- 일본어/영어/한국어 별도 검색어 10개 지정
+- Market data: "use EXACT numbers, write N/A if not found"
+- Temperature 0.2 → 0.1 (더 factual)
+
+### Fixed — Claude Prompt (구조화)
+- system prompt에 ANTI-HALLUCINATION RULES 8조항 별도 전달
+- "FORBIDDEN: generic headlines without specific names"
+- 강제 최소 개수 제거 ("return only real items")
+- 스키마 예시: "1.52%" → "실제수치 또는 N/A"
+
+### Added — validateBrief() (클라이언트 + 서버)
+- 제네릭 패턴 정규식 필터 (URL 없는 "일본 부동산 펀드, X 인수" 제거)
+- 마켓 데이터 0%/0bp → N/A 자동 치환
+- 제목 10자 미만 제거
+- 서버(generate.js)와 클라이언트(index.html) 양쪽에 적용
+
+### Efficiency
+- Gemini temp 0.1 (factual)
+- Claude system prompt 분리 (토큰 효율)
+- 12시간 캐시 유지 (중복 생성 방지)
 
 ---
 
-## v15.0 (2026-03-14) — MAJOR FEATURE UPGRADE
-- Rerun 버튼, 딥다이브 분석, Rich 검색 분석
-- 스크립트 뷰어, 소스 관리, 닛케이 로그인
-- 원문 404 수정, 배속 단순화
-
-## v14.0 (2026-03-14) — FULL BUG AUDIT (35+ runtime bugs fixed)
-## v13.0 (2026-03-13) — ES5 rewrite
-## v10.0–v1.0 — See previous versions
+## v16.0 — PRO TOOLS (Comp Table, Deal Tracker, Weekly Memo, Alert)
+## v15.0 — MAJOR FEATURE UPGRADE
+## v14.0 — FULL BUG AUDIT (35+ runtime bugs)
+## v13.0–v1.0 — See previous versions

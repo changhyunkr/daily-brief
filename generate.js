@@ -24,6 +24,8 @@ async function fetchNewsWithGemini(date) {
   console.log('Step 1: Gemini Flash + Google Search...');
   const prompt = `Today is ${date} (JST) 4:30 AM. You are preparing a morning briefing for a Japan PE/Real Estate fund manager. Japanese morning papers just published, US markets closed.
 
+CRITICAL: Only report news you ACTUALLY find via Google Search. NEVER fabricate. If you find fewer items, that's OK. 8 real items > 20 fake items.
+
 Search ALL these areas exhaustively:
 
 JAPAN (highest priority):
@@ -70,8 +72,8 @@ MARKET REPORTS PUBLISHED TODAY:
 - Any major investment bank market outlook
 
 For each: Korean headline, category (글로벌|일본|미국|아시아|매크로|딜|화제|한국), 2-sentence Korean summary, source, URL.
-Market levels: JGB 10Y %, USD/JPY, Nikkei, S&P500, WTI, USD/KRW.
-Target 20-25 stories. ALWAYS find at least 3 deal items and 2 trending items.`;
+Market levels: JGB 10Y %, USD/JPY, Nikkei, S&P500, WTI, USD/KRW. Use EXACT numbers from search results. If not found, write "N/A".
+Return only items you actually found. Quality over quantity. Include real source URLs.`;
 
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`,
@@ -96,13 +98,19 @@ async function structureWithClaude(rawNews, date, useSearch = false) {
 
   const sys = `Senior Japan PE/Real Estate investment analyst preparing daily morning brief.
 
+CRITICAL ANTI-HALLUCINATION RULES:
+- ONLY use information from the provided raw news data. NEVER invent or fabricate news.
+- If a specific number, price, or fact is not in the raw data, write "정보 없음" or "N/A".
+- Market data: use EXACT numbers from the raw data. If not found, use "N/A" for value and "—" for change.
+- URLs: use the EXACT URL from the source. If no URL available, use "".
+- If fewer than 10 real stories exist in the raw data, return fewer items. Quality > quantity.
+- Every headline MUST reference a SPECIFIC company name, person, number, or event from the data.
+- FORBIDDEN: Generic headlines like "일본 부동산 펀드, 빌딩 인수" without specific names.
+
 HEADLINE RULES:
 - Korean, max 55 chars, specific (include numbers/company names)
 - Categories: 글로벌 | 일본 | 미국 | 아시아 | 매크로 | 딜 | 화제 | 한국
-- 딜 category = ANY of: M&A, PE buyout, TOB/MBO, carve-out, RE transaction, activist campaign, fund closing, earnings with investment thesis, data center/infra deal. Minimum 4 deal items.
-- 화제 category = MUST have at least 2: WBC/sports, AI/tech announcement, geopolitical flashpoint, trending investor topic, major cultural moment. These are "what educated investors are talking about today."
 - implications = specific actionable PE/RE angle (not "주목할 만하다" — say WHY and WHAT to do/watch)
-- Real URLs from news sources
 - No Japanese punctuation in Korean text`;
 
   const body_content = useSearch
@@ -111,12 +119,12 @@ HEADLINE RULES:
 
   const schema = `Return ONLY this JSON (no markdown fences, no text outside JSON):
 {"date":"${date}","generatedAt":${Date.now()},"generatedBy":"github-actions","model":"${useSearch?'claude-search':'gemini+claude'}",
-"headlines":[{"id":"h1","cat":"일본","title":"헤드라인","summary":"2문장 요약.","detail":"3-4문장 분석.","implications":"PE/RE 투자 관점.","source":"Nikkei Asia","url":"https://..."}],
-"market":{"jgb10y":{"v":"1.52%","d":"+3bp","t":1},"usdjpy":{"v":"148.2","d":"-0.4","t":-1},"nikkei":{"v":"38,450","d":"+0.4%","t":1},"sp500":{"v":"5,680","d":"-0.2%","t":-1},"wti":{"v":"$72.4","d":"-0.8%","t":-1},"usdkrw":{"v":"1,340","d":"+2","t":-1}},
-"deals":[{"id":"d1","title":"딜 제목","value":"$Xbn","type":"카브아웃","summary":"구조와 왜 지금.","source":"Bloomberg","url":"https://..."}],
+"headlines":[{"id":"h1","cat":"일본","title":"구체적 헤드라인","summary":"팩트 기반 2문장.","detail":"3-4문장 분석.","implications":"PE/RE 투자 관점 구체적 시사점.","source":"실제 출처","url":"실제 URL 또는 빈문자열"}],
+"market":{"jgb10y":{"v":"실제수치 또는 N/A","d":"변동 또는 —","t":0},"usdjpy":{"v":"","d":"","t":0},"nikkei":{"v":"","d":"","t":0},"sp500":{"v":"","d":"","t":0},"wti":{"v":"","d":"","t":0},"usdkrw":{"v":"","d":"","t":0}},
+"deals":[{"id":"d1","title":"실제 딜명","value":"금액","type":"유형","summary":"팩트 기반 요약.","source":"출처","url":"URL"}],
 "watch":[{"n":1,"text":"관전포인트1"},{"n":2,"text":"관전포인트2"},{"n":3,"text":"관전포인트3"}]}
 
-Include 14-20 headlines across ALL categories. Include 4-8 deals (be generous). t=1 up, -1 down, 0 flat.`;
+Include ONLY real items from the raw data. t=1 up, -1 down, 0 flat/unknown.`;
 
   const body = {
     model: 'claude-sonnet-4-20250514', max_tokens: 6000,
@@ -193,6 +201,34 @@ function save(date, data) {
   console.log(`  ✓ Saved (${dates.length} total)`);
 }
 
+function validateBrief(b) {
+  if (!b) return b;
+  const genericPattern = /^(일본|미국|한국|중국|글로벌)\s*(부동산|기업|펀드|투자),?\s*(부동산|기업|펀드|투자|오피스|물류|빌딩)/;
+  if (b.headlines) {
+    const before = b.headlines.length;
+    b.headlines = b.headlines.filter(h => {
+      if (!h.title || h.title.length < 10) return false;
+      if (genericPattern.test(h.title) && !h.url) return false;
+      return true;
+    });
+    const removed = before - b.headlines.length;
+    if (removed > 0) console.log(`  ⚠ Validation: removed ${removed} suspicious headlines`);
+  }
+  if (b.market) {
+    for (const k of ['jgb10y','usdjpy','nikkei','sp500','wti','usdkrw']) {
+      const m = b.market[k];
+      if (!m) { b.market[k] = {v:'N/A',d:'—',t:0}; continue; }
+      if (m.v === '0' || m.v === '0%' || m.v === '$0' || m.d === '0' || m.d === '0%' || m.d === '0bp') {
+        b.market[k] = {v:'N/A',d:'—',t:0};
+      }
+    }
+  }
+  if (b.deals) {
+    b.deals = b.deals.filter(d => d.title && d.title.length >= 8 && !(genericPattern.test(d.title) && !d.url));
+  }
+  return b;
+}
+
 async function main() {
   let rawNews = null, briefing = null;
   try { rawNews = await fetchNewsWithGemini(TODAY); } catch(e) { console.warn(`⚠ Gemini: ${e.message}`); }
@@ -202,6 +238,7 @@ async function main() {
   briefing.date = TODAY;
   briefing.generatedAt = briefing.generatedAt || Date.now();
   briefing.serverGenerated = true;
+  briefing = validateBrief(briefing);
   addSpecialTopic(TODAY, briefing);
   save(TODAY, briefing);
   const cats = [...new Set(briefing.headlines?.map(h=>h.cat)||[])];
