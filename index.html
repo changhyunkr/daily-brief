@@ -738,1058 +738,436 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── STORAGE (sandbox-safe) ───────────────────────────────────────────────────
-const _mem = {};
-let _ls = false;
-try { localStorage.setItem('_chk','1'); localStorage.removeItem('_chk'); _ls = true; } catch(e) {}
-const S = {
-  get(k){ try{ return _ls ? localStorage.getItem(k) : (_mem[k]||null); } catch{ return _mem[k]||null; } },
-  set(k,v){ try{ if(_ls) localStorage.setItem(k,v); else _mem[k]=v; } catch{ _mem[k]=v; } },
-  rm(k){ try{ if(_ls) localStorage.removeItem(k); else delete _mem[k]; } catch{} },
-  getJ(k){ try{ const s=this.get(k); return s?JSON.parse(s):null; } catch{ return null; } },
-  setJ(k,v){ try{ this.set(k, JSON.stringify(v)); } catch(e){ console.warn('Storage full'); } },
-  keys(){ try{ if(_ls){ const a=[]; for(let i=0;i<localStorage.length;i++) a.push(localStorage.key(i)); return a; } return Object.keys(_mem); } catch{ return []; } }
-};
+/* Daily Brief v13 — clean ES5, no template literals, no const/let at top scope */
 
-// ─── KEYS ────────────────────────────────────────────────────────────────────
-const K = {
-  gemini:'db_gemini', claude:'db_claude', openai:'db_openai',
-  github:'db_github', settings:'db_settings',
-  sched:'db_sched', lastPre:'db_lastpre',
-  brief: d => 'db_brief_'+d,
-  pod: (d,l) => 'db_pod_'+d+'_'+l,
-};
+/* ── STORAGE ─────────────────────────────────────────────── */
+var _mem = {};
+var _ls = false;
+try { localStorage.setItem('_t','1'); localStorage.removeItem('_t'); _ls=true; } catch(e) {}
+function sg(k){try{return _ls?localStorage.getItem(k):(_mem[k]||null);}catch(e){return _mem[k]||null;}}
+function ss(k,v){try{if(_ls)localStorage.setItem(k,v);else _mem[k]=v;}catch(e){_mem[k]=v;}}
+function sr(k){try{if(_ls)localStorage.removeItem(k);else delete _mem[k];}catch(e){}}
+function sgj(k){try{var s=sg(k);return s?JSON.parse(s):null;}catch(e){return null;}}
+function ssj(k,v){try{ss(k,JSON.stringify(v));}catch(e){}}
+function skeys(){try{if(_ls){var a=[];for(var i=0;i<localStorage.length;i++)a.push(localStorage.key(i));return a;}return Object.keys(_mem);}catch(e){return[];}}
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
-let curDate = todayStr();
-let curBrief = null;
-let curCat = 'all';
-let curLen = 'short';
-let settings = { autoGen:true, japanMode:true, koreaMode:false, usMode:true, dealMode:true, trendMode:true, podAutoGen:false };
-let podSecs = [], podIdx = 0;
-let spd = 1.0, elapsed = 0, totalSec = 0;
-let playing = false, paused = false, timerRef = null;
-let voices = [], selVoice = null;
-let audioEl = null;
-let useOaiTts = false;
-let oaiVoice = 'nova';
+/* ── STATE ───────────────────────────────────────────────── */
+var curDate=todayStr(),curBrief=null,curCat='all',curLen='short';
+var cfg={autoGen:true,japanTab:true,koreaTab:false,usTab:true,dealTab:true,trendTab:true};
+var psecs=[],pidx=0,spd=1.0,elapsed=0,totalSec=0;
+var playing=false,paused=false,timerRef=null;
+var voices=[],selVoice=null,useOai=false,oaiVoice='nova',audioEl=null;
+var chatHist=[];
+var catCls={'글로벌':'cg','일본':'cj','미국':'cu','한국':'ck','아시아':'ca','매크로':'cm','딜':'cd','화제':'ct'};
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-async function init() {
-  loadSettings();
-  loadVoices();
-  speechSynthesis.onvoiceschanged = loadVoices;
-
-  const hasKey = S.get(K.claude) || S.get(K.openai);
-  if (!hasKey) {
-    // Setup screen is visible by default (no display:none in HTML)
-    return;
-  }
-
-  showMain();
-  updateDateUI();
-  updateCounts();
-  loadSchedUI();
-  checkSched();
-
-  // 1. Local cache
-  const cached = S.getJ(K.brief(curDate));
-  if (cached && !isStale(cached)) {
-    renderBrief(cached);
-    return;
-  }
-  // 2. GitHub
-  const remote = await fetchGithub(curDate);
-  if (remote) {
-    S.setJ(K.brief(curDate), remote);
-    renderBrief(remote);
-    return;
-  }
-  // 3. Generate
-  if (settings.autoGen) {
-    await autoGen(curDate);
-  } else {
-    renderEmpty('📰','브리핑 없음','지금 생성', () => autoGen(curDate));
-  }
+/* ── SETUP ───────────────────────────────────────────────── */
+function saveSetup(){
+  var gv=document.getElementById('si-gemini').value.trim();
+  var cv=document.getElementById('si-claude').value.trim();
+  var ov=document.getElementById('si-openai').value.trim();
+  var err=document.getElementById('su-err');
+  if(!cv&&!ov){if(err){err.textContent='Claude 또는 OpenAI 키 중 하나는 필요합니다';err.style.display='block';}return;}
+  if(err)err.style.display='none';
+  if(gv)ss('db_gemini',gv);
+  if(cv)ss('db_claude',cv);
+  if(ov)ss('db_openai',ov);
+  if(_ls){window.location.reload();}else{document.getElementById('setup').style.display='none';startApp();}
 }
 
-function showMain() {
-  // Hide setup & loading
-  const su = document.getElementById('setupScreen');
-  if (su) su.style.display = 'none';
-  const ld = document.getElementById('loadingScreen');
-  if (ld) { ld.classList.remove('show'); ld.style.display = 'none'; }
-  // Show main
-  const ma = document.getElementById('mainArea');
-  if (ma) { ma.style.display = 'flex'; ma.style.flexDirection = 'column'; }
-  const tb = document.getElementById('tabbar');
-  if (tb) tb.style.display = 'flex';
+/* ── INIT ────────────────────────────────────────────────── */
+function init(){
+  if(!sg('db_claude')&&!sg('db_openai'))return;
+  document.getElementById('setup').style.display='none';
+  startApp();
 }
 
-// ─── GITHUB FETCH ─────────────────────────────────────────────────────────────
-async function fetchGithub(date) {
-  const base = S.get(K.github);
-  if (!base) return null;
-  try {
-    const url = base.replace(/\/$/, '') + '/data/briefing-' + date + '.json?t=' + Date.now();
-    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!data.headlines?.length) return null;
-    return data;
-  } catch(e) { console.log('GitHub fetch failed:', e.message); return null; }
+function startApp(){
+  document.getElementById('app').style.display='flex';
+  loadCfg();loadVoices();
+  if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
+  updateDateUI();updateCounts();loadSchedUI();checkSched();
+  var cached=sgj('db_brief_'+curDate);
+  if(cached&&!isStale(cached)){renderBrief(cached);return;}
+  fetchGithub(curDate).then(function(r){
+    if(r){ssj('db_brief_'+curDate,r);renderBrief(r);}
+    else if(cfg.autoGen){autoGen(curDate);}
+    else{renderEmpty('📰','브리핑 없음','지금 생성',function(){autoGen(curDate);});}
+  });
 }
 
-// ─── AUTO GENERATE ────────────────────────────────────────────────────────────
-async function autoGen(date) {
-  // Ensure loading is visible
-  const suEl = document.getElementById('setupScreen');
-  if (suEl) suEl.style.display = 'none';
-  const ldEl = document.getElementById('loadingScreen');
-  if (ldEl) { ldEl.style.display = 'flex'; ldEl.classList.add('show'); }
+/* ── GITHUB ──────────────────────────────────────────────── */
+function fetchGithub(date){
+  var base=sg('db_github');if(!base)return Promise.resolve(null);
+  var url=base.replace(/\/$/,'')+'/data/briefing-'+date+'.json?t='+Date.now();
+  return fetch(url).then(function(r){return r.ok?r.json():null;})
+    .then(function(d){return d&&d.headlines&&d.headlines.length?d:null;})
+    .catch(function(){return null;});
+}
 
-  try {
-    stepOn(0);
-    const raw = await fetchGemini(date);
-    stepDone(0); stepOn(1);
-    const brief = await structureClaude(raw, date);
-    stepDone(1); stepOn(2);
-    S.setJ(K.brief(date), brief);
-    stepDone(2); stepOn(3);
-    await delay(300);
-    stepDone(3);
-    await delay(400);
-    if (ldEl) { ldEl.classList.remove('show'); ldEl.style.display = 'none'; }
-    showMain();
-    renderBrief(brief);
+/* ── LOADING STEPS ───────────────────────────────────────── */
+function stepOn(n){var s=document.getElementById('ls'+n),i=document.getElementById('li'+n);if(s)s.classList.add('on');if(i)i.className='ld-dot spin';}
+function stepDone(n){var s=document.getElementById('ls'+n),i=document.getElementById('li'+n);if(s){s.classList.remove('on');s.classList.add('ok');}if(i){i.className='ld-dot done';i.textContent='v';}}
+
+/* ── AUTO GEN ────────────────────────────────────────────── */
+function autoGen(date){
+  var ld=document.getElementById('loading');if(ld)ld.style.display='flex';
+  stepOn(0);
+  fetchGemini(date).then(function(raw){
+    stepDone(0);stepOn(1);return structureAI(raw,date);
+  }).then(function(brief){
+    stepDone(1);stepOn(2);ssj('db_brief_'+date,brief);stepDone(2);stepOn(3);return delay(600);
+  }).then(function(){
+    stepDone(3);return delay(400);
+  }).then(function(){
+    if(ld)ld.style.display='none';
+    var b=sgj('db_brief_'+date);if(b)renderBrief(b);
     updateCounts();
-  } catch(e) {
-    if (ldEl) { ldEl.classList.remove('show'); ldEl.style.display = 'none'; }
-    showMain();
-    console.error('autoGen failed:', e);
-    renderEmpty('❌', '생성 실패: ' + e.message, '다시 시도', () => autoGen(date));
-  }
+  }).catch(function(err){
+    if(ld)ld.style.display='none';
+    console.error('autoGen:',err);
+    renderEmpty('X','생성 실패: '+err.message,'다시 시도',function(){autoGen(date);});
+  });
 }
 
-// ─── GEMINI ───────────────────────────────────────────────────────────────────
-async function fetchGemini(date) {
-  const key = S.get(K.gemini);
-  if (!key) return null;
-  var prompt = 'Today is ' + date + ' JST. Prepare morning briefing for Japan PE/Real Estate fund manager. Japanese morning papers just published.'
-    + '\n\nSearch exhaustively:'
-    + '\nJAPAN: BOJ rate signals, JGB yields, Nikkei/Sankei headlines, J-REIT activity, PE deals (KKR/Blackstone/PAG/Warburg), TOB/MBO, activist investors'
-    + '\nUS OVERNIGHT: S&P500/Nasdaq exact close, Fed speakers, economic data'
-    + '\nGLOBAL MACRO: USD/JPY, oil WTI, China PBOC, Korea BOK, geopolitics'
-    + '\nDEALS: M&A $500M+, PE buyouts, RE transactions, fund closings, activist campaigns'
-    + '\nTRENDING: WBC/sports, AI/tech news, geopolitical flashpoints'
-    + '\n\nFor each: Korean headline, category (글로벌|일본|미국|아시아|매크로|딜|화제|한국), 2-sentence Korean summary, source, URL.'
-    + '\nMarket: JGB 10Y%, USD/JPY, Nikkei, S&P500, WTI, USD/KRW.'
-    + '\nTarget 20-25 stories. MINIMUM 4 딜 items, 2 화제 items.';
-
-  const res = await fetch(
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + key,
-    { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        contents:[{role:'user',parts:[{text:prompt}]}],
-        tools:[{google_search:{}}],
-        generationConfig:{temperature:.2, maxOutputTokens:10000}
-      })
-    }
-  );
-  if (!res.ok) { const e=await res.json().catch(()=>({})); throw new Error('Gemini: '+(e.error?.message||res.status)); }
-  const j = await res.json();
-  const text = j.candidates?.[0]?.content?.parts?.filter(p=>p.text).map(p=>p.text).join('\n') || '';
-  if (!text) throw new Error('Gemini empty response');
-  return text;
+/* ── GEMINI ──────────────────────────────────────────────── */
+function fetchGemini(date){
+  var key=sg('db_gemini');if(!key)return Promise.resolve(null);
+  var prompt='Today is '+date+' JST. Morning briefing for Japan PE/RE fund manager.'
+    +'\nSearch: Japan BOJ JGB Nikkei PE deals TOB activist, US S&P500 close Fed, macro oil FX, M&A $500M+, sports AI tech.'
+    +'\nFor each: Korean headline, category (글로벌|일본|미국|아시아|매크로|딜|화제|한국), 2-sentence Korean summary, source, URL.'
+    +'\nMarket: JGB 10Y%, USD/JPY, Nikkei, S&P500, WTI, USD/KRW.'
+    +'\nTarget 20-25 stories. MINIMUM 4 딜, 2 화제.';
+  return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+key,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.2,maxOutputTokens:10000}})
+  }).then(function(r){if(!r.ok)throw new Error('Gemini '+r.status);return r.json();})
+  .then(function(j){
+    var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
+    if(!parts)throw new Error('Gemini empty');
+    return parts.filter(function(p){return p.text;}).map(function(p){return p.text;}).join('\n');
+  });
 }
 
-// ─── CLAUDE / OPENAI STRUCTURE ────────────────────────────────────────────────
-async function structureClaude(raw, date) {
-  const ckey = S.get(K.claude);
-  const okey = S.get(K.openai);
-  const useSearch = !raw;
-  const jp = settings.japanMode !== false;
+/* ── STRUCTURE AI ────────────────────────────────────────── */
+function structureAI(raw,date){
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var jp=cfg.japanTab!==false;
+  var schema='{"date":"'+date+'","generatedAt":'+Date.now()+',"model":"auto",'
+    +'"headlines":[{"id":"h1","cat":"일본","title":"헤드라인","summary":"2문장","detail":"3-4문장","implications":"임플리케이션","source":"Nikkei","url":"https://..."}],'
+    +'"market":{"jgb10y":{"v":"1.52%","d":"+3bp","t":1},"usdjpy":{"v":"148.2","d":"-0.4","t":-1},"nikkei":{"v":"38,240","d":"-0.6%","t":-1},"sp500":{"v":"5,698","d":"+0.8%","t":1},"wti":{"v":"$71.8","d":"-0.4%","t":-1},"usdkrw":{"v":"1,338","d":"+1","t":-1}},'
+    +'"deals":[{"id":"d1","title":"딜명","value":"JPY Xbn","type":"카브아웃","summary":"요약","source":"Bloomberg","url":"https://..."}],'
+    +'"watch":[{"n":1,"text":"관전1"},{"n":2,"text":"관전2"},{"n":3,"text":"관전3"}]}';
+  var rules='Korean headlines max 55 chars. Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국.'
+    +' MUST: 3+일본 2+미국 4+딜 2+화제. implications='+(jp?'PE/부동산':'투자')+' action point.'
+    +' CRITICAL: return exactly 14-18 headlines and 4-6 deals.';
+  var promptText=(!raw?'Search NOW for today ('+date+' JST) news. Find 15+ stories.':'Structure ALL this news:\n'+(raw||'').slice(0,9000))
+    +'\n\n'+rules+'\nReturn ONLY JSON:\n'+schema;
 
-  const rules = "Rules: Korean headlines max 55 chars. Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. MUST include 3+일본, 2+미국, 1+글로벌, 1+매크로, 4+딜(M&A/PE/RE/activist/earnings/fund), 2+화제(sports/AI/geopolitics/trending). implications=specific " + (jp?"PE/부동산":"투자") + " action point. Real URLs. No Japanese punctuation.";
-
-  const countRule = "CRITICAL: Return EXACTLY 14-18 headline objects and 4-6 deal objects. Count before responding. Fewer than 14 headlines = wrong answer.";
-
-  const schema = '{"date":"' + date + '","generatedAt":' + Date.now() + ',"model":"auto","headlines":[{"id":"h1","cat":"일본","title":"헤드라인","summary":"2문장","detail":"3-4문장","implications":"임플리케이션","source":"Nikkei","url":"https://..."},{"id":"h2","cat":"미국","title":"...","summary":"...","detail":"...","implications":"...","source":"Bloomberg","url":"https://..."}],"market":{"jgb10y":{"v":"1.52%","d":"+3bp","t":1},"usdjpy":{"v":"148.2","d":"-0.4","t":-1},"nikkei":{"v":"38,240","d":"-0.6%","t":-1},"sp500":{"v":"5,698","d":"+0.8%","t":1},"wti":{"v":"$71.8","d":"-0.4%","t":-1},"usdkrw":{"v":"1,338","d":"+1","t":-1}},"deals":[{"id":"d1","title":"딜명","value":"JPY Xbn","type":"카브아웃","summary":"요약","source":"Bloomberg","url":"https://..."},{"id":"d2","title":"딜2","value":"$Xbn","type":"TOB","summary":"요약","source":"Reuters","url":"https://..."}],"watch":[{"n":1,"text":"관전1"},{"n":2,"text":"관전2"},{"n":3,"text":"관전3"}]}';
-
-  const prompt = (useSearch
-    ? "Search RIGHT NOW for today (" + date + " JST) news: Japan BOJ JGB 日経不動産 PE deals TOB MBO, US S&P500 close Fed, global macro oil FX, M&A deals globally, sports WBC AI tech geopolitics. Find 15+ different stories."
-    : "Structure ALL of this news. Do not skip any stories.
-
-News (" + date + " JST):
-" + (raw||'').slice(0,9000))
-    + "
-
-" + rules + "
-" + countRule + "
-
-Return ONLY JSON (no markdown):
-" + schema;
-
-  if (ckey) {
-    const body = {
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 6000,
-      messages: [{role:'user', content: prompt}]
-    };
-    if (useSearch) body.tools = [{type:'web_search_20250305', name:'web_search'}];
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
+  if(ckey){
+    var body={model:'claude-sonnet-4-20250514',max_tokens:6000,messages:[{role:'user',content:promptText}]};
+    if(!raw)body.tools=[{type:'web_search_20250305',name:'web_search'}];
+    return fetch('https://api.anthropic.com/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify(body)
-    });
-    if (!res.ok) { const e=await res.json().catch(()=>({})); throw new Error('Claude: '+(e.error?.message||res.status)); }
-    const j = await res.json();
-    return parseJ(j.content.filter(b=>b.type==='text').map(b=>b.text).join(''));
+    }).then(function(r){return r.json();})
+    .then(function(j){return parseJ(j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join(''));});
   }
-  if (okey) {
-    const res = await fetch('https://api.openai.com/v1/chat/completions', {
-      method:'POST',
+  if(okey){
+    return fetch('https://api.openai.com/v1/chat/completions',{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},
-      body:JSON.stringify({
-        model:'gpt-4o', max_tokens:6000,
-        messages:[
-          {role:'system', content:'You are a senior Japan PE/RE investment analyst. Always return the FULL JSON with 14-18 headlines and 4-6 deals as instructed. Never return partial results.'},
-          {role:'user', content: prompt}
-        ]
-      })
-    });
-    if (!res.ok) throw new Error('OpenAI: '+res.status);
-    const j = await res.json();
-    return parseJ(j.choices[0].message.content);
+      body:JSON.stringify({model:'gpt-4o',max_tokens:6000,messages:[
+        {role:'system',content:'Return FULL JSON with exactly 14-18 headlines and 4-6 deals.'},
+        {role:'user',content:promptText}
+      ]})
+    }).then(function(r){return r.json();})
+    .then(function(j){return parseJ(j.choices[0].message.content);});
   }
-  throw new Error('API 키 없음');
+  return Promise.reject(new Error('API 키 없음'));
 }
 
-function parseJ(txt) {
-  const s = txt.indexOf('{'), e = txt.lastIndexOf('}');
-  if (s < 0) throw new Error('JSON not found');
-  return JSON.parse(txt.slice(s, e+1));
-}
+function parseJ(txt){var s=txt.indexOf('{'),e=txt.lastIndexOf('}');if(s<0)throw new Error('JSON not found');return JSON.parse(txt.slice(s,e+1));}
 
-// ─── RENDER ───────────────────────────────────────────────────────────────────
-function renderBrief(data) {
-  curBrief = data;
-  renderMkt(data.market);
-  renderCards(data.headlines, curCat);
-  const dl = document.getElementById('podDateLbl');
-  if (dl) dl.textContent = dateLbl(data.date);
-}
+/* ── RENDER ──────────────────────────────────────────────── */
+function renderBrief(data){curBrief=data;renderMkt(data.market);renderCards(data.headlines,curCat);var el=document.getElementById('podD');if(el)el.textContent=dateLbl(data.date);}
 
-function renderMkt(m) {
-  if (!m) return;
-  const fields = [m.jgb10y,m.usdjpy,m.nikkei,m.sp500,m.wti,m.usdkrw];
-  fields.forEach((f,i) => {
-    if (!f) return;
-    const ve = document.getElementById('mv'+i);
-    const ce = document.getElementById('mc'+i);
-    if (ve) { ve.textContent = f.v; ve.className = 'mkt-v '+(f.t===1?'up':f.t===-1?'dn':'na'); }
-    if (ce) { ce.textContent = f.d; ce.className = 'mkt-c '+(f.t===1?'up':f.t===-1?'dn':'na'); }
-  });
-}
-
-function renderCards(hl, filter) {
-  const el = document.getElementById('cardsList');
-  const items = (filter && filter !== 'all') ? (hl||[]).filter(h => h.cat === filter) : (hl||[]);
-
-  if (!items.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">해당 카테고리 없음</div></div>';
-    return;
+function renderMkt(m){
+  if(!m)return;
+  var flds=[m.jgb10y,m.usdjpy,m.nikkei,m.sp500,m.wti,m.usdkrw];
+  for(var i=0;i<6;i++){var f=flds[i];if(!f)continue;
+    var ve=document.getElementById('mv'+i),ce=document.getElementById('mc'+i);
+    if(ve){ve.textContent=f.v;ve.className='mc-v '+(f.t===1?'up':f.t===-1?'dn':'na');}
+    if(ce){ce.textContent=f.d;ce.className='mc-c '+(f.t===1?'up':f.t===-1?'dn':'na');}
   }
+}
 
-  let html = '<div class="sec-hdr">헤드라인</div><div class="card-group">';
-  html += items.map(h =>
-    '<div class="news-row" onclick="openSheet(\'h\',\''+esc(h.id)+'\')">' +
-    '<div class="news-body">' +
-    '<span class="ncat c-'+esc(h.cat)+'">'+esc(h.cat)+'</span>' +
-    '<div class="n-title">'+esc(h.title)+'</div>' +
-    '<div class="n-sum">'+esc(h.summary||'')+'</div>' +
-    '</div>' +
-    '<div class="news-right"><span class="n-src">'+esc(h.source||'')+'</span><span class="n-chev">›</span></div>' +
-    '</div>'
-  ).join('');
-  html += '</div>';
-
-  if ((!filter || filter === 'all' || filter === '딜') && curBrief?.deals?.length) {
-    html += '<div class="sec-hdr">딜 하이라이트</div>';
-    html += curBrief.deals.map(d =>
-      '<div class="deal-card" onclick="openSheet(\'d\',\''+esc(d.id)+'\')">' +
-      '<div class="deal-badge">'+esc(d.type||'딜')+'</div>' +
-      '<div class="deal-title">'+esc(d.title)+'</div>' +
-      '<div class="deal-val">'+esc(d.value||'')+'</div>' +
-      '<div class="deal-sum">'+esc(d.summary||'')+'</div>' +
-      '<div class="deal-src">'+esc(d.source||'')+'</div>' +
-      '</div>'
-    ).join('');
+function renderCards(hl,filter){
+  var el=document.getElementById('cardsList');
+  var items=(filter&&filter!=='all')?(hl||[]).filter(function(h){return h.cat===filter;}):(hl||[]);
+  if(!items.length){el.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">해당 카테고리 없음</div></div>';return;}
+  var html='<div class="sec">헤드라인</div><div class="grp">';
+  for(var i=0;i<items.length;i++){
+    var h=items[i],cls=catCls[h.cat]||'cg';
+    html+='<div class="nrow" onclick="openSheet(\'h\',\''+esc(h.id)+'\')"><div class="nbody"><span class="ncat '+cls+'">'+esc(h.cat)+'</span><div class="ntitle">'+esc(h.title)+'</div><div class="nsum">'+esc(h.summary||'')+'</div></div><div class="nright"><span class="nsrc">'+esc(h.source||'')+'</span><span class="nchev">›</span></div></div>';
   }
-
-  if ((!filter || filter === 'all') && curBrief?.watch?.length) {
-    html += '<div class="sec-hdr">Key Watch</div><div class="card-group">';
-    html += curBrief.watch.map(w =>
-      '<div class="watch-row"><span class="watch-n">#'+w.n+'</span><span class="watch-t">'+esc(w.text)+'</span></div>'
-    ).join('');
-    html += '</div>';
-  }
-
-  el.innerHTML = html;
-}
-
-function renderEmpty(ico, txt, btnTxt, cb) {
-  document.getElementById('cardsList').innerHTML =
-    '<div class="empty"><div class="empty-ico">'+ico+'</div>' +
-    '<div class="empty-txt">'+esc(txt)+'</div>' +
-    '<button class="empty-btn" id="_emptyBtn">'+esc(btnTxt)+'</button></div>';
-  document.getElementById('_emptyBtn')?.addEventListener('click', cb);
-}
-
-function filterCat(cat, btn) {
-  curCat = cat;
-  document.querySelectorAll('.chip').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  if (curBrief) renderCards(curBrief.headlines, cat);
-}
-
-// ─── SHEET ────────────────────────────────────────────────────────────────────
-function openSheet(type, id) {
-  if (!curBrief) return;
-  const item = type === 'h'
-    ? curBrief.headlines.find(h => h.id === id)
-    : curBrief.deals.find(d => d.id === id);
-  if (!item) return;
-
-  document.getElementById('sheetBody').innerHTML =
-    '<span class="ncat c-'+esc(item.cat||item.type||'딜')+' sh-cat">'+esc(item.cat||item.type||'딜')+'</span>' +
-    '<div class="sh-title">'+esc(item.title)+'</div>' +
-    '<div class="sh-body">'+esc(item.detail||item.summary||'')+'</div>' +
-    (item.implications ?
-      '<div class="sh-imp"><div class="sh-imp-lbl">투자 임플리케이션</div><div class="sh-imp-txt">'+esc(item.implications)+'</div></div>' : '') +
-    '<div class="sh-footer"><span class="sh-src">'+esc(item.source||'')+'</span>' +
-    (item.url && item.url.startsWith('http') ? '<a class="sh-link" href="'+item.url+'" target="_blank">원문 ↗</a>' : '') +
-    '</div>' +
-    '<div style="display:flex;flex-direction:column;gap:var(--s2);margin-bottom:var(--s3)">' +
-    '<button style="width:100%;height:44px;border-radius:var(--r2);border:none;background:var(--accent);color:#000;font-size:15px;font-weight:600;cursor:pointer" onclick="closeSheet();deepDive(''+type+'',''+esc(id)+'')">🔍 딥다이브 분석</button>' +
-    '<button style="width:100%;height:44px;border-radius:var(--r2);border:none;background:var(--e2);color:var(--accent);font-size:15px;font-weight:500;cursor:pointer" onclick="closeSheet();topicPodcast(''+esc(item.title)+'')">🎙 팟캐스트 생성</button>' +
-    '<button style="width:100%;height:44px;border-radius:var(--r2);border:none;background:var(--e2);color:var(--t2);font-size:15px;font-weight:500;cursor:pointer" onclick="closeSheet();askAbout(''+esc(item.title)+'')">💬 AI에게 질문</button>' +
-    '</div>' +
-    '<button class="sh-close" onclick="closeSheet()">닫기</button>';
-
-  document.getElementById('ov').classList.add('show');
-  document.getElementById('sheet').classList.add('show');
-}
-
-function closeSheet() {
-  document.getElementById('ov').classList.remove('show');
-  document.getElementById('sheet').classList.remove('show');
-}
-
-// ─── PODCAST ─────────────────────────────────────────────────────────────────
-async function pickLen(len, btn) {
-  curLen = len;
-  document.querySelectorAll('.len-btn').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  stopAll(); elapsed = 0; podSecs = []; updateProg();
-  await genPod(curDate, len);
-}
-
-async function genPod(date, len) {
-  const cached = S.get(K.pod(date, len));
-  if (cached) { parsePod(cached); return; }
-
-  const brief = S.getJ(K.brief(date));
-  if (!brief) { document.getElementById('podSecList').innerHTML = '<div class="empty"><div class="empty-ico">📅</div><div class="empty-txt">먼저 브리핑을 생성해주세요</div></div>'; return; }
-
-  document.getElementById('podSecList').innerHTML = '<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">스크립트 생성 중...</div></div>';
-  const lens = {short:'3분 약450자', medium:'10분 약1500자', long:'20분 약3000자'};
-  const secs = {
-    short:['오프닝','마켓 체크','Top 이슈','Key Watch'],
-    medium:['오프닝','마켓 체크','주요 이슈','PE/RE 임플리케이션','투자 아이디어','Key Watch'],
-    long:['오프닝','마켓 딥다이브','글로벌 이슈','일본 포커스','PE/RE 분석','딜 하이라이트','투자 아이디어','Key Watch·클로징']
-  };
-  const briefData = JSON.stringify({headlines:(brief.headlines||[]).slice(0,10), market:brief.market, deals:(brief.deals||[]).slice(0,4), watch:brief.watch});
-  const prompt = '당신은 일본 PE/부동산 펀드 매니저를 위한 팟캐스트 스크립트를 씁니다.\n\n브리핑:\n'+briefData.slice(0,6000)+'\n\n길이: '+lens[len]+'\n\n규칙:\n1. 모든 숫자는 한국어 음독: 53,746.50→"오만 삼천칠백사십육점오" / -1.3%→"일점삼 퍼센트 하락" / +3bp→"삼 베이시스포인트 상승"\n2. 영문약어 한국어화: BOJ→일본은행 / JGB→일본국채 / PE→사모펀드 / CPI→소비자물가\n3. 자연스러운 시니어 애널리스트 전화 브리핑 스타일\n4. 섹션구분: '+secs[len].map(s=>'=='+s+'==').join(' ')+'\n\n스크립트만 반환.';
-
-  try {
-    const ckey = S.get(K.claude), okey = S.get(K.openai);
-    let script = '';
-    if (ckey) {
-      const r = await fetch('https://api.anthropic.com/v1/messages', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:len==='long'?3000:len==='medium'?2000:700, messages:[{role:'user',content:prompt}]})
-      });
-      if (r.ok) { const j=await r.json(); script=j.content.filter(b=>b.type==='text').map(b=>b.text).join(''); }
-    } else if (okey) {
-      const r = await fetch('https://api.openai.com/v1/chat/completions', {
-        method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},
-        body:JSON.stringify({model:'gpt-4o', max_tokens:len==='long'?3000:len==='medium'?2000:700, messages:[{role:'user',content:prompt}]})
-      });
-      if (r.ok) { const j=await r.json(); script=j.choices[0].message.content; }
+  html+='</div>';
+  if((!filter||filter==='all'||filter==='딜')&&curBrief&&curBrief.deals&&curBrief.deals.length){
+    html+='<div class="sec">딜 하이라이트</div>';
+    for(var di=0;di<curBrief.deals.length;di++){
+      var d=curBrief.deals[di];
+      html+='<div class="deal" onclick="openSheet(\'d\',\''+esc(d.id)+'\')"><div class="deal-badge">'+esc(d.type||'딜')+'</div><div class="deal-t">'+esc(d.title)+'</div><div class="deal-v">'+esc(d.value||'')+'</div><div class="deal-s">'+esc(d.summary||'')+'</div><div class="deal-src">'+esc(d.source||'')+'</div></div>';
     }
-    if (script) { S.set(K.pod(date,len), script); parsePod(script); }
-    else { document.getElementById('podSecList').innerHTML = '<div class="empty"><div class="empty-ico">❌</div><div class="empty-txt">스크립트 생성 실패</div></div>'; }
-  } catch(e) {
-    document.getElementById('podSecList').innerHTML = '<div class="empty"><div class="empty-ico">❌</div><div class="empty-txt">'+esc(e.message)+'</div></div>';
   }
-}
-
-function parsePod(txt) {
-  podSecs = [];
-  const parts = txt.trim().split(/==([^=]+)==/);
-  if (parts[0].trim()) podSecs.push({name:'인트로', text:parts[0].trim()});
-  for (let i = 1; i < parts.length; i += 2) {
-    const body = parts[i+1] ? parts[i+1].trim() : '';
-    if (body) podSecs.push({name:parts[i].trim(), text:body});
+  if((!filter||filter==='all')&&curBrief&&curBrief.watch&&curBrief.watch.length){
+    html+='<div class="sec">Key Watch</div><div class="grp">';
+    for(var wi=0;wi<curBrief.watch.length;wi++){var w=curBrief.watch[wi];html+='<div class="wrow"><span class="wn">#'+w.n+'</span><span class="wt">'+esc(w.text)+'</span></div>';}
+    html+='</div>';
   }
-  podIdx = 0;
-  totalSec = Math.ceil(podSecs.reduce((s,x) => s+x.text.length, 0) / 6.5 / spd);
-  document.getElementById('totT').textContent = fmtT(totalSec);
-  renderPodSecs();
-  document.getElementById('playerBar').classList.add('show');
-  document.getElementById('pbTitle').textContent = dateLbl(curDate) + ' 팟캐스트 ›';
+  el.innerHTML=html;
 }
 
-function renderPodSecs() {
-  const el = document.getElementById('podSecList');
-  if (!podSecs.length) return;
-  el.innerHTML = '<div class="pod-sec-group">' +
-    podSecs.map((s,i) =>
-      '<div class="pod-sec-row'+(i===podIdx?' playing':'')+'" onclick="jumpPod('+i+')">' +
-      '<span class="ps-n">'+String(i+1).padStart(2,'0')+'</span>' +
-      '<span class="ps-name">'+esc(s.name)+'</span>' +
-      '<span class="ps-dur">'+fmtT(Math.ceil(s.text.length/6.5/spd))+'</span>' +
-      '</div>'
-    ).join('') + '</div>';
+function renderEmpty(ico,txt,btnTxt,cb){
+  document.getElementById('cardsList').innerHTML='<div class="empty"><div class="empty-ico">'+ico+'</div><div class="empty-txt">'+esc(txt)+'</div><button class="empty-btn" id="_eb">'+esc(btnTxt)+'</button></div>';
+  var btn=document.getElementById('_eb');if(btn&&cb)btn.addEventListener('click',cb);
 }
 
-// ─── TTS ──────────────────────────────────────────────────────────────────────
-function loadVoices() {
-  voices = speechSynthesis.getVoices();
-  const sel = document.getElementById('voiceSel');
-  if (!sel) return;
-  sel.innerHTML = '';
-  const okey = S.get(K.openai);
-  if (okey) {
-    ['nova','alloy','shimmer','echo','onyx'].forEach(v => {
-      const o = document.createElement('option');
-      o.value = 'oai:'+v; o.textContent = '✦ '+v; sel.appendChild(o);
-    });
-    useOaiTts = true;
-    updateTtsLabel();
-  }
-  const koVoices = voices.filter(v => v.lang.startsWith('ko'));
-  koVoices.forEach(v => {
-    const o = document.createElement('option');
-    o.value = String(voices.indexOf(v)); o.textContent = v.name; sel.appendChild(o);
-  });
-  if (!okey && koVoices.length) { selVoice = koVoices[0]; sel.value = String(voices.indexOf(koVoices[0])); }
+function filterCat(cat,btn){
+  curCat=cat;var chips=document.querySelectorAll('.chip');for(var i=0;i<chips.length;i++)chips[i].classList.remove('on');btn.classList.add('on');
+  if(curBrief)renderCards(curBrief.headlines,cat);
 }
 
-function pickVoice() {
-  const v = document.getElementById('voiceSel').value;
-  if (v.startsWith('oai:')) { useOaiTts = true; oaiVoice = v.slice(4); }
-  else { useOaiTts = false; const i = parseInt(v); if (!isNaN(i)) selVoice = voices[i]; }
-  updateTtsLabel();
+/* ── SHEET ───────────────────────────────────────────────── */
+function openSheet(type,id){
+  if(!curBrief)return;
+  var item=findById(type==='h'?curBrief.headlines:curBrief.deals,id);if(!item)return;
+  var cls=catCls[item.cat||item.type||'딜']||'cd';
+  var html='<span class="ncat '+cls+'" style="margin:var(--s3) 0 var(--s2);display:inline-flex">'+esc(item.cat||item.type||'딄')+'</span>'
+    +'<div class="sh-title">'+esc(item.title)+'</div>'
+    +'<div class="sh-body">'+esc(item.detail||item.summary||'')+'</div>';
+  if(item.implications)html+='<div class="sh-imp"><div class="sh-imp-l">투자 임플리케이션</div><div class="sh-imp-t">'+esc(item.implications)+'</div></div>';
+  html+='<div class="sh-footer"><span class="sh-src">'+esc(item.source||'')+'</span>'+(item.url&&item.url.startsWith('http')?'<a class="sh-link" href="'+item.url+'" target="_blank">원문</a>':'')+'</div>';
+  html+='<div class="sh-acts"><button class="sh-act primary" onclick="closeSheet();topicPodcast(\''+esc(item.title)+'\')">팟캐스트 생성</button>'
+    +'<button class="sh-act secondary" onclick="closeSheet();askAbout(\''+esc(item.title)+'\')">AI에게 질문</button></div>'
+    +'<button class="sh-close" onclick="closeSheet()">닫기</button>';
+  document.getElementById('sheetBody').innerHTML=html;
+  document.getElementById('ov').classList.add('on');document.getElementById('sheet').classList.add('on');
+}
+function closeSheet(){document.getElementById('ov').classList.remove('on');document.getElementById('sheet').classList.remove('on');}
+function findById(arr,id){if(!arr)return null;for(var i=0;i<arr.length;i++)if(arr[i].id===id)return arr[i];return null;}
+
+/* ── PODCAST ─────────────────────────────────────────────── */
+function pickLen(len,btn){
+  curLen=len;var bs=document.querySelectorAll('.len-btn');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');btn.classList.add('on');
+  stopAll();elapsed=0;psecs=[];updateProg();genPod(curDate,len);
 }
 
-function updateTtsLabel() {
-  const el = document.getElementById('ttsModeLabel');
-  if (!el) return;
-  el.textContent = useOaiTts && S.get(K.openai) ? '✦ OpenAI TTS — 고품질 음성' : '기기 내장 음성';
-  el.style.color = useOaiTts ? 'var(--accent)' : 'var(--t3)';
+function genPod(date,len){
+  var cached=sg('db_pod_'+date+'_'+len);if(cached){parsePod(cached);return;}
+  var brief=sgj('db_brief_'+date);
+  if(!brief){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">📅</div><div class="empty-txt">먼저 브리핑을 생성해주세요</div></div>';return;}
+  document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">스크립트 생성 중...</div></div>';
+  var lens={short:'3분 약450자',medium:'10분 약1500자',long:'20분 약3000자'};
+  var snames={short:['오프닝','마켓 체크','Top 이슈','Key Watch'],medium:['오프닝','마켓 체크','주요 이슈','PE/RE 임플리케이션','투자 아이디어','Key Watch'],long:['오프닝','마켓 딥다이브','글로벌 이슈','일본 포커스','PE/RE 분석','딜 하이라이트','투자 아이디어','Key Watch']};
+  var bdata=JSON.stringify({headlines:(brief.headlines||[]).slice(0,10),market:brief.market,deals:(brief.deals||[]).slice(0,4),watch:brief.watch}).slice(0,5000);
+  var secM=snames[len].map(function(s){return '=='+s+'==';}).join(' ');
+  var prompt='일본 PE/부동산 팟캐스트 스크립트 (한국어).\n브리핑:\n'+bdata+'\n길이:'+lens[len]+'\n숫자 한국어 음독. 섹션:'+secM+'\n스크립트만 반환.';
+  var ckey=sg('db_claude'),okey=sg('db_openai'),maxT=len==='long'?3000:len==='medium'?2000:700;
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxT,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:maxT,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  p.then(function(s){if(s){ss('db_pod_'+date+'_'+len,s);parsePod(s);}}).catch(function(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
-function numKo(n) {
-  const abs = Math.abs(Math.floor(n));
-  if (abs === 0) return '영';
-  const u = ['','일','이','삼','사','오','육','칠','팔','구'];
-  let r = '';
-  if (abs >= 10000) r += numKo(Math.floor(abs/10000)) + '만';
-  const rem = abs % 10000;
-  const th=Math.floor(rem/1000); if(th) r+=(th===1?'':u[th])+'천';
-  const hu=Math.floor((rem%1000)/100); if(hu) r+=(hu===1?'':u[hu])+'백';
-  const te=Math.floor((rem%100)/10); if(te) r+=(te===1?'':u[te])+'십';
-  const on=rem%10; if(on) r+=u[on];
-  return r;
+function parsePod(txt){
+  psecs=[];var parts=txt.trim().split(/==([^=]+)==/);
+  if(parts[0].trim())psecs.push({name:'인트로',text:parts[0].trim()});
+  for(var i=1;i<parts.length;i+=2){var body=parts[i+1]?parts[i+1].trim():'';if(body)psecs.push({name:parts[i].trim(),text:body});}
+  pidx=0;totalSec=Math.ceil(psecs.reduce(function(s,x){return s+x.text.length;},0)/6.5/spd);
+  document.getElementById('totT').textContent=fmtT(totalSec);renderPsecs();
+  document.getElementById('playerBar').classList.add('on');
+  document.getElementById('pbTitle').textContent=dateLbl(curDate)+' 팟캐스트 >';
 }
 
-function toSpeech(txt) {
-  return txt
-    .replace(/[。．]/g, '.')
-    .replace(/[、，「」『』【】〔〕《》〈〉・]/g, ' ')
-    .replace(/\+(\d)/g, '플러스 $1')
-    .replace(/(?<![0-9\w])-(\d)/g, '마이너스 $1')
-    .replace(/([0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?)/g, m => {
-      const parts = m.replace(/,/g,'').split('.');
-      const n = numKo(parseInt(parts[0]));
-      return parts[1] ? n+'점'+parts[1].split('').map(d=>numKo(parseInt(d))).join('') : n;
-    })
-    .replace(/(\d+)\.(\d+)/g, (m,a,b) => numKo(parseInt(a))+'점'+b.split('').map(d=>numKo(parseInt(d))).join(''))
-    .replace(/\b(\d+)\b/g, m => numKo(parseInt(m)))
-    .replace(/BOJ/gi,'일본은행').replace(/JGB/gi,'일본국채').replace(/Fed/gi,'연준')
-    .replace(/CPI/gi,'소비자물가').replace(/GDP/gi,'지디피').replace(/REIT/gi,'리츠')
-    .replace(/M&A/gi,'엠앤에이').replace(/PE/g,'사모펀드').replace(/bp/gi,'베이시스포인트')
-    .replace(/([A-Z]{2,})/g, m => m.split('').join(' '))
-    .replace(/\s+/g,' ').trim();
+function renderPsecs(){
+  var el=document.getElementById('podSecList');if(!psecs.length)return;
+  var html='<div class="psec-grp">';
+  for(var i=0;i<psecs.length;i++){html+='<div class="psec-row'+(i===pidx?' now':'')+'" onclick="jumpPod('+i+')">'+'<span class="psec-n">'+pad2(i+1)+'</span><span class="psec-name">'+esc(psecs[i].name)+'</span><span class="psec-dur">'+fmtT(Math.ceil(psecs[i].text.length/6.5/spd))+'</span></div>';}
+  el.innerHTML=html+'</div>';
 }
 
-function setSpd(s, btn) {
-  spd = s;
-  document.querySelectorAll('.spd-btn').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  if (audioEl) audioEl.playbackRate = s;
-  if (podSecs.length) { totalSec = Math.ceil(podSecs.reduce((a,x)=>a+x.text.length,0)/6.5/s); document.getElementById('totT').textContent = fmtT(totalSec); }
-  if (playing && !audioEl) { const i=podIdx; stopAll(); speakFrom(i); }
+/* ── TTS ─────────────────────────────────────────────────── */
+function loadVoices(){
+  voices=speechSynthesis.getVoices();var sel=document.getElementById('voiceSel');if(!sel)return;
+  sel.innerHTML='';var okey=sg('db_openai');
+  if(okey){var ov=['nova','alloy','shimmer','echo','onyx'];for(var i=0;i<ov.length;i++){var o=document.createElement('option');o.value='oai:'+ov[i];o.textContent='+ '+ov[i];sel.appendChild(o);}useOai=true;var tts=document.getElementById('podTts');if(tts)tts.textContent='OpenAI TTS 고품질';}
+  var ko=voices.filter(function(v){return v.lang.startsWith('ko');});
+  for(var j=0;j<ko.length;j++){var op=document.createElement('option');op.value=String(voices.indexOf(ko[j]));op.textContent=ko[j].name;sel.appendChild(op);}
+  if(!okey&&ko.length){selVoice=ko[0];sel.value=String(voices.indexOf(ko[0]));}
+}
+function pickVoice(){var v=document.getElementById('voiceSel').value;if(v.startsWith('oai:')){useOai=true;oaiVoice=v.slice(4);}else{useOai=false;var idx=parseInt(v);if(!isNaN(idx))selVoice=voices[idx];}}
+
+function numKo(n){var abs=Math.abs(Math.floor(n));if(abs===0)return '영';var u=['','일','이','삼','사','오','육','칠','팔','구'];var r='';if(abs>=10000){r+=numKo(Math.floor(abs/10000))+'만';}var rem=abs%10000;var th=Math.floor(rem/1000);if(th)r+=(th===1?'':u[th])+'천';var hu=Math.floor((rem%1000)/100);if(hu)r+=(hu===1?'':u[hu])+'백';var te=Math.floor((rem%100)/10);if(te)r+=(te===1?'':u[te])+'십';var on=rem%10;if(on)r+=u[on];return r;}
+
+function toSpeech(txt){
+  return txt.replace(/[。．]/g,'.').replace(/[、，「」]/g,' ')
+    .replace(/\+(\d)/g,'플러스 $1')
+    .replace(/([0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?)/g,function(m){var pts=m.replace(/,/g,'').split('.');var n=numKo(parseInt(pts[0]));return pts[1]?n+'점'+pts[1].split('').map(function(d){return numKo(parseInt(d));}).join(''):n;})
+    .replace(/(\d+)\.(\d+)/g,function(m,a,b){return numKo(parseInt(a))+'점'+b.split('').map(function(d){return numKo(parseInt(d));}).join('');})
+    .replace(/\b(\d+)\b/g,function(m){return numKo(parseInt(m));})
+    .replace(/BOJ/gi,'일본은행').replace(/JGB/gi,'일본국채').replace(/Fed/gi,'연준').replace(/CPI/gi,'소비자물가').replace(/REIT/gi,'리츠')
+    .replace(/([A-Z]{2,})/g,function(m){return m.split('').join(' ');}).replace(/\s+/g,' ').trim();
 }
 
-function cycleBriefSpd(btn) {
-  const steps = [.9,1,1.2,1.5,1.8];
-  spd = steps[(steps.indexOf(spd)+1) % steps.length];
-  btn.textContent = spd.toFixed(1)+'×';
-  if (audioEl) audioEl.playbackRate = spd;
-  document.querySelectorAll('.spd-btn').forEach(b => b.classList.toggle('on', parseFloat(b.textContent)===spd));
-  if (playing && !audioEl) { const i=podIdx; stopAll(); speakFrom(i); }
+function setSpd(s,btn){spd=s;var bs=document.querySelectorAll('.spd-btn');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');btn.classList.add('on');if(audioEl)audioEl.playbackRate=s;if(psecs.length){totalSec=Math.ceil(psecs.reduce(function(a,x){return a+x.text.length;},0)/6.5/s);document.getElementById('totT').textContent=fmtT(totalSec);}if(playing&&!audioEl){var idx=pidx;stopAll();speakFrom(idx);}}
+function pbCycleSpd(btn){var steps=[.9,1,1.2,1.5,1.8];spd=steps[(steps.indexOf(spd)+1)%steps.length];btn.textContent=spd.toFixed(1)+'x';if(audioEl)audioEl.playbackRate=spd;var bs=document.querySelectorAll('.spd-btn');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',parseFloat(bs[i].textContent)===spd);if(playing&&!audioEl){var idx=pidx;stopAll();speakFrom(idx);}}
+
+function ptoggle(){
+  if(!psecs.length){goTab('pod');return;}
+  if(audioEl){if(playing){if(paused){audioEl.play();paused=false;setIco(false);}else{audioEl.pause();paused=true;setIco(true);}}else{audioEl.currentTime=elapsed||0;audioEl.play();playing=true;paused=false;setIco(false);}return;}
+  if(playing){if(paused){speechSynthesis.resume();paused=false;setIco(false);}else{speechSynthesis.pause();paused=true;setIco(true);}}else speakFrom(pidx);
 }
 
-async function togglePlay() {
-  if (!podSecs.length) { switchTab('pod'); return; }
-  if (audioEl) {
-    if (playing) { if (paused) { audioEl.play(); paused=false; setIco(false); } else { audioEl.pause(); paused=true; setIco(true); } }
-    else { audioEl.currentTime=elapsed||0; await audioEl.play(); playing=true; paused=false; setIco(false); }
+function speakFrom(idx){
+  stopAll();pidx=idx;
+  if(useOai&&sg('db_openai')){
+    var fullTxt=psecs.slice(idx).map(function(s){return s.name+'.\n'+s.text;}).join('\n\n');
+    var stEl=document.getElementById('ttsSt');if(stEl){stEl.textContent='음성 생성 중...';stEl.style.display='block';}
+    fetch('https://api.openai.com/v1/audio/speech',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+sg('db_openai')},body:JSON.stringify({model:'tts-1',voice:oaiVoice,input:fullTxt,speed:spd,response_format:'mp3'})})
+    .then(function(res){if(stEl)stEl.style.display='none';if(!res.ok){useOai=false;speakSec(pidx);return;}return res.blob().then(function(blob){audioEl=new Audio(URL.createObjectURL(blob));audioEl.playbackRate=spd;audioEl.ontimeupdate=function(){if(!audioEl)return;elapsed=Math.floor(audioEl.currentTime);if(audioEl.duration)totalSec=Math.floor(audioEl.duration);updateProg();var acc=0;for(var i=0;i<psecs.length;i++){var l=Math.ceil(psecs[i].text.length/6.5/spd);if(elapsed<acc+l){if(pidx!==i){pidx=i;renderPsecs();}break;}acc+=l;}};audioEl.onended=function(){playing=false;paused=false;setIco(true);elapsed=0;updateProg();};audioEl.play();playing=true;paused=false;setIco(false);});})
+    .catch(function(){if(stEl)stEl.style.display='none';useOai=false;speakSec(pidx);});
     return;
-  }
-  if (playing) { if (paused){speechSynthesis.resume();paused=false;setIco(false);} else{speechSynthesis.pause();paused=true;setIco(true);} }
-  else speakFrom(podIdx);
-}
-
-async function speakFrom(idx) {
-  stopAll(); podIdx = idx;
-  if (useOaiTts && S.get(K.openai)) {
-    const fullTxt = podSecs.slice(idx).map(s => s.name+'.\n'+s.text).join('\n\n');
-    showTtsStatus('음성 생성 중... (~15-30초)');
-    try {
-      const res = await fetch('https://api.openai.com/v1/audio/speech', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+S.get(K.openai)},
-        body:JSON.stringify({model:'tts-1', voice:oaiVoice, input:fullTxt, speed:spd, response_format:'mp3'})
-      });
-      hideTtsStatus();
-      if (res.ok) {
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        audioEl = new Audio(url);
-        audioEl.playbackRate = spd;
-        audioEl.ontimeupdate = () => {
-          if (!audioEl) return;
-          elapsed = Math.floor(audioEl.currentTime);
-          totalSec = Math.floor(audioEl.duration)||totalSec;
-          updateProg();
-          let acc=0; for(let i=0;i<podSecs.length;i++){const l=Math.ceil(podSecs[i].text.length/6.5/spd);if(elapsed<acc+l){if(podIdx!==i){podIdx=i;renderPodSecs();}break;}acc+=l;}
-        };
-        audioEl.onended = () => { playing=false; paused=false; setIco(true); elapsed=0; updateProg(); };
-        await audioEl.play();
-        playing=true; paused=false; setIco(false); return;
-      }
-    } catch(e) { hideTtsStatus(); console.warn('OAI TTS failed:', e.message); }
-    showToast('OpenAI TTS 실패 → 기기 음성으로 재생'); useOaiTts=false;
   }
   speakSec(idx);
 }
 
-function speakSec(idx) {
-  if (idx >= podSecs.length) { stopAll(); elapsed=0; updateProg(); return; }
-  podIdx = idx; renderPodSecs();
-  const u = new SpeechSynthesisUtterance(toSpeech(podSecs[idx].text));
-  u.lang = 'ko-KR'; u.rate = Math.min(spd,1.5); u.pitch = 1;
-  if (selVoice) u.voice = selVoice;
-  u.onend = () => speakSec(idx+1);
-  u.onerror = e => { if(e.error!=='interrupted') console.warn('TTS:',e.error); };
-  speechSynthesis.speak(u);
-  playing=true; paused=false; setIco(false); startTimer();
+function speakSec(idx){
+  if(idx>=psecs.length){stopAll();elapsed=0;updateProg();return;}
+  pidx=idx;renderPsecs();
+  var u=new SpeechSynthesisUtterance(toSpeech(psecs[idx].text));u.lang='ko-KR';u.rate=Math.min(spd,1.5);u.pitch=1;if(selVoice)u.voice=selVoice;
+  u.onend=function(){speakSec(idx+1);};u.onerror=function(e){if(e.error!=='interrupted')console.warn('TTS:',e.error);};
+  speechSynthesis.speak(u);playing=true;paused=false;setIco(false);startTimer();
 }
 
-function stopAll() {
-  if (audioEl) { audioEl.pause(); audioEl=null; }
-  speechSynthesis.cancel();
-  playing=false; paused=false; clearInterval(timerRef); setIco(true);
+function stopAll(){if(audioEl){audioEl.pause();audioEl=null;}speechSynthesis.cancel();playing=false;paused=false;clearInterval(timerRef);setIco(true);}
+function pskip(d){elapsed=Math.max(0,Math.min(elapsed+d,totalSec));if(audioEl){audioEl.currentTime=elapsed;updateProg();return;}var i=secAt(elapsed);if(playing)speakFrom(i);else{pidx=i;renderPsecs();}updateProg();}
+function jumpPod(i){var s=0;for(var j=0;j<i;j++)s+=Math.ceil(psecs[j].text.length/6.5/spd);elapsed=s;if(audioEl){audioEl.currentTime=s;if(!playing){audioEl.play();playing=true;paused=false;setIco(false);}return;}if(playing)speakFrom(i);else{pidx=i;renderPsecs();}updateProg();}
+function secAt(s){var acc=0,r=0;for(var i=0;i<psecs.length;i++){var l=Math.ceil(psecs[i].text.length/6.5/spd);if(acc+l>s){r=i;break;}acc+=l;r=i;}return r;}
+function pseek(e){var b=document.getElementById('progTrack');var p=Math.max(0,Math.min(1,e.offsetX/b.offsetWidth));elapsed=Math.floor(p*totalSec);if(audioEl){audioEl.currentTime=elapsed;updateProg();return;}var i=secAt(elapsed);if(playing)speakFrom(i);else{pidx=i;renderPsecs();}updateProg();}
+function startTimer(){clearInterval(timerRef);timerRef=setInterval(function(){if(!audioEl){elapsed++;updateProg();if(elapsed>=totalSec)clearInterval(timerRef);}},1000);}
+function updateProg(){var p=totalSec>0?Math.min(100,elapsed/totalSec*100):0,pct=p+'%';var pf=document.getElementById('progFill');if(pf)pf.style.width=pct;var pt=document.getElementById('progThumb');if(pt)pt.style.left=pct;var ct=document.getElementById('curT');if(ct)ct.textContent=fmtT(elapsed);if(audioEl&&audioEl.duration){var tt=document.getElementById('totT');if(tt)tt.textContent=fmtT(Math.floor(audioEl.duration));}var bf=document.getElementById('pbFill');if(bf)bf.style.width=pct;}
+function setIco(play){var ico=play?'<path d="M8 5v14l11-7z"/>':'<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';['playIco','bpIco'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=ico;});var pb=document.getElementById('playerBar');if(pb)pb.classList.toggle('on',psecs.length>0);}
+
+/* ── CHAT ────────────────────────────────────────────────── */
+function sendChat(){
+  var inp=document.getElementById('chatInp');var q=inp.value.trim();if(!q)return;
+  inp.value='';addMsg('user',q);chatHist.push({role:'user',content:q});
+  var thinkEl=addMsg('ai','생각 중...','thinking');
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var ctx=curBrief?'오늘 브리핑:\n'+(curBrief.headlines||[]).slice(0,5).map(function(h){return h.cat+': '+h.title;}).join('\n')+'\n\n':'';
+  var sys=ctx+'일본 PE/부동산 투자 전문 애널리스트. 간결하고 구체적으로 한국어로 답변.';
+  var msgs=chatHist.slice(-8);var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,tools:[{type:'web_search_20250305',name:'web_search'}],messages:msgs})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:800,messages:[{role:'system',content:sys}].concat(msgs)})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  p.then(function(text){thinkEl.remove();addMsg('ai',text||'응답 없음');chatHist.push({role:'assistant',content:text||''});var el=document.getElementById('chatMsgs');el.scrollTop=el.scrollHeight;}).catch(function(e){thinkEl.remove();addMsg('ai','오류: '+e.message);});
+}
+function addMsg(role,text,cls){var el=document.getElementById('chatMsgs');var d=document.createElement('div');d.className='cmsg '+role+(cls?' '+cls:'');d.innerHTML='<div class="cbub">'+esc(text).replace(/\n/g,'<br>')+'</div>';el.appendChild(d);el.scrollTop=el.scrollHeight;return d;}
+function askAbout(topic){goTab('chat');document.getElementById('chatInp').value=topic+'에 대해 더 자세히 알려줘';sendChat();}
+
+/* ── TOPIC PODCAST ───────────────────────────────────────── */
+function topicPodcast(topic){
+  goTab('pod');document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">'+esc(topic)+'<br>팟캐스트 생성 중...</div></div>';
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var bctx=curBrief?JSON.stringify({headlines:(curBrief.headlines||[]).slice(0,6),deals:(curBrief.deals||[]).slice(0,3)}).slice(0,2000):'';
+  var prompt='토픽:'+topic+'\n참고:\n'+bctx+'\n5분 한국어 팟캐스트. 숫자 한국어 음독.\n섹션:==배경====핵심 분석====투자 임플리케이션====결론==\n스크립트만 반환.';
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  p.then(function(s){if(s){parsePod(s);document.getElementById('podH').textContent=topic;showToast('팟캐스트 준비됨');}}).catch(function(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
-function skip(d) {
-  elapsed = Math.max(0, Math.min(elapsed+d, totalSec));
-  if (audioEl) { audioEl.currentTime=elapsed; updateProg(); return; }
-  const i=secAt(elapsed);
-  if (playing) speakFrom(i); else { podIdx=i; renderPodSecs(); }
-  updateProg();
+/* ── SEARCH ──────────────────────────────────────────────── */
+function doSearch(){
+  var q=document.getElementById('srchInp').value.trim();if(!q)return;
+  var res=document.getElementById('srchResults');
+  var allK=skeys().filter(function(k){return k.startsWith('db_brief_');});
+  var matches=[];allK.forEach(function(k){try{var d=sgj(k);if(d&&JSON.stringify(d).toLowerCase().indexOf(q.toLowerCase())>=0)matches.push(d);}catch(e){}});
+  var html='';
+  if(matches.length){html+='<div class="sec">과거 브리핑 ('+matches.length+'건)</div>';matches.slice(0,8).forEach(function(m){var hl=(m.headlines||[]).filter(function(h){return JSON.stringify(h).toLowerCase().indexOf(q.toLowerCase())>=0;})[0];html+='<div class="sri" onclick="loadDateBrief(\''+m.date+'\')"><div class="sri-d">'+dateLbl(m.date)+'</div><div class="sri-t">'+esc(hl&&hl.title||m.date+' 브리핑')+'</div><div class="sri-p">'+esc(hl&&hl.summary||'')+'</div></div>';});}
+  html+='<div class="sec">AI 생성</div><div class="empty"><button class="empty-btn" id="_sgb">「'+esc(q)+'」분석 생성</button></div>';
+  res.innerHTML=html;var btn=document.getElementById('_sgb');if(btn)btn.addEventListener('click',function(){genCustom(q);});
+}
+function loadDateBrief(date){curDate=date;updateDateUI();var d=sgj('db_brief_'+date);if(d){renderBrief(d);goTab('brief');}}
+function genCustom(q){
+  var res=document.getElementById('srchResults');res.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">분석 중...</div></div>';
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var prompt='"'+q+'"에 대한 한국어 브리핑 4-5단락. 현황, 핵심 수치, 투자 임플리케이션 포함.';
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  p.then(function(text){res.innerHTML='<div class="sec">「'+esc(q)+'」</div><div style="margin:0 var(--s4) var(--s4);padding:var(--s4);background:var(--e1);border-radius:var(--r3);font-size:15px;color:var(--t2);line-height:1.8">'+esc(text).replace(/\n/g,'<br>')+'</div><div style="padding:0 var(--s4) var(--s4)"><button class="empty-btn" id="_spb">팟캐스트로 듣기</button></div>';var sb=document.getElementById('_spb');if(sb)sb.addEventListener('click',function(){topicPodcast(q);});}).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
-function jumpPod(i) {
-  let s=0; for(let j=0;j<i;j++) s+=Math.ceil(podSecs[j].text.length/6.5/spd);
-  elapsed=s;
-  if (audioEl) { audioEl.currentTime=s; if(!playing){audioEl.play();playing=true;paused=false;setIco(false);} return; }
-  if (playing) speakFrom(i); else { podIdx=i; renderPodSecs(); }
-  updateProg();
+/* ── PASTE ───────────────────────────────────────────────── */
+function analyzePaste(){
+  var txt=document.getElementById('pasteArea').value.trim();if(txt.length<100){showToast('기사 텍스트를 붙여넣어 주세요');return;}
+  var res=document.getElementById('pasteResult');res.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">분석 중...</div></div>';
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var prompt='다음 기사를 분석해서 JSON만 반환:\n기사:\n'+txt.slice(0,5000)+'\n{"title":"55자이내","cat":"글로벌|일본|미국|아시아|매크로|딜|화제|한국","summary":"2문장","detail":"3-4문장","implications":"PE/RE관점","source":"출처"}';
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  p.then(function(raw){var item=parseJ(raw);item.id='paste_'+Date.now();item.url='';if(curBrief){curBrief.headlines.unshift(item);ssj('db_brief_'+curDate,curBrief);renderCards(curBrief.headlines,curCat);}var cls=catCls[item.cat]||'cg';res.innerHTML='<div class="grp" style="margin:0 var(--s4)"><div class="nrow"><div class="nbody"><span class="ncat '+cls+'">'+esc(item.cat)+'</span><div class="ntitle">'+esc(item.title)+'</div><div class="nsum">'+esc(item.summary)+'</div></div></div></div>';document.getElementById('pasteArea').value='';showToast('브리핑에 추가됐습니다');}).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
-function secAt(s) { let acc=0,r=0; for(let i=0;i<podSecs.length;i++){const l=Math.ceil(podSecs[i].text.length/6.5/spd);if(acc+l>s){r=i;break;}acc+=l;r=i;} return r; }
-function seekBar(e) { const b=document.getElementById('progTrack'); const p=Math.max(0,Math.min(1,e.offsetX/b.offsetWidth)); elapsed=Math.floor(p*totalSec); if(audioEl){audioEl.currentTime=elapsed;updateProg();return;} const i=secAt(elapsed); if(playing) speakFrom(i); else{podIdx=i;renderPodSecs();} updateProg(); }
-function startTimer() { clearInterval(timerRef); timerRef=setInterval(()=>{if(!audioEl){elapsed++;updateProg();if(elapsed>=totalSec)clearInterval(timerRef);}},1000); }
-function updateProg() {
-  const p = totalSec>0 ? Math.min(100,elapsed/totalSec*100) : 0;
-  const pct = p+'%';
-  const pf=document.getElementById('progFill'); if(pf) pf.style.width=pct;
-  const pt=document.getElementById('progThumb'); if(pt) pt.style.left=pct;
-  const ct=document.getElementById('curT'); if(ct) ct.textContent=fmtT(elapsed);
-  if(audioEl&&audioEl.duration){const tt=document.getElementById('totT');if(tt) tt.textContent=fmtT(Math.floor(audioEl.duration));}
-  const bf=document.getElementById('pbFill'); if(bf) bf.style.width=pct;
-}
-function setIco(isPlay) {
-  const ico = isPlay ? '<path d="M8 5v14l11-7z"/>' : '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-  ['playIco','bpIco'].forEach(id=>{const el=document.getElementById(id);if(el) el.innerHTML=ico;});
-  const pb=document.getElementById('playerBar'); if(pb) pb.classList.toggle('show', podSecs.length>0);
-}
-function showTtsStatus(msg){const el=document.getElementById('ttsStatus');if(el){el.textContent=msg;el.style.display='block';}}
-function hideTtsStatus(){const el=document.getElementById('ttsStatus');if(el) el.style.display='none';}
-
-// ─── DATE NAV ─────────────────────────────────────────────────────────────────
-function navDate(d) {
-  const dt = new Date(curDate+'T00:00:00'); dt.setDate(dt.getDate()+d);
-  const nd = dt.toISOString().slice(0,10);
-  if (nd > todayStr()) return;
-  curDate = nd; updateDateUI(); stopAll(); elapsed=0; podSecs=[]; curBrief=null;
-  document.getElementById('playerBar').classList.remove('show');
-  const cached = S.getJ(K.brief(nd));
-  if (cached) { renderBrief(cached); }
-  else { renderEmpty('📰', dateLbl(nd)+' 브리핑 없음', '지금 생성', () => autoGen(nd)); }
-}
-
-function updateDateUI() {
-  const el = document.getElementById('dateLbl'); if(el) el.textContent = dateLbl(curDate);
-  const nb = document.getElementById('nextBtn'); if(nb) nb.disabled = curDate >= todayStr();
-  const pl = document.getElementById('podDateLbl'); if(pl) pl.textContent = dateLbl(curDate);
-}
-
-// ─── SEARCH ──────────────────────────────────────────────────────────────────
-async function doSearch() {
-  const q = document.getElementById('srchInp').value.trim();
-  if (!q) return;
-  const res = document.getElementById('srchResults');
-  const allKeys = S.keys().filter(k => k.startsWith('db_brief_'));
-  const matches = [];
-  allKeys.forEach(k => {
-    try {
-      const d = S.getJ(k);
-      if (d && JSON.stringify(d).toLowerCase().includes(q.toLowerCase())) matches.push(d);
-    } catch {}
-  });
-
-  let html = '';
-  if (matches.length) {
-    html += '<div class="sec-hdr">과거 브리핑 ('+matches.length+'건)</div>';
-    html += matches.slice(0,8).map(m => {
-      const hl = m.headlines?.find(h => JSON.stringify(h).toLowerCase().includes(q.toLowerCase()));
-      return '<div class="srch-r-item" onclick="loadDateBrief(\''+m.date+'\')">' +
-        '<div class="sri-date">'+dateLbl(m.date)+'</div>' +
-        '<div class="sri-title">'+esc(hl?.title||m.date+' 브리핑')+'</div>' +
-        '<div class="sri-prev">'+esc(hl?.summary||'')+'</div></div>';
-    }).join('');
-  }
-  html += '<div class="sec-hdr" style="margin-top:var(--s3)">AI 생성</div>' +
-    '<div class="empty"><button class="empty-btn" onclick="genCustom(\''+q.replace(/'/g,"\\'")+'\')">' +
-    '「'+esc(q)+'」분석 생성 →</button></div>';
-  res.innerHTML = html;
-}
-
-function loadDateBrief(date) {
-  curDate = date; updateDateUI();
-  const d = S.getJ(K.brief(date));
-  if (d) { renderBrief(d); switchTab('brief'); }
-}
-
-async function genCustom(q) {
-  const res = document.getElementById('srchResults');
-  res.innerHTML = '<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">「'+esc(q)+'」분석 중...</div></div>';
-  const ckey=S.get(K.claude), okey=S.get(K.openai);
-  const prompt = '최신 뉴스를 검색해서 "'+q+'"에 대한 한국어 브리핑을 4-5단락으로 작성해줘. 현황, 핵심 수치, 투자/비즈니스 임플리케이션, 주목 포인트 포함. 출처 명시.';
-  try {
-    let text = '';
-    if (ckey) {
-      const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})});
-      if(r.ok){const j=await r.json();text=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');}
-    } else if (okey) {
-      const r = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
-      if(r.ok){const j=await r.json();text=j.choices[0].message.content;}
-    }
-    if (text) {
-      res.innerHTML = '<div class="sec-hdr">「'+esc(q)+'」</div>' +
-        '<div style="margin:0 var(--s4) var(--s4);padding:var(--s4);background:var(--e1);border-radius:var(--r3);font-size:15px;color:var(--t2);line-height:1.8">'+esc(text).replace(/\n/g,'<br>')+'</div>' +
-        '<div style="padding:0 var(--s4) var(--s4)"><button class="empty-btn" onclick="switchTab(\'pod\')">팟캐스트로 듣기</button></div>';
-    }
-  } catch(e) {
-    res.innerHTML = '<div class="empty"><div class="empty-ico">❌</div><div class="empty-txt">'+esc(e.message)+'</div></div>';
-  }
-}
-
-// ─── NIKKEI PASTE ANALYZER ────────────────────────────────────────────────────
-async function analyzePaste() {
-  const txt = document.getElementById('pasteArea').value.trim();
-  if (txt.length < 100) { showToast('기사 텍스트를 붙여넣어 주세요'); return; }
-  const res = document.getElementById('pasteResult');
-  res.innerHTML = '<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">분석 중...</div></div>';
-  const ckey=S.get(K.claude), okey=S.get(K.openai);
-  const prompt = '다음 기사를 분석해서 JSON만 반환 (마크다운 없이):\n\n기사:\n'+txt.slice(0,5000)+'\n\n{"title":"55자 이내 한국어 제목","cat":"글로벌|일본|미국|아시아|매크로|딜|화제|한국","summary":"2문장 요약","detail":"3-4문장 분석","implications":"PE/부동산 투자 관점","source":"출처"}';
-  try {
-    let raw = '';
-    if (ckey) {
-      const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})});
-      if(r.ok){const j=await r.json();raw=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');}
-    } else if (okey) {
-      const r = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:600,messages:[{role:'user',content:prompt}]})});
-      if(r.ok){const j=await r.json();raw=j.choices[0].message.content;}
-    }
-    const item = parseJ(raw);
-    item.id = 'paste_'+Date.now(); item.url = '';
-    if (curBrief) { curBrief.headlines.unshift(item); S.setJ(K.brief(curDate),curBrief); renderCards(curBrief.headlines,curCat); }
-    res.innerHTML = '<div class="card-group" style="margin:0 var(--s4)">' +
-      '<div class="news-row">' +
-      '<div class="news-body"><span class="ncat c-'+esc(item.cat)+'">'+esc(item.cat)+'</span>' +
-      '<div class="n-title">'+esc(item.title)+'</div>' +
-      '<div class="n-sum">'+esc(item.summary)+'</div></div></div></div>' +
-      '<div style="margin:var(--s2) var(--s4);padding:var(--s3) var(--s4);background:var(--e1);border-radius:var(--r2);border-left:3px solid var(--accent)"><div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:4px">임플리케이션</div><div style="font-size:14px;color:var(--t2)">'+esc(item.implications)+'</div></div>';
-    document.getElementById('pasteArea').value = '';
-    showToast('✓ 브리핑에 추가됐습니다');
-  } catch(e) {
-    res.innerHTML = '<div class="empty"><div class="empty-ico">❌</div><div class="empty-txt">'+esc(e.message)+'</div></div>';
-  }
-}
-
-// ─── SETTINGS ────────────────────────────────────────────────────────────────
-function saveSetup() {
-  try {
-    var gVal  = document.getElementById('si-gemini').value.trim();
-    var clVal = document.getElementById('si-claude').value.trim();
-    var oVal  = document.getElementById('si-openai').value.trim();
-    if (!clVal && !oVal) {
-      alert('Claude 또는 OpenAI 키 중 하나는 필요합니다');
-      return;
-    }
-    // Save using raw localStorage to avoid any S/K dependency issues
-    if (gVal)  { try { localStorage.setItem('db_gemini', gVal); } catch(e) {} }
-    if (clVal) { try { localStorage.setItem('db_claude', clVal); } catch(e) {} }
-    if (oVal)  { try { localStorage.setItem('db_openai', oVal); } catch(e) {} }
-    window.location.reload();
-  } catch(err) {
-    var errDiv=document.getElementById('su-err');
-    if(errDiv){errDiv.textContent='오류: '+err.message;errDiv.style.display='block';}
-    else { alert('saveSetup error: ' + err.message); }
-  }
-}
-
-function saveKeys() {
-  const g=document.getElementById('set-gemini').value.trim();
-  const c=document.getElementById('set-claude').value.trim();
-  const o=document.getElementById('set-openai').value.trim();
-  if (g) S.set(K.gemini,g); if (c) S.set(K.claude,c); if (o) S.set(K.openai,o);
-  showToast('✓ 저장됐습니다'); loadVoices();
-}
-
-function saveGithub() {
-  const v = document.getElementById('set-github').value.trim().replace(/\/$/,'');
-  if (v) { S.set(K.github,v); showToast('✓ GitHub URL 저장됨'); }
-}
-
-function loadSettings() {
-  const s = S.getJ(K.settings);
-  if (s) settings = {...settings, ...s};
-  document.querySelectorAll('[id^="tog-"]').forEach(el => {
-    const key = el.id.replace('tog-','');
-    if (key in settings) el.classList.toggle('on', settings[key] !== false);
-  });
-  ['gemini','claude','openai'].forEach(k => {
-    const el = document.getElementById('set-'+k); if(el && S.get(K[k])) el.value = S.get(K[k]);
-  });
-  const gh = document.getElementById('set-github'); if(gh && S.get(K.github)) gh.value = S.get(K.github);
-  if (settings.usMode===undefined) settings.usMode=true;
-  if (settings.dealMode===undefined) settings.dealMode=true;
-  if (settings.trendMode===undefined) settings.trendMode=true;
-  setTimeout(updateCatTabs, 50);
-}
-
-function togSetting(key) {
-  settings[key] = !settings[key];
-  const el = document.getElementById('tog-'+key); if(el) el.classList.toggle('on', settings[key]);
-  S.setJ(K.settings, settings);
+/* ── SETTINGS ────────────────────────────────────────────── */
+function saveGithub(){var v=document.getElementById('set-github').value.trim().replace(/\/$/,'');if(v){ss('db_github',v);showToast('GitHub URL 저장됨');}}
+function saveKeys(){var g=document.getElementById('set-gemini').value.trim(),cl=document.getElementById('set-claude').value.trim(),o=document.getElementById('set-openai').value.trim();if(g)ss('db_gemini',g);if(cl)ss('db_claude',cl);if(o)ss('db_openai',o);showToast('저장됐습니다');loadVoices();}
+function loadCfg(){
+  var saved=sgj('db_cfg');if(saved){for(var k in saved)cfg[k]=saved[k];}
+  var togs=document.querySelectorAll('[id^="tog-"]');for(var i=0;i<togs.length;i++){var key=togs[i].id.replace('tog-','');if(key in cfg)togs[i].classList.toggle('on',cfg[key]!==false);}
+  var g=sg('db_gemini'),cl=sg('db_claude'),o=sg('db_openai'),gh=sg('db_github');
+  var eg=document.getElementById('set-gemini');if(eg&&g)eg.value=g;
+  var ec=document.getElementById('set-claude');if(ec&&cl)ec.value=cl;
+  var eo=document.getElementById('set-openai');if(eo&&o)eo.value=o;
+  var egh=document.getElementById('set-github');if(egh&&gh)egh.value=gh;
   updateCatTabs();
 }
+function togSetting(key){cfg[key]=!cfg[key];var el=document.getElementById('tog-'+key);if(el)el.classList.toggle('on',cfg[key]);ssj('db_cfg',cfg);updateCatTabs();}
+function updateCatTabs(){var map={'japanTab':'cb-j','koreaTab':'cb-k','usTab':'cb-u','dealTab':'cb-d','trendTab':'cb-t'};for(var key in map){var el=document.getElementById(map[key]);if(!el)continue;el.style.display=(key==='koreaTab'?cfg.koreaTab:(cfg[key]!==false))?'':'none';}}
+function updateCounts(){var n=skeys().filter(function(k){return k.startsWith('db_brief_');}).length;var sc=document.getElementById('storedCnt');if(sc)sc.textContent=n+'일';var ec=document.getElementById('estCost');if(ec)ec.textContent='~$'+(n*0.04).toFixed(2)+'/월';}
+function clearOld(){if(!confirm('30일 이전 데이터를 삭제할까요?'))return;var cut=new Date();cut.setDate(cut.getDate()-30);var n=0;skeys().filter(function(k){return k.startsWith('db_');}).forEach(function(k){var m=k.match(/(\d{4}-\d{2}-\d{2})/);if(m&&new Date(m[1])<cut){sr(k);n++;}});updateCounts();showToast(n+'개 삭제됐습니다');}
 
-function updateCatTabs() {
-  const map = { japanMode:'cb-일본', koreaMode:'cb-한국', usMode:'cb-미국', dealMode:'cb-딜', trendMode:'cb-화제' };
-  Object.entries(map).forEach(([key, id]) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const show = settings[key] !== false;
-    if (key === 'koreaMode') el.style.display = settings.koreaMode ? '' : 'none';
-    else el.style.display = show ? '' : 'none';
-  });
-}
+/* ── SCHEDULE ────────────────────────────────────────────── */
+function checkSched(){var t=sg('db_sched')||'06:00';var now=new Date();if(now.getHours()>=21){var tom=new Date(now);tom.setDate(tom.getDate()+1);var ts=tom.toISOString().slice(0,10);if(sg('db_lastpre')!==ts&&!sgj('db_brief_'+ts)){ss('db_lastpre',ts);setTimeout(function(){silentGen(ts);},5000);}}updateSchedLbl(t);}
+function silentGen(date){if(!sg('db_claude')&&!sg('db_openai'))return;var ex=sgj('db_brief_'+date);if(ex&&!isStale(ex))return;fetchGemini(date).catch(function(){return null;}).then(function(r){return structureAI(r,date);}).then(function(b){b.date=date;ssj('db_brief_'+date,b);updateCounts();if(curDate===date)renderBrief(b);showToast(dateLbl(date)+' 브리핑 준비됨');}).catch(function(e){console.warn('Silent gen:',e.message);});}
+function saveSched(){var t=document.getElementById('schedTime').value;ss('db_sched',t);updateSchedLbl(t);showToast('매일 '+t+' 이후 열면 브리핑이 준비됩니다');}
+function loadSchedUI(){var t=sg('db_sched')||'06:00';var el=document.getElementById('schedTime');if(el)el.value=t;updateSchedLbl(t);}
+function updateSchedLbl(t){var el=document.getElementById('schedLbl');if(!el)return;var pts=t.split(':');var h=parseInt(pts[0]),m=parseInt(pts[1]);var now=new Date(),next=new Date(now);next.setHours(h,m,0,0);if(next<=now)next.setDate(next.getDate()+1);var diff=Math.round((next-now)/60000);el.textContent=t+' · '+(Math.floor(diff/60)>0?Math.floor(diff/60)+'시간 '+(diff%60)+'분 후':(diff%60)+'분 후');}
+function preGenTom(){var tom=new Date();tom.setDate(tom.getDate()+1);var ts=tom.toISOString().slice(0,10);if(sgj('db_brief_'+ts)&&!isStale(sgj('db_brief_'+ts))){showToast(dateLbl(ts)+' 이미 준비됨');return;}showToast('내일 브리핑 생성 시작...');silentGen(ts);}
 
-function updateCounts() {
-  const n = S.keys().filter(k => k.startsWith('db_brief_')).length;
-  const el = document.getElementById('storedCnt'); if(el) el.textContent = n+'일';
-  const ec = document.getElementById('estCost'); if(ec) ec.textContent = '~$'+((n*0.04).toFixed(2))+'/월';
-}
+/* ── NAV / TABS ──────────────────────────────────────────── */
+function navDate(d){var dt=new Date(curDate+'T00:00:00');dt.setDate(dt.getDate()+d);var nd=dt.toISOString().slice(0,10);if(nd>todayStr())return;curDate=nd;updateDateUI();stopAll();elapsed=0;psecs=[];curBrief=null;document.getElementById('playerBar').classList.remove('on');var c=sgj('db_brief_'+nd);if(c)renderBrief(c);else renderEmpty('📰',dateLbl(nd)+' 없음','지금 생성',function(){autoGen(nd);});}
+function updateDateUI(){var el=document.getElementById('dateLbl');if(el)el.textContent=dateLbl(curDate);var nb=document.getElementById('nextBtn');if(nb)nb.disabled=curDate>=todayStr();var pd=document.getElementById('podD');if(pd)pd.textContent=dateLbl(curDate);}
+function goTab(id){var panes=document.querySelectorAll('.pane');for(var i=0;i<panes.length;i++)panes[i].classList.remove('on');var tbbs=document.querySelectorAll('.tbb');for(var i=0;i<tbbs.length;i++)tbbs[i].classList.remove('on');var pane=document.getElementById('pane-'+id);if(pane)pane.classList.add('on');var tbb=document.getElementById('tbb-'+id);if(tbb)tbb.classList.add('on');if(id==='pod'&&!psecs.length&&sgj('db_brief_'+curDate))genPod(curDate,curLen);}
 
-function clearOld() {
-  if (!confirm('30일 이전 데이터를 삭제할까요?')) return;
-  const cut = new Date(); cut.setDate(cut.getDate()-30);
-  let n = 0;
-  S.keys().filter(k=>k.startsWith('db_')).forEach(k=>{
-    const m = k.match(/(\d{4}-\d{2}-\d{2})/);
-    if (m && new Date(m[1]) < cut) { S.rm(k); n++; }
-  });
-  updateCounts(); showToast(n+'개 삭제됐습니다');
-}
-
-// ─── SCHEDULE ────────────────────────────────────────────────────────────────
-function checkSched() {
-  const t = S.get(K.sched) || '06:00';
-  const now = new Date();
-  if (now.getHours() >= 21) {
-    const tom = new Date(now); tom.setDate(tom.getDate()+1);
-    const ts = tom.toISOString().slice(0,10);
-    if (S.get(K.lastPre) !== ts && !S.getJ(K.brief(ts))) {
-      S.set(K.lastPre, ts);
-      setTimeout(() => silentGen(ts), 5000);
-    }
-  }
-  updateSchedLabel(t);
-}
-
-async function silentGen(date) {
-  if (!S.get(K.claude) && !S.get(K.openai)) return;
-  if (S.getJ(K.brief(date)) && !isStale(S.getJ(K.brief(date)))) return;
-  try {
-    const raw = await fetchGemini(date).catch(() => null);
-    const brief = await structureClaude(raw, date);
-    brief.date = date; S.setJ(K.brief(date), brief);
-    updateCounts();
-    if (curDate === date) { renderBrief(brief); }
-    showToast('📰 '+dateLbl(date)+' 브리핑 준비됨');
-  } catch(e) { console.warn('Silent gen failed:', e.message); }
-}
-
-function saveSchedule() {
-  const t = document.getElementById('schedTime').value;
-  S.set(K.sched, t); updateSchedLabel(t);
-  showToast('✓ 매일 '+t+' 이후 열면 완성된 브리핑이 기다립니다');
-}
-
-async function preGenTomorrow() {
-  const tom = new Date(); tom.setDate(tom.getDate()+1);
-  const ts = tom.toISOString().slice(0,10);
-  const ex = S.getJ(K.brief(ts));
-  if (ex && !isStale(ex)) { showToast('✓ '+dateLbl(ts)+' 브리핑 이미 준비됨'); return; }
-  showToast('⏳ 내일 브리핑 생성 시작...');
-  await silentGen(ts);
-  showToast('✓ '+dateLbl(ts)+' 완료!');
-}
-
-function loadSchedUI() {
-  const t = S.get(K.sched) || '06:00';
-  const el = document.getElementById('schedTime'); if(el) el.value = t;
-  updateSchedLabel(t);
-}
-
-function updateSchedLabel(t) {
-  const el = document.getElementById('schedLabel'); if(!el) return;
-  const [h,m] = t.split(':').map(Number);
-  const now = new Date(), next = new Date(now);
-  next.setHours(h,m,0,0); if(next<=now) next.setDate(next.getDate()+1);
-  const diff = Math.round((next-now)/60000);
-  el.textContent = t+' · '+(Math.floor(diff/60)>0?Math.floor(diff/60)+'시간 '+(diff%60)+'분 후':(diff%60)+'분 후');
-}
-
-// ─── NAV / TABS ───────────────────────────────────────────────────────────────
-
-// ─── DEEP DIVE ───────────────────────────────────────────────────────────────
-async function deepDive(type, id) {
-  const item = type==='h' ? curBrief?.headlines?.find(h=>h.id===id) : curBrief?.deals?.find(d=>d.id===id);
-  if (!item) return;
-  closeSheet();
-  switchTab('deepdive');
-  const el = document.getElementById('ddContent');
-  el.innerHTML = '<div class="dd-panel">' +
-    '<button class="dd-back" onclick="switchTab('brief')"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/></svg> 브리핑으로</button>' +
-    '<span class="ncat c-'+esc(item.cat||'딜')+'" style="margin-bottom:var(--s3);display:inline-flex">'+esc(item.cat||item.type||'딜')+'</span>' +
-    '<div style="font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:var(--s4);line-height:1.35">'+esc(item.title)+'</div>' +
-    '<div class="dd-loading" id="ddLoading"><div class="dd-spinner"></div><span>딥다이브 분석 중...</span></div>' +
-    '<div id="ddResult"></div>' +
-    '</div>';
-
-  const ckey=S.get(K.claude), okey=S.get(K.openai);
-  const prompt = '다음 기사를 심층 분석해 주세요 (한국어).
-
-제목: '+item.title+'
-요약: '+(item.summary||'')+'
-
-## 배경 및 맥락
-## 핵심 수치와 데이터
-## 시장 반응 및 이해관계자
-## PE/부동산 투자 임플리케이션
-## 리스크 및 반대 시나리오
-## 후속 주목 포인트
-
-각 섹션을 ## 헤더로 구분해 작성해주세요.';
-  try {
-    let text = '';
-    if (ckey) {
-      const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})});
-      if(r.ok){const j=await r.json();text=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');}
-    } else if (okey) {
-      const r = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:2000,messages:[{role:'user',content:prompt}]})});
-      if(r.ok){const j=await r.json();text=j.choices[0].message.content;}
-    }
-    document.getElementById('ddLoading').style.display='none';
-    const secs = text.split(/^##\s+/m).filter(Boolean);
-    let html = '';
-    secs.forEach(sec=>{const ln=sec.split('
-');html+='<div class="dd-section"><div class="dd-sec-lbl">'+esc(ln[0].trim())+'</div><div class="dd-body">'+esc(ln.slice(1).join('
-').trim()).replace(/
-/g,'<br>')+'</div></div>';});
-    if(!html) html='<div class="dd-section"><div class="dd-body">'+esc(text).replace(/
-/g,'<br>')+'</div></div>';
-    html += '<div style="display:flex;flex-direction:column;gap:var(--s2);margin:var(--s5) 0">' +
-      '<button class="empty-btn" style="width:100%;font-size:14px" onclick="topicPodcast(''+esc(item.title)+'')">🎙 이 기사로 팟캐스트 생성</button>' +
-      '<button class="empty-btn" style="width:100%;font-size:14px;background:transparent;border:.5px solid var(--accent-bdr)" onclick="askAbout(''+esc(item.title)+'')">💬 AI에게 더 물어보기</button>' +
-      '</div>';
-    document.getElementById('ddResult').innerHTML = '<div class="dd-panel">'+html+'</div>';
-  } catch(e) {
-    document.getElementById('ddLoading').style.display='none';
-    document.getElementById('ddResult').innerHTML = '<div class="dd-panel"><div style="color:var(--red);font-size:15px">오류: '+esc(e.message)+'</div></div>';
-  }
-}
-
-// ─── AI CHAT ──────────────────────────────────────────────────────────────────
-let chatHistory = [];
-async function sendChat() {
-  const inp = document.getElementById('chatInp');
-  const q = inp.value.trim(); if (!q) return;
-  inp.value = '';
-  appendMsg('user', q);
-  chatHistory.push({role:'user', content:q});
-  const thinkDiv = appendMsg('ai', '생각 중...', 'thinking');
-  const ckey=S.get(K.claude), okey=S.get(K.openai);
-  const ctx = curBrief ? '오늘 브리핑:
-'+(curBrief.headlines||[]).slice(0,5).map(h=>h.cat+': '+h.title).join('
-')+'
-
-' : '';
-  const sysmsg = ctx+'당신은 일본 PE/부동산 투자 전문 애널리스트입니다. 간결하고 구체적으로 한국어로 답변하세요.';
-  try {
-    let text = '';
-    if (ckey) {
-      const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sysmsg,tools:[{type:'web_search_20250305',name:'web_search'}],messages:chatHistory.slice(-8)})});
-      if(r.ok){const j=await r.json();text=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');}
-    } else if (okey) {
-      const r = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:800,messages:[{role:'system',content:sysmsg},...chatHistory.slice(-8)]})});
-      if(r.ok){const j=await r.json();text=j.choices[0].message.content;}
-    }
-    thinkDiv.remove();
-    appendMsg('ai', text||'응답 없음');
-    chatHistory.push({role:'assistant',content:text||''});
-    const msgs=document.getElementById('chatMsgs'); msgs.scrollTop=msgs.scrollHeight;
-  } catch(e) { thinkDiv.remove(); appendMsg('ai','오류: '+e.message); }
-}
-function appendMsg(role, text, cls) {
-  const el=document.getElementById('chatMsgs');
-  const d=document.createElement('div'); d.className='chat-msg '+role+(cls?' '+cls:'');
-  d.innerHTML='<div class="chat-bubble">'+esc(text).replace(/
-/g,'<br>')+'</div>';
-  el.appendChild(d); el.scrollTop=el.scrollHeight; return d;
-}
-function askAbout(topic){switchTab('chat');document.getElementById('chatInp').value=topic+'에 대해 더 자세히 알려줘';sendChat();}
-
-// ─── TOPIC PODCAST ────────────────────────────────────────────────────────────
-async function topicPodcast(topic) {
-  switchTab('pod');
-  document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">「'+esc(topic)+'」<br>팟캐스트 생성 중...</div></div>';
-  const ckey=S.get(K.claude), okey=S.get(K.openai);
-  const bctx = curBrief ? JSON.stringify({headlines:(curBrief.headlines||[]).slice(0,6),deals:(curBrief.deals||[]).slice(0,3)}).slice(0,2000) : '';
-  const prompt = '토픽: '+topic+'
-참고:
-'+bctx+'
-
-5분 분량 한국어 팟캐스트 스크립트.
-규칙: 모든 숫자를 한국어 음독으로, 자연스러운 애널리스트 스타일.
-섹션구분: ==배경== ==핵심 분석== ==투자 임플리케이션== ==결론==
-
-스크립트만 반환.';
-  try {
-    let script='';
-    if (ckey) {
-      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
-      if(r.ok){const j=await r.json();script=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');}
-    } else if (okey) {
-      const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
-      if(r.ok){const j=await r.json();script=j.choices[0].message.content;}
-    }
-    if(script){parsePod(script);document.getElementById('podH').textContent=topic;showToast('팟캐스트 준비됨 — 재생 버튼을 누르세요');}
-  } catch(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">❌</div><div class="empty-txt">'+esc(e.message)+'</div></div>';}
-}
-
-function switchTab(id) {
-  document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('on'));
-  document.getElementById('pane-'+id)?.classList.add('on');
-  document.getElementById('tbb-'+id)?.classList.add('on');
-  if (id==='pod' && !podSecs.length && S.getJ(K.brief(curDate))) genPod(curDate,curLen);
-}
-
-// ─── STEP INDICATORS ─────────────────────────────────────────────────────────
-function stepOn(n){const s=document.getElementById('ls'+n),i=document.getElementById('li'+n);if(s)s.classList.add('on');if(i){i.className='ld-dot spin';}}
-function stepDone(n){const s=document.getElementById('ls'+n),i=document.getElementById('li'+n);if(s){s.classList.remove('on');s.classList.add('ok');}if(i){i.className='ld-dot done';i.textContent='✓';}}
-
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
-function show(id){const el=document.getElementById(id);if(el){el.style.display='';el.classList.add('show');}}
-function hide(id){const el=document.getElementById(id);if(el){el.classList.remove('show');if(el.classList.contains('loading'))el.style.display='none';}}
+/* ── HELPERS ─────────────────────────────────────────────── */
 function todayStr(){return new Date().toISOString().slice(0,10);}
 function dateLbl(d){return new Date(d+'T00:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});}
 function isStale(d){return !d.generatedAt||(Date.now()-d.generatedAt>12*3600*1000);}
-function fmtT(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function fmtT(s){return Math.floor(s/60)+':'+pad2(s%60);}
+function pad2(n){return n<10?'0'+n:String(n);}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function delay(ms){return new Promise(r=>setTimeout(r,ms));}
-function showToast(msg){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3000);}
+function delay(ms){return new Promise(function(r){setTimeout(r,ms);});}
+function showToast(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},3000);}
 
-// ─── KEYBOARD ─────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  const si = document.getElementById('srchInp');
-  if (si) si.addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
-  const ci = document.getElementById('chatInp');
-  if (ci) ci.addEventListener('keydown', e => { if(e.key==='Enter' && !e.shiftKey){e.preventDefault();sendChat();} });
+/* ── KEYBOARD ────────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded',function(){
+  var si=document.getElementById('srchInp');if(si)si.addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
+  var ci=document.getElementById('chatInp');if(ci)ci.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
 });
 
-// ─── START ────────────────────────────────────────────────────────────────────
-(async () => {
-  try {
-    await init();
-  } catch(e) {
-    console.error('Init error:', e);
-    document.getElementById('loadingScreen').classList.remove('show');
-    document.getElementById('loadingScreen').style.display = 'none';
-    // Setup screen is already visible by default - just make sure
-    document.getElementById('setupScreen').style.display = '';
-    // Show error message
-    const p = document.querySelector('#setupScreen .su-p');
-    if (p) {
-      const err = document.createElement('div');
-      err.style.cssText = 'padding:12px;background:rgba(255,59,48,.1);border-radius:8px;font-size:13px;color:#FF3B30;margin-top:12px';
-      err.textContent = '오류: ' + (e.message || String(e));
-      p.after(err);
-    }
-  }
-})();
+/* ── START ───────────────────────────────────────────────── */
+init();
+
 </script>
 </body>
 </html>
