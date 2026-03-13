@@ -875,18 +875,16 @@ async function autoGen(date) {
 async function fetchGemini(date) {
   const key = S.get(K.gemini);
   if (!key) return null;
-  const prompt = `Today is ${date} JST. Prepare morning briefing for Japan PE/Real Estate fund manager. Japanese morning papers just published.
-
-Search exhaustively:
-JAPAN: BOJ rate signals, JGB yields, Nikkei/Sankei headlines, 日経不動産マーケット, J-REIT activity, PE deals (KKR/Blackstone/Carlyle/PAG/Warburg), TOB/MBO, activist investors, earnings
-US OVERNIGHT: S&P500/Nasdaq exact close, Fed speakers, economic data, major political news
-GLOBAL MACRO: USD/JPY move, oil WTI price, China PBOC/economy, Korea BOK/Samsung, geopolitics (Ukraine, Middle East, US-China)
-DEALS: ANY M&A globally $500M+, PE buyouts, RE transactions, fund closings, activist campaigns, earnings with investment angle
-TRENDING: WBC/sports, AI/tech news, geopolitical flashpoints, investor must-knows
-
-For each story: Korean headline, category (글로벌|일본|미국|아시아|매크로|딜|화제|한국), 2-sentence Korean summary, source, URL.
-Market levels: JGB 10Y%, USD/JPY, Nikkei, S&P500, WTI, USD/KRW.
-Target 20-25 stories. MINIMUM 4 딜 items, 2 화제 items.`;
+  var prompt = 'Today is ' + date + ' JST. Prepare morning briefing for Japan PE/Real Estate fund manager. Japanese morning papers just published.'
+    + '\n\nSearch exhaustively:'
+    + '\nJAPAN: BOJ rate signals, JGB yields, Nikkei/Sankei headlines, J-REIT activity, PE deals (KKR/Blackstone/PAG/Warburg), TOB/MBO, activist investors'
+    + '\nUS OVERNIGHT: S&P500/Nasdaq exact close, Fed speakers, economic data'
+    + '\nGLOBAL MACRO: USD/JPY, oil WTI, China PBOC, Korea BOK, geopolitics'
+    + '\nDEALS: M&A $500M+, PE buyouts, RE transactions, fund closings, activist campaigns'
+    + '\nTRENDING: WBC/sports, AI/tech news, geopolitical flashpoints'
+    + '\n\nFor each: Korean headline, category (글로벌|일본|미국|아시아|매크로|딜|화제|한국), 2-sentence Korean summary, source, URL.'
+    + '\nMarket: JGB 10Y%, USD/JPY, Nikkei, S&P500, WTI, USD/KRW.'
+    + '\nTarget 20-25 stories. MINIMUM 4 딜 items, 2 화제 items.';
 
   const res = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + key,
