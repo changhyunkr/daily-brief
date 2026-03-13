@@ -525,8 +525,20 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 .rich-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
 
 /* ── SOURCE MANAGEMENT ── */
-.src-item{display:flex;align-items:center;gap:var(--s3);padding:0 var(--s4);
-  min-height:var(--tap);border-bottom:.5px solid var(--sep)}
+.src-cat{background:var(--e1);border-radius:var(--r3);overflow:hidden;margin-bottom:var(--s3)}
+.src-cat-hdr{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s4);
+  cursor:pointer;border-bottom:.5px solid var(--sep);user-select:none}
+.src-cat-hdr:active{background:var(--e2)}
+.src-cat-ico{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.src-cat-name{flex:1;font-size:14px;font-weight:600;color:var(--t1)}
+.src-cat-cnt{font-size:12px;color:var(--t3);padding:2px 8px;background:var(--e2);border-radius:10px}
+.src-cat-chev{font-size:12px;color:var(--t3);transition:transform .2s}
+.src-cat-hdr.open .src-cat-chev{transform:rotate(90deg)}
+.src-cat-body{display:none;max-height:300px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.src-cat-body::-webkit-scrollbar{display:none}
+.src-cat-body.open{display:block}
+.src-item{display:flex;align-items:center;gap:var(--s2);padding:0 var(--s4);
+  min-height:38px;border-bottom:.5px solid var(--sep);font-size:13px}
 .src-item:last-child{border-bottom:none}
 .src-name{flex:1;font-size:15px;color:var(--t1)}
 .src-url{font-size:11px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
@@ -599,7 +611,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
-  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v17 · Built 2026-03-14 v17</div>
+  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v18 · Built 2026-03-14 v18</div>
   <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
@@ -846,12 +858,16 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row" onclick="togSetting('trendMode')"><span class="set-row-lbl">🔥 화제 탭</span><button class="ios-tog on" id="tog-trendMode"></button></div>
             <div class="set-row" onclick="togSetting('podAutoGen')"><span class="set-row-lbl">브리핑 후 팟캐스트 자동생성</span><button class="ios-tog" id="tog-podAutoGen"></button></div>
           </div>
-          <div class="set-lbl">뉴스 소스</div>
+          <div class="set-lbl">뉴스 소스 (<span id="srcCount">0</span>개)</div>
+          <div id="srcCatList"></div>
           <div class="set-grp">
-            <div id="srcList"></div>
             <div class="src-add-row">
               <input class="src-add-inp" id="srcAddInp" placeholder="소스 이름 또는 URL 추가...">
               <button class="src-add-btn" onclick="addSource()">추가</button>
+            </div>
+            <div style="display:flex;gap:var(--s2);padding:var(--s2) var(--s4) var(--s3)">
+              <button class="set-btn" style="flex:1;margin:0" onclick="resetSources()">기본값 복원</button>
+              <button class="set-btn" style="flex:1;margin:0;color:var(--red)" onclick="clearAllSources()">전체 삭제</button>
             </div>
           </div>
           <div class="set-lbl">닛케이 로그인 (서버 스크래핑)</div>
@@ -867,7 +883,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v17<br>Built 2026-03-14 v17</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v18<br>Built 2026-03-14 v18</div>
         </div>
       </div>
 
@@ -913,7 +929,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-/* Daily Brief v17 — clean ES5, no template literals, no const/let at top scope */
+/* Daily Brief v18 — clean ES5, no template literals, no const/let at top scope */
 
 /* ── STORAGE ─────────────────────────────────────────────── */
 var _mem = {};
@@ -1022,12 +1038,15 @@ function autoGen(date){
 /* ── GEMINI ──────────────────────────────────────────────── */
 function fetchGemini(date){
   var key=sg('db_gemini');if(!key)return Promise.resolve(null);
+  var active=getActiveSources();
+  var srcNames=active.slice(0,30).map(function(s){return s.name;}).join(', ');
   var prompt='Today is '+date+' (JST, around 4:30 AM). You MUST use Google Search to find REAL news from the last 24 hours.'
     +'\n\nIMPORTANT RULES:'
     +'\n- ONLY report news you actually found via search. NEVER fabricate or guess.'
     +'\n- Each item MUST have a real source URL from the actual article.'
     +'\n- If you cannot find enough news, return fewer items. 5 real items > 20 fake items.'
     +'\n- Market data MUST be real closing prices from yesterday. If unknown, write "N/A".'
+    +'\n\nPRIORITY SOURCES (search these first): '+srcNames
     +'\n\nSEARCH THESE TOPICS (in order of priority):'
     +'\n1. [Japanese] 日経新聞 朝刊 トップ (today Nikkei morning headlines)'
     +'\n2. [Japanese] 日本 不動産 取引 REIT (Japan real estate deals, J-REIT news)'
@@ -1392,6 +1411,7 @@ function genRichAnalysis(q){
 
 function renderRichAnalysis(container,q,data){
   var html='<div class="rich-wrap"><div class="sec-hdr">'+esc(q)+'</div>';
+  var foundSources=[];
   (data.sections||[]).forEach(function(sec){
     html+='<div class="rich-section"><div class="rich-sec-title">'+esc(sec.title)+'</div><div class="rich-body">'+esc(sec.body||'').replace(/\n/g,'<br>')+'</div>';
     if(sec.table&&sec.table.headers){
@@ -1406,10 +1426,30 @@ function renderRichAnalysis(container,q,data){
       sec.kv.forEach(function(item){html+='<div class="rich-kv-item"><div class="rich-kv-label">'+esc(item.label)+'</div><div class="rich-kv-value">'+esc(item.value)+'</div></div>';});
       html+='</div>';
     }
+    if(sec.source)foundSources.push(sec.source);
     html+='</div>';
   });
   html+='<div style="display:flex;gap:var(--s2);margin-top:var(--s4)"><button class="empty-btn" style="flex:1" onclick="topicPodcast(\''+esc(q)+'\')">팟캐스트</button><button class="empty-btn" style="flex:1;background:var(--e1);color:var(--accent);border:1px solid var(--accent-bdr)" onclick="askAbout(\''+esc(q)+'\')">AI 질문</button></div></div>';
   container.innerHTML=html;
+  setTimeout(function(){checkNewSources(JSON.stringify(data));},500);
+}
+
+function checkNewSources(text){
+  var urlMatch=text.match(/https?:\/\/[^\s"',<>]+/g);
+  if(!urlMatch)return;
+  var dominated=['google.com','bing.com','t.co','bit.ly','youtu.be','youtube.com','twitter.com','facebook.com','instagram.com','reddit.com','wikipedia.org','anthropic.com','openai.com'];
+  var seen={};
+  urlMatch.forEach(function(u){
+    try{
+      var host=u.split('/')[2].replace(/^www\./,'');
+      if(dominated.some(function(d){return host.indexOf(d)>=0;}))return;
+      if(seen[host])return;seen[host]=true;
+      var sources=sgj('db_sources_v2')||defaultSources;
+      var known=false;
+      for(var c in sources)(sources[c]||[]).forEach(function(s){if(s.url&&s.url.indexOf(host)>=0)known=true;});
+      if(!known)suggestSource(host,u.split('?')[0]);
+    }catch(e){}
+  });
 }
 
 /* ── PASTE ───────────────────────────────────────────────── */
@@ -1499,40 +1539,156 @@ function togScriptView(mode){
 }
 
 /* ── SOURCE MANAGEMENT ──────────────────────────────────── */
-var defaultSources=[
-  {name:'Nikkei Asia',url:'https://asia.nikkei.com'},
-  {name:'Nikkei (日経)',url:'https://www.nikkei.com'},
-  {name:'Nikkei RE (不動産)',url:'https://www.nikkei.com/realestate'},
-  {name:'Bloomberg',url:'https://www.bloomberg.com'},
-  {name:'Reuters',url:'https://www.reuters.com'},
-  {name:'DEAL Street Asia',url:'https://www.dealstreetasia.com'},
-  {name:'PE Hub',url:'https://www.pehub.com'},
-  {name:'CBRE Japan',url:'https://www.cbre.co.jp'},
-  {name:'JLL Japan',url:'https://www.joneslanglasalle.co.jp'}
-];
+var defaultSources={
+  'JP-정책·데이터':[
+    {name:'BOJ (일본은행)',url:'https://www.boj.or.jp/',on:true},
+    {name:'MOF (재무성)',url:'https://www.mof.go.jp/',on:true},
+    {name:'내각부 (GDP)',url:'https://www.cao.go.jp/',on:true},
+    {name:'총무성 통계 (물가)',url:'https://www.stat.go.jp/',on:true},
+    {name:'후생노동성 (고용)',url:'https://www.mhlw.go.jp/',on:true},
+    {name:'국토교통성 (부동산)',url:'https://www.mlit.go.jp/',on:true},
+    {name:'METI (산업)',url:'https://www.meti.go.jp/',on:true},
+    {name:'TSE (도쿄거래소)',url:'https://www.jpx.co.jp/',on:true}
+  ],
+  'JP-언론':[
+    {name:'日経 (닛케이)',url:'https://www.nikkei.com/',on:true},
+    {name:'Nikkei Asia',url:'https://asia.nikkei.com/',on:true},
+    {name:'아사히',url:'https://www.asahi.com/',on:true},
+    {name:'요미우리',url:'https://www.yomiuri.co.jp/',on:true},
+    {name:'마이니치',url:'https://mainichi.jp/',on:true},
+    {name:'Jiji (시사통신)',url:'https://www.jiji.com/',on:true},
+    {name:'Kyodo (공동통신)',url:'https://www.kyodonews.jp/',on:true},
+    {name:'NHK',url:'https://www3.nhk.or.jp/',on:true},
+    {name:'Diamond Online',url:'https://diamond.jp/',on:false},
+    {name:'BI Japan',url:'https://www.businessinsider.jp/',on:false}
+  ],
+  'JP-부동산/RE':[
+    {name:'닛케이부동산',url:'https://www.nikkei.com/realestate',on:true},
+    {name:'NLI Research',url:'https://www.nli-research.co.jp/english/',on:true},
+    {name:'JLL Japan',url:'https://www.jll.co.jp/en/trends-and-insights/research',on:true},
+    {name:'CBRE Japan',url:'https://www.cbre.co.jp/insights',on:true},
+    {name:'Savills Japan',url:'https://www.savills.co.jp/research/',on:true},
+    {name:'C&W Japan',url:'https://www.cushmanwakefield.com/en/japan/insights',on:true},
+    {name:'ULI Japan',url:'https://japan.uli.org/',on:false}
+  ],
+  'JP-딜/액티비즘':[
+    {name:'DealStreetAsia',url:'https://www.dealstreetasia.com/',on:true},
+    {name:'Mergermarket',url:'https://www.mergermarket.com/',on:false},
+    {name:'PE Hub',url:'https://www.pehub.com/',on:true}
+  ],
+  'KR-정책·데이터':[
+    {name:'BOK (한국은행)',url:'https://www.bok.or.kr/',on:true},
+    {name:'기재부 (MOEF)',url:'https://www.moef.go.kr/',on:true},
+    {name:'금융위 (FSC)',url:'https://www.fsc.go.kr/',on:true},
+    {name:'금감원 (FSS)',url:'https://www.fss.or.kr/',on:true},
+    {name:'KOSIS (통계청)',url:'https://kosis.kr/',on:true},
+    {name:'DART 공시',url:'https://dart.fss.or.kr/',on:true},
+    {name:'KRX (거래소)',url:'https://global.krx.co.kr/',on:true}
+  ],
+  'KR-뉴스/딜':[
+    {name:'연합뉴스',url:'https://www.yna.co.kr/',on:true},
+    {name:'한국경제',url:'https://www.hankyung.com/',on:true},
+    {name:'매일경제',url:'https://www.mk.co.kr/',on:true},
+    {name:'조선일보',url:'https://www.chosun.com/',on:false},
+    {name:'중앙일보',url:'https://www.joongang.co.kr/',on:false},
+    {name:'동아일보',url:'https://www.donga.com/',on:false},
+    {name:'Korea Herald',url:'https://www.koreaherald.com/',on:true},
+    {name:'KED Global',url:'https://www.kedglobal.com/',on:true}
+  ],
+  'KR-부동산':[
+    {name:'젠스타메이트',url:'https://www.genstarmate.com/',on:true},
+    {name:'CBRE Korea',url:'https://www.cbre.co.kr/',on:true},
+    {name:'JLL Korea',url:'https://www.jll.co.kr/',on:false},
+    {name:'Savills Korea',url:'https://www.savills.co.kr/',on:false}
+  ],
+  'US-정책·데이터':[
+    {name:'Fed',url:'https://www.federalreserve.gov/',on:true},
+    {name:'U.S. Treasury',url:'https://home.treasury.gov/',on:true},
+    {name:'BLS (물가/고용)',url:'https://www.bls.gov/',on:true},
+    {name:'BEA (GDP)',url:'https://www.bea.gov/',on:true},
+    {name:'USTR (관세)',url:'https://ustr.gov/',on:true},
+    {name:'DoD (안보)',url:'https://www.defense.gov/',on:false},
+    {name:'State Dept',url:'https://www.state.gov/',on:false},
+    {name:'SEC EDGAR',url:'https://www.sec.gov/edgar',on:true}
+  ],
+  'US-뉴스/마켓':[
+    {name:'Bloomberg',url:'https://www.bloomberg.com/',on:true},
+    {name:'Reuters',url:'https://www.reuters.com/',on:true},
+    {name:'WSJ',url:'https://www.wsj.com/',on:true},
+    {name:'FT',url:'https://www.ft.com/',on:true},
+    {name:'CNBC',url:'https://www.cnbc.com/',on:true},
+    {name:'Axios',url:'https://www.axios.com/',on:true},
+    {name:'Politico',url:'https://www.politico.com/',on:false},
+    {name:'The Information',url:'https://www.theinformation.com/',on:false}
+  ],
+  '글로벌 기구':[
+    {name:'IMF',url:'https://www.imf.org/',on:true},
+    {name:'World Bank',url:'https://www.worldbank.org/',on:false},
+    {name:'OECD',url:'https://www.oecd.org/',on:true},
+    {name:'IEA (에너지)',url:'https://www.iea.org/',on:true},
+    {name:'WTO',url:'https://www.wto.org/',on:false}
+  ],
+  '사용자 추가':[]
+};
+
+var catIcons={'JP-정책·데이터':'🏛','JP-언론':'📰','JP-부동산/RE':'🏢','JP-딜/액티비즘':'💼','KR-정책·데이터':'🏛','KR-뉴스/딜':'📰','KR-부동산':'🏢','US-정책·데이터':'🏛','US-뉴스/마켓':'📰','글로벌 기구':'🌐','사용자 추가':'⭐'};
+
 function loadSources(){
-  var saved=sgj('db_sources');
-  var sources=saved||defaultSources;
-  renderSources(sources);
+  var saved=sgj('db_sources_v2');
+  if(!saved){saved={};for(var cat in defaultSources){saved[cat]=defaultSources[cat].map(function(s){return {name:s.name,url:s.url,on:s.on};});}}
+  renderSources(saved);
 }
 function renderSources(sources){
-  var el=document.getElementById('srcList');if(!el)return;
-  var html='';
-  sources.forEach(function(s,i){
-    html+='<div class="src-item"><span class="src-name">'+esc(s.name)+'</span><span class="src-url">'+esc(s.url)+'</span><button class="src-del" onclick="delSource('+i+')">×</button></div>';
-  });
+  var el=document.getElementById('srcCatList');if(!el)return;
+  var html='',total=0;
+  for(var cat in sources){
+    var items=sources[cat]||[];var onCnt=items.filter(function(s){return s.on;}).length;total+=onCnt;
+    html+='<div class="src-cat"><div class="src-cat-hdr" onclick="togSrcCat(this)"><span class="src-cat-ico">'+(catIcons[cat]||'📌')+'</span><span class="src-cat-name">'+esc(cat)+'</span><span class="src-cat-cnt">'+onCnt+'/'+items.length+'</span><span class="src-cat-chev">›</span></div><div class="src-cat-body">';
+    items.forEach(function(s,i){
+      html+='<div class="src-item"><button class="ios-tog'+(s.on?' on':'')+'" style="width:40px;height:24px;min-width:40px" onclick="togSource(\''+esc(cat)+'\','+i+')"></button><span class="src-name">'+esc(s.name)+'</span>'+(cat==='사용자 추가'?'<button class="src-del" onclick="delSource(\''+esc(cat)+'\','+i+')">×</button>':'')+'</div>';
+    });
+    html+='</div></div>';
+  }
   el.innerHTML=html;
+  var cnt=document.getElementById('srcCount');if(cnt)cnt.textContent=total;
+}
+function togSrcCat(hdr){hdr.classList.toggle('open');var body=hdr.nextElementSibling;if(body)body.classList.toggle('open');}
+function togSource(cat,idx){
+  var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
+  if(sources[cat]&&sources[cat][idx])sources[cat][idx].on=!sources[cat][idx].on;
+  ssj('db_sources_v2',sources);renderSources(sources);
 }
 function addSource(){
   var inp=document.getElementById('srcAddInp');var v=inp.value.trim();if(!v)return;
-  var sources=sgj('db_sources')||defaultSources.slice();
-  var isUrl=v.indexOf('http')===0||v.indexOf('www.')===0;
-  sources.push({name:isUrl?v.replace(/https?:\/\/(www\.)?/,'').split('/')[0]:v,url:isUrl?v:''});
-  ssj('db_sources',sources);renderSources(sources);inp.value='';showToast('소스 추가됨');
+  var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
+  if(!sources['사용자 추가'])sources['사용자 추가']=[];
+  var isUrl=v.indexOf('http')===0;
+  sources['사용자 추가'].push({name:isUrl?v.replace(/https?:\/\/(www\.)?/,'').split('/')[0]:v,url:isUrl?v:'',on:true});
+  ssj('db_sources_v2',sources);renderSources(sources);inp.value='';showToast('소스 추가됨');
 }
-function delSource(idx){
-  var sources=sgj('db_sources')||defaultSources.slice();
-  sources.splice(idx,1);ssj('db_sources',sources);renderSources(sources);showToast('소스 삭제됨');
+function delSource(cat,idx){
+  var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
+  if(sources[cat])sources[cat].splice(idx,1);
+  ssj('db_sources_v2',sources);renderSources(sources);showToast('삭제됨');
+}
+function resetSources(){if(!confirm('모든 소스를 기본값으로 복원할까요?'))return;sr('db_sources_v2');loadSources();showToast('기본값 복원됨');}
+function clearAllSources(){if(!confirm('모든 소스를 삭제할까요?'))return;var empty={};for(var c in defaultSources)empty[c]=[];ssj('db_sources_v2',empty);renderSources(empty);showToast('전체 삭제됨');}
+function getActiveSources(){
+  var sources=sgj('db_sources_v2')||defaultSources;var active=[];
+  for(var cat in sources)(sources[cat]||[]).forEach(function(s){if(s.on)active.push(s);});
+  return active;
+}
+function suggestSource(name,url){
+  if(!name||!url)return;
+  var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
+  var all=[];for(var c in sources)(sources[c]||[]).forEach(function(s){all.push(s.url);});
+  if(all.some(function(u){return u&&url.indexOf(u.replace(/\/$/,''))>=0;}))return;
+  var msg='새로운 소스를 발견했습니다:\n'+name+' ('+url+')\n\n소스 리스트에 추가할까요?';
+  if(confirm(msg)){
+    if(!sources['사용자 추가'])sources['사용자 추가']=[];
+    sources['사용자 추가'].push({name:name,url:url,on:true});
+    ssj('db_sources_v2',sources);showToast(name+' 추가됨');
+  }
 }
 
 /* ── TOOLS TAB ──────────────────────────────────────────── */
