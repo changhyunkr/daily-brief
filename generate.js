@@ -71,7 +71,7 @@ MARKET REPORTS PUBLISHED TODAY:
 - BOJ/MOF statistics
 - Any major investment bank market outlook
 
-For each: Korean headline, category (글로벌|일본|미국|아시아|매크로|딜|화제|한국), 2-sentence Korean summary, source, URL.
+For each: Korean headline, category (글로벌|일본|미국|아시아|매크로|딜|화제|한국), published time (e.g. "3/14 06:30"), 2-sentence Korean summary, source, URL. Only include news from last 24-36 hours.
 Market levels: JGB 10Y %, USD/JPY, Nikkei, S&P500, WTI, USD/KRW. Use EXACT numbers from search results. If not found, write "N/A".
 Return only items you actually found. Quality over quantity. Include real source URLs.`;
 
@@ -119,10 +119,16 @@ HEADLINE RULES:
 
   const schema = `Return ONLY this JSON (no markdown fences, no text outside JSON):
 {"date":"${date}","generatedAt":${Date.now()},"generatedBy":"github-actions","model":"${useSearch?'claude-search':'gemini+claude'}",
-"headlines":[{"id":"h1","cat":"일본","title":"구체적 헤드라인","summary":"팩트 기반 2문장.","detail":"3-4문장 분석.","implications":"PE/RE 투자 관점 구체적 시사점.","source":"실제 출처","url":"실제 URL 또는 빈문자열"}],
+"headlines":[{"id":"h1","cat":"일본","title":"구체적 헤드라인","time":"3/14 06:30","summary":"팩트 기반 2문장.","detail":"3-4문장 분석.","implications":"아래 가이드 참조","source":"실제 출처","url":"실제 URL 또는 빈문자열"}],
 "market":{"jgb10y":{"v":"실제수치 또는 N/A","d":"변동 또는 —","t":0},"usdjpy":{"v":"","d":"","t":0},"nikkei":{"v":"","d":"","t":0},"sp500":{"v":"","d":"","t":0},"wti":{"v":"","d":"","t":0},"usdkrw":{"v":"","d":"","t":0}},
-"deals":[{"id":"d1","title":"실제 딜명","value":"금액","type":"유형","summary":"팩트 기반 요약.","source":"출처","url":"URL"}],
+"deals":[{"id":"d1","title":"실제 딜명","time":"3/14","value":"금액","type":"유형","summary":"팩트 기반 요약.","source":"출처","url":"URL"}],
 "watch":[{"n":1,"text":"관전포인트1"},{"n":2,"text":"관전포인트2"},{"n":3,"text":"관전포인트3"}]}
+
+IMPLICATIONS GUIDE — implications must have this depth:
+BAD: "주목할 만하다", "투자자들이 관심을 가질 것"
+GOOD: "JGB 10Y 1.5% 돌파 시 도쿄 오피스 캡레이트 3.5→4.0% 조정 압력. 레버리지 60%+ 건은 리파이 리스크 점검"
+GOOD: "BOJ 4월 동결 시 엔화 155엔 돌파 → 해외 LP의 JPY 헤지 비용 상승. 신규 펀드 캐피탈콜 타이밍 조정"
+Must include: (1) specific numbers/scenarios (2) direct portfolio impact (3) concrete action item
 
 Include ONLY real items from the raw data. t=1 up, -1 down, 0 flat/unknown.`;
 

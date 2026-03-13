@@ -167,6 +167,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 .n-sum{font-size:14px;line-height:1.5;color:var(--t2)}
 .news-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:3px;padding-top:2px}
 .n-src{font-size:10px;color:var(--t3)}
+.n-time{font-size:10px;color:var(--t4);font-variant-numeric:tabular-nums}
 .n-chev{color:var(--t4);font-size:14px}
 
 /* ── DEAL CARDS ── */
@@ -616,7 +617,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
-  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v19 · Built 2026-03-14 v19</div>
+  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v20 · Built 2026-03-14 v20</div>
   <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
@@ -900,7 +901,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v19<br>Built 2026-03-14 v19</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v20<br>Built 2026-03-14 v20</div>
         </div>
       </div>
 
@@ -946,7 +947,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-/* Daily Brief v19 — clean ES5, no template literals, no const/let at top scope */
+/* Daily Brief v20 — clean ES5, no template literals, no const/let at top scope */
 
 /* ── STORAGE ─────────────────────────────────────────────── */
 var _mem = {};
@@ -1078,6 +1079,7 @@ function fetchGemini(date){
     +'\n\nFor EACH real news item found, provide:'
     +'\n- Headline (Korean, max 55 chars, specific with names/numbers)'
     +'\n- Category: 글로벌|일본|미국|아시아|매크로|딜|화제|한국'
+    +'\n- Published time (e.g. "3/14 06:30 JST" or "3/13 22:15 EST"). MUST be from last 24-36 hours only.'
     +'\n- 2-sentence Korean summary with SPECIFIC facts from the article'
     +'\n- Source name (Nikkei, Bloomberg, Reuters, etc.)'
     +'\n- ACTUAL article URL (not a google redirect)'
@@ -1110,16 +1112,27 @@ function structureAI(raw,date){
     +'5. If fewer than 10 real stories exist, return fewer items. 8 real > 15 fake.\n'
     +'6. Deal items: only include REAL announced deals from the data. Do not fabricate deals.\n'
     +'7. Every headline must reference a SPECIFIC company, person, number, or event from the data.\n'
-    +'8. FORBIDDEN: generic headlines like "일본 부동산 펀드, 빌딩 인수" without specific names.\n';
+    +'8. FORBIDDEN: generic headlines like "일본 부동산 펀드, 빌딩 인수" without specific names.\n'
+    +'9. TIME: include "time" field with the article publish time (e.g. "3/14 06:30" or "3/13 22:15"). If unknown, write the date only.\n'
+    +'10. RECENCY: Only include news from the last 24-36 hours. Reject anything older.\n';
 
   var schema='{"date":"'+date+'","generatedAt":'+Date.now()+',"model":"auto",'
-    +'"headlines":[{"id":"h1","cat":"일본","title":"구체적 헤드라인 (회사명+수치 필수)","summary":"2문장 팩트 기반","detail":"3-4문장 분석","implications":"PE/RE 구체적 시사점","source":"실제 출처","url":"실제 URL 또는 빈문자열"}],'
+    +'"headlines":[{"id":"h1","cat":"일본","title":"구체적 헤드라인 (회사명+수치 필수)","time":"3/14 06:30","summary":"2문장 팩트 기반","detail":"3-4문장 분석","implications":"아래 IMPLICATIONS GUIDE 참조","source":"실제 출처","url":"실제 URL 또는 빈문자열"}],'
     +'"market":{"jgb10y":{"v":"실제수치 또는 N/A","d":"변동 또는 —","t":0},"usdjpy":{"v":"","d":"","t":0},"nikkei":{"v":"","d":"","t":0},"sp500":{"v":"","d":"","t":0},"wti":{"v":"","d":"","t":0},"usdkrw":{"v":"","d":"","t":0}},'
-    +'"deals":[{"id":"d1","title":"실제 딜명","value":"금액","type":"유형","summary":"팩트 기반 요약","source":"출처","url":"URL"}],'
+    +'"deals":[{"id":"d1","title":"실제 딜명","time":"3/14","value":"금액","type":"유형","summary":"팩트 기반 요약","source":"출처","url":"URL"}],'
     +'"watch":[{"n":1,"text":"관전1"},{"n":2,"text":"관전2"},{"n":3,"text":"관전3"}]}';
 
+  var impGuide='IMPLICATIONS GUIDE — implications 필드는 반드시 아래 수준의 depth를 가져야 합니다:\n'
+    +'BAD (금지): "주목할 만하다", "투자자들이 관심을 가질 것", "시장에 영향을 줄 수 있다"\n'
+    +'GOOD (필수 수준):\n'
+    +'- "JGB 10Y 1.5% 돌파 시 도쿄 오피스 캡레이트 3.5→4.0% 조정 압력. 2024년 취득 물건 중 레버리지 60%+ 건은 리파이 리스크 점검 필요"\n'
+    +'- "세븐아이 MBO 실패 시 쿠시타르가 독자 TOB 가능성. 편의점 섹터 EV/EBITDA 12x→15x 리레이팅. 우리 포트폴리오 내 리테일 exposure 재검토"\n'
+    +'- "BOJ 4월 금리동결 시 엔화 155엔 돌파 → 해외 LP 입장에서 JPY 헤지 비용 상승. 신규 JP 펀드 캐피탈콜 타이밍 조정 검토"\n'
+    +'- "물류센터 공급과잉 사이타마/치바 공실률 8%+ 예상. 반면 도심 라스트마일 시설은 구조적 부족. 포지셔닝 시프트 필요"\n'
+    +'핵심: (1) 구체적 수치/시나리오 (2) 우리 포트폴리오/전략에 대한 직접적 영향 (3) 구체적 action item\n';
+
   var rules='Format: Korean headlines max 55 chars. Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국.\n'
-    +'implications='+(jp?'일본 PE/부동산':'투자')+' 관점의 구체적 action point.\n'
+    +impGuide
     +'Return ONLY valid JSON. No markdown fences.';
 
   var promptText;
@@ -1203,14 +1216,14 @@ function renderCards(hl,filter){
   var html='<div class="sec-hdr">헤드라인</div><div class="card-group">';
   for(var i=0;i<items.length;i++){
     var h=items[i],cls=catCls[h.cat]||'c-글로벌',am=isAlertMatch(h)?' alert-match':'';
-    html+='<div class="news-row'+am+'" onclick="openSheet(\'h\',\''+esc(h.id)+'\')"><div class="news-body"><span class="ncat '+cls+'">'+esc(h.cat)+'</span>'+(am?'<span style="font-size:10px;color:var(--accent);margin-left:4px">🔔</span>':'')+'<div class="n-title">'+esc(h.title)+'</div><div class="n-sum">'+esc(h.summary||'')+'</div></div><div class="news-right"><span class="n-src">'+esc(h.source||'')+'</span><span class="n-chev">›</span></div></div>';
+    html+='<div class="news-row'+am+'" onclick="openSheet(\'h\',\''+esc(h.id)+'\')"><div class="news-body"><span class="ncat '+cls+'">'+esc(h.cat)+'</span>'+(am?'<span style="font-size:10px;color:var(--accent);margin-left:4px">🔔</span>':'')+'<div class="n-title">'+esc(h.title)+'</div><div class="n-sum">'+esc(h.summary||'')+'</div></div><div class="news-right"><span class="n-src">'+esc(h.source||'')+'</span>'+(h.time?'<span class="n-time">'+esc(h.time)+'</span>':'')+'<span class="n-chev">›</span></div></div>';
   }
   html+='</div>';
   if((!filter||filter==='all'||filter==='딜')&&curBrief&&curBrief.deals&&curBrief.deals.length){
     html+='<div class="sec-hdr">딜 하이라이트</div>';
     for(var di=0;di<curBrief.deals.length;di++){
       var d=curBrief.deals[di];
-      html+='<div class="deal-card" onclick="openSheet(\'d\',\''+esc(d.id)+'\')"><div class="deal-badge">'+esc(d.type||'딜')+'</div><div class="deal-title">'+esc(d.title)+'</div><div class="deal-val">'+esc(d.value||'')+'</div><div class="deal-sum">'+esc(d.summary||'')+'</div><div class="deal-src">'+esc(d.source||'')+'</div></div>';
+      html+='<div class="deal-card" onclick="openSheet(\'d\',\''+esc(d.id)+'\')"><div class="deal-badge">'+esc(d.type||'딜')+'</div><div class="deal-title">'+esc(d.title)+'</div><div class="deal-val">'+esc(d.value||'')+'</div><div class="deal-sum">'+esc(d.summary||'')+'</div><div class="deal-src">'+esc(d.source||'')+(d.time?' · '+esc(d.time):'')+'</div></div>';
     }
   }
   if((!filter||filter==='all')&&curBrief&&curBrief.watch&&curBrief.watch.length){
@@ -1248,7 +1261,7 @@ function openSheet(type,id){
     +'<div class="sh-title">'+esc(item.title)+'</div>'
     +'<div class="sh-body">'+esc(item.detail||item.summary||'')+'</div>';
   if(item.implications)html+='<div class="sh-imp"><div class="sh-imp-lbl">투자 임플리케이션</div><div class="sh-imp-txt">'+esc(item.implications)+'</div></div>';
-  html+='<div class="sh-footer"><span class="sh-src">'+esc(item.source||'')+'</span>'
+  html+='<div class="sh-footer"><span class="sh-src">'+esc(item.source||'')+(item.time?' · '+esc(item.time):'')+'</span>'
     +(realUrl?'<a class="sh-link" href="'+realUrl+'" target="_blank" rel="noopener">원문 검색</a>':'')+'</div>';
   html+='<div style="display:flex;gap:var(--s2);margin:var(--s4) 0;flex-wrap:wrap">'
     +'<button class="sh-close" style="flex:1;background:var(--accent);color:#000" onclick="closeSheet();genDeepDive(\''+esc(item.id)+'\')">딥다이브 분석</button>'

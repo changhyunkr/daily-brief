@@ -1,26 +1,30 @@
 # Daily Brief — Changelog
 
-## v19.0 (2026-03-14) — FOCUS CUSTOMIZATION + SOURCE UX
+## v20.0 (2026-03-14) — RECENCY + INSIGHTFUL IMPLICATIONS
 
-### Fixed
-- **토글 클릭 → 아코디언 닫힘 버그**: event.stopPropagation() 추가 + togSource()가 DOM 전체 리빌드 대신 in-place 토글
-- 카테고리 카운트 배지 실시간 업데이트
+### Fixed — 당일 뉴스 강제
+- Gemini: "Only include news from last 24-36 hours" 룰 추가
+- Claude: "RECENCY: Reject anything older than 36 hours" 룰 추가
+- JSON 스키마에 "time" 필드 추가 (헤드라인 + 딜 양쪽)
 
-### New: 소스 스마트 추가
-- URL 입력 → 바로 추가
-- 키워드 입력 (toyokeizai, 東洋経済 등) → Claude 웹서치로 공식 URL 자동 검색 → confirm 팝업
+### Added — 뉴스 시간 표시
+- 헤드라인 카드: 소스 아래에 "3/14 06:30" 형태로 시간 표시
+- 딜 카드: 소스 옆에 시간 표시
+- 시트 상세: footer에 시간 표시
 
-### New: 브리핑 포커스 커스터마이제이션
-- **국가 칩**: 일본, 한국, 미국, 중국, 아시아, 글로벌
-- **섹터 칩**: 부동산/RE, PE/바이아웃, M&A/딜, 테크/AI, 매크로/금리, 에너지, 인프라, 물류, 헬스케어, 데이터센터
-- AND 조합: "일본 + 부동산 + PE" → Gemini/Claude에 교차점 우선순위 지시
-- 프리뷰: "일본 + 부동산 | 한국 + PE" 형태로 현재 포커스 표시
-- Gemini prompt에 FOCUS PRIORITY 섹션 자동 주입
-- Claude system prompt에도 포커스 컨텍스트 주입
-- localStorage에 저장, 앱 재시작 시 복원
+### Changed — 임플리케이션 대폭 강화
+- IMPLICATIONS GUIDE 프롬프트 추가 (클라이언트 + 서버)
+- BAD 예시 명시 (금지): "주목할 만하다", "투자자들이 관심을 가질 것"
+- GOOD 예시 4개:
+  - "JGB 1.5% 돌파 시 캡레이트 3.5→4.0% 조정, 레버리지 60%+ 리파이 점검"
+  - "세븐아이 MBO 실패 시 쿠시타르 독자 TOB. 편의점 EV/EBITDA 12x→15x 리레이팅"
+  - "BOJ 동결 시 엔화 155엔 → LP 헤지비용 상승, 캐피탈콜 타이밍 조정"
+  - "물류센터 공급과잉 사이타마/치바 8%+ 공실. 도심 라스트마일은 구조적 부족"
+- 필수 3요소: (1) 구체적 수치/시나리오 (2) 포트폴리오 직접 영향 (3) 구체적 action item
 
 ---
 
+## v19.0 — FOCUS CUSTOMIZATION (국가×섹터 AND 조합), 소스 스마트 추가
 ## v18.0 — 81개 소스 (11개 카테고리), 소스 자동 발견
 ## v17.0 — ANTI-HALLUCINATION (validateBrief, 강제최소 제거)
 ## v16.0 — PRO TOOLS (Comp, Deal Tracker, Weekly Memo, Alert)
