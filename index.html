@@ -496,19 +496,20 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
         <div class="inp-ico ico-g">G</div>
         <div><div class="inp-label">Gemini<span class="badge-free">무료</span></div><div class="inp-sub">aistudio.google.com</div></div>
       </div>
-      <div class="inp-row"><input class="api-inp" id="si-gemini" type="password" placeholder="AIza..."></div>
+      <div class="inp-row"><input class="api-inp" id="si-gemini" type="text" autocomplete="off" placeholder="AIza..."></div>
       <div class="inp-row" style="border-top:.5px solid var(--sep)">
         <div class="inp-ico ico-a">A</div>
         <div><div class="inp-label">Claude</div><div class="inp-sub">console.anthropic.com</div></div>
       </div>
-      <div class="inp-row"><input class="api-inp" id="si-claude" type="password" placeholder="sk-ant-api03-..."></div>
+      <div class="inp-row"><input class="api-inp" id="si-claude" type="text" autocomplete="off" placeholder="sk-ant-api03-..."></div>
       <div class="inp-row" style="border-top:.5px solid var(--sep)">
         <div class="inp-ico ico-o">O</div>
         <div><div class="inp-label">OpenAI<span class="badge-opt">선택</span></div><div class="inp-sub">platform.openai.com</div></div>
       </div>
-      <div class="inp-row"><input class="api-inp" id="si-openai" type="password" placeholder="sk-proj-..."></div>
+      <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
+  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v13 · Built 2026-03-13 16:28 JST</div>
   <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
@@ -697,6 +698,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v13<br>Built 2026-03-13 16:28 JST</div>
         </div>
       </div>
 
@@ -766,12 +768,17 @@ function saveSetup(){
   var cv=document.getElementById('si-claude').value.trim();
   var ov=document.getElementById('si-openai').value.trim();
   var err=document.getElementById('su-err');
-  if(!cv&&!ov){if(err){err.textContent='Claude 또는 OpenAI 키 중 하나는 필요합니다';err.style.display='block';}return;}
+  if(!cv&&!ov){
+    if(err){err.textContent='Claude 또는 OpenAI 키 중 하나는 필요합니다';err.style.display='block';}
+    return;
+  }
   if(err)err.style.display='none';
   if(gv)ss('db_gemini',gv);
   if(cv)ss('db_claude',cv);
   if(ov)ss('db_openai',ov);
-  if(_ls){window.location.reload();}else{document.getElementById('setup').style.display='none';startApp();}
+  // Never reload — reload loses keys if localStorage blocked
+  document.getElementById('setup').style.display='none';
+  startApp();
 }
 
 /* ── INIT ────────────────────────────────────────────────── */
