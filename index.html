@@ -525,6 +525,11 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 .rich-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
 
 /* ── SOURCE MANAGEMENT ── */
+.focus-chip{display:inline-flex;align-items:center;height:30px;padding:0 10px;
+  border-radius:15px;border:1px solid var(--sep2);background:var(--e1);
+  color:var(--t2);font-size:13px;cursor:pointer;transition:all .15s;user-select:none}
+.focus-chip.on{background:var(--accent-bg);border-color:var(--accent-bdr);color:var(--accent);font-weight:500}
+.focus-chip:active{opacity:.7}
 .src-cat{background:var(--e1);border-radius:var(--r3);overflow:hidden;margin-bottom:var(--s3)}
 .src-cat-hdr{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s4);
   cursor:pointer;border-bottom:.5px solid var(--sep);user-select:none}
@@ -611,7 +616,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
-  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v18 · Built 2026-03-14 v18</div>
+  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v19 · Built 2026-03-14 v19</div>
   <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
@@ -858,6 +863,18 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row" onclick="togSetting('trendMode')"><span class="set-row-lbl">🔥 화제 탭</span><button class="ios-tog on" id="tog-trendMode"></button></div>
             <div class="set-row" onclick="togSetting('podAutoGen')"><span class="set-row-lbl">브리핑 후 팟캐스트 자동생성</span><button class="ios-tog" id="tog-podAutoGen"></button></div>
           </div>
+          <div class="set-lbl">브리핑 포커스</div>
+          <div class="set-grp">
+            <div style="padding:var(--s2) var(--s4);font-size:12px;color:var(--t3)">국가 × 섹터 조합으로 뉴스 우선순위를 설정합니다</div>
+            <div style="padding:var(--s2) var(--s4) var(--s1)"><span style="font-size:12px;font-weight:600;color:var(--t3)">국가</span></div>
+            <div id="focusCountries" style="padding:0 var(--s4) var(--s3);display:flex;flex-wrap:wrap;gap:var(--s1)"></div>
+            <div style="padding:var(--s2) var(--s4) var(--s1);border-top:.5px solid var(--sep)"><span style="font-size:12px;font-weight:600;color:var(--t3)">섹터</span></div>
+            <div id="focusSectors" style="padding:0 var(--s4) var(--s3);display:flex;flex-wrap:wrap;gap:var(--s1)"></div>
+            <div style="padding:var(--s2) var(--s4) var(--s3);border-top:.5px solid var(--sep)">
+              <div style="font-size:12px;color:var(--t3);margin-bottom:var(--s1)">현재 포커스:</div>
+              <div id="focusPreview" style="font-size:13px;color:var(--accent);font-weight:500">전체</div>
+            </div>
+          </div>
           <div class="set-lbl">뉴스 소스 (<span id="srcCount">0</span>개)</div>
           <div id="srcCatList"></div>
           <div class="set-grp">
@@ -883,7 +900,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v18<br>Built 2026-03-14 v18</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v19<br>Built 2026-03-14 v19</div>
         </div>
       </div>
 
@@ -929,7 +946,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-/* Daily Brief v18 — clean ES5, no template literals, no const/let at top scope */
+/* Daily Brief v19 — clean ES5, no template literals, no const/let at top scope */
 
 /* ── STORAGE ─────────────────────────────────────────────── */
 var _mem = {};
@@ -980,7 +997,7 @@ function init(){
 function startApp(){
   var ma=document.getElementById('mainArea');if(ma){ma.style.display='flex';ma.style.flexDirection='column';}
   var tb=document.getElementById('tabbar');if(tb)tb.style.display='flex';
-  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();
+  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
   updateDateUI();updateCounts();loadSchedUI();checkSched();
   var cached=sgj('db_brief_'+curDate);
@@ -1067,7 +1084,8 @@ function fetchGemini(date){
     +'\n\nMARKET DATA (search for exact closing prices):'
     +'\n- JGB 10Y yield, USD/JPY, Nikkei 225, S&P 500, WTI crude, USD/KRW'
     +'\n- Include exact numbers and daily change. Write N/A if not found.'
-    +'\n\nReturn 10-20 items. Quality over quantity. NO fabrication.';
+    +'\n\nReturn 10-20 items. Quality over quantity. NO fabrication.'
+    +getFocusPrompt();
   return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+key,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.1,maxOutputTokens:10000}})
@@ -1112,7 +1130,8 @@ function structureAI(raw,date){
   }
 
   if(ckey){
-    var body={model:'claude-sonnet-4-20250514',max_tokens:6000,system:antiHalluc,messages:[{role:'user',content:promptText}]};
+    var focusCtx=getFocusPrompt();
+    var body={model:'claude-sonnet-4-20250514',max_tokens:6000,system:antiHalluc+focusCtx,messages:[{role:'user',content:promptText}]};
     if(!raw)body.tools=[{type:'web_search_20250305',name:'web_search'}];
     return fetch('https://api.anthropic.com/v1/messages',{method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
@@ -1538,6 +1557,80 @@ function togScriptView(mode){
   }
 }
 
+/* ── FOCUS MANAGEMENT ───────────────────────────────────── */
+var focusCountryOpts=[
+  {id:'jp',label:'🇯🇵 일본',on:true},
+  {id:'kr',label:'🇰🇷 한국',on:true},
+  {id:'us',label:'🇺🇸 미국',on:true},
+  {id:'cn',label:'🇨🇳 중국',on:false},
+  {id:'asia',label:'🌏 아시아',on:false},
+  {id:'global',label:'🌐 글로벌',on:true}
+];
+var focusSectorOpts=[
+  {id:'re',label:'🏢 부동산/RE',on:true},
+  {id:'pe',label:'💼 PE/바이아웃',on:true},
+  {id:'ma',label:'🤝 M&A/딜',on:true},
+  {id:'tech',label:'💻 테크/AI',on:false},
+  {id:'macro',label:'📊 매크로/금리',on:true},
+  {id:'energy',label:'⚡ 에너지',on:false},
+  {id:'infra',label:'🏗 인프라',on:false},
+  {id:'logistics',label:'📦 물류',on:false},
+  {id:'health',label:'🏥 헬스케어',on:false},
+  {id:'datacenter',label:'🖥 데이터센터',on:false}
+];
+function loadFocus(){
+  var saved=sgj('db_focus');
+  if(saved){
+    if(saved.countries)focusCountryOpts.forEach(function(c){if(c.id in saved.countries)c.on=saved.countries[c.id];});
+    if(saved.sectors)focusSectorOpts.forEach(function(s){if(s.id in saved.sectors)s.on=saved.sectors[s.id];});
+  }
+  renderFocus();
+}
+function renderFocus(){
+  var ce=document.getElementById('focusCountries');
+  var se=document.getElementById('focusSectors');
+  if(ce){var h='';focusCountryOpts.forEach(function(c){h+='<span class="focus-chip'+(c.on?' on':'')+'" onclick="togFocus(\'c\',\''+c.id+'\',this)">'+c.label+'</span>';});ce.innerHTML=h;}
+  if(se){var h2='';focusSectorOpts.forEach(function(s){h2+='<span class="focus-chip'+(s.on?' on':'')+'" onclick="togFocus(\'s\',\''+s.id+'\',this)">'+s.label+'</span>';});se.innerHTML=h2;}
+  updateFocusPreview();
+}
+function togFocus(type,id,el){
+  var arr=type==='c'?focusCountryOpts:focusSectorOpts;
+  arr.forEach(function(x){if(x.id===id)x.on=!x.on;});
+  if(el)el.classList.toggle('on');
+  saveFocus();updateFocusPreview();
+}
+function saveFocus(){
+  var data={countries:{},sectors:{}};
+  focusCountryOpts.forEach(function(c){data.countries[c.id]=c.on;});
+  focusSectorOpts.forEach(function(s){data.sectors[s.id]=s.on;});
+  ssj('db_focus',data);
+}
+function updateFocusPreview(){
+  var el=document.getElementById('focusPreview');if(!el)return;
+  var countries=focusCountryOpts.filter(function(c){return c.on;}).map(function(c){return c.label.replace(/^.\s*/,'');});
+  var sectors=focusSectorOpts.filter(function(s){return s.on;}).map(function(s){return s.label.replace(/^.\s*/,'');});
+  if(!countries.length&&!sectors.length){el.textContent='전체 (포커스 없음)';return;}
+  if(!countries.length)countries=['전체 국가'];
+  if(!sectors.length)sectors=['전체 섹터'];
+  var combos=[];
+  if(countries.length<=2&&sectors.length<=3){countries.forEach(function(c){sectors.forEach(function(s){combos.push(c+' + '+s);});});}
+  else{combos.push(countries.join(', ')+' × '+sectors.join(', '));}
+  el.textContent=combos.join(' | ');
+}
+function getFocusPrompt(){
+  var countries=focusCountryOpts.filter(function(c){return c.on;});
+  var sectors=focusSectorOpts.filter(function(s){return s.on;});
+  if(!countries.length&&!sectors.length)return '';
+  var cnames={jp:'Japan/일본',kr:'Korea/한국',us:'US/미국',cn:'China/중국',asia:'Asia/아시아',global:'Global'};
+  var snames={re:'Real Estate/부동산/不動産',pe:'Private Equity/PE buyout/바이아웃',ma:'M&A/TOB/carve-out/LBO/MBO',tech:'Tech/AI/semiconductor',macro:'Macro/interest rates/FX/central bank',energy:'Energy/oil/renewables',infra:'Infrastructure/transportation',logistics:'Logistics/supply chain/warehousing',health:'Healthcare/pharma/biotech',datacenter:'Data center/cloud/digital infra'};
+  var focus='\n\nFOCUS PRIORITY (weight these higher in selection and analysis):\n';
+  focus+='Countries: '+countries.map(function(c){return cnames[c.id]||c.id;}).join(', ')+'\n';
+  focus+='Sectors: '+sectors.map(function(s){return snames[s.id]||s.id;}).join(', ')+'\n';
+  focus+='Prioritize news at the INTERSECTION of these countries and sectors.\n';
+  focus+='Example: if Japan+RE+PE selected, prioritize "Blackstone acquires Tokyo office building" over generic US tech news.\n';
+  return focus;
+}
+
 /* ── SOURCE MANAGEMENT ──────────────────────────────────── */
 var defaultSources={
   'JP-정책·데이터':[
@@ -1643,9 +1736,9 @@ function renderSources(sources){
   var html='',total=0;
   for(var cat in sources){
     var items=sources[cat]||[];var onCnt=items.filter(function(s){return s.on;}).length;total+=onCnt;
-    html+='<div class="src-cat"><div class="src-cat-hdr" onclick="togSrcCat(this)"><span class="src-cat-ico">'+(catIcons[cat]||'📌')+'</span><span class="src-cat-name">'+esc(cat)+'</span><span class="src-cat-cnt">'+onCnt+'/'+items.length+'</span><span class="src-cat-chev">›</span></div><div class="src-cat-body">';
+    html+='<div class="src-cat"><div class="src-cat-hdr" onclick="togSrcCat(this)"><span class="src-cat-ico">'+(catIcons[cat]||'📌')+'</span><span class="src-cat-name">'+esc(cat)+'</span><span class="src-cat-cnt" id="sc-'+cat.replace(/[^a-zA-Z]/g,'')+'">'+onCnt+'/'+items.length+'</span><span class="src-cat-chev">›</span></div><div class="src-cat-body">';
     items.forEach(function(s,i){
-      html+='<div class="src-item"><button class="ios-tog'+(s.on?' on':'')+'" style="width:40px;height:24px;min-width:40px" onclick="togSource(\''+esc(cat)+'\','+i+')"></button><span class="src-name">'+esc(s.name)+'</span>'+(cat==='사용자 추가'?'<button class="src-del" onclick="delSource(\''+esc(cat)+'\','+i+')">×</button>':'')+'</div>';
+      html+='<div class="src-item"><button class="ios-tog'+(s.on?' on':'')+'" style="width:40px;height:24px;min-width:40px" onclick="event.stopPropagation();this.classList.toggle(\'on\');togSource(\''+esc(cat)+'\','+i+')"></button><span class="src-name">'+esc(s.name)+'</span>'+(cat==='사용자 추가'?'<button class="src-del" onclick="event.stopPropagation();delSource(\''+esc(cat)+'\','+i+')">×</button>':'')+'</div>';
     });
     html+='</div></div>';
   }
@@ -1655,16 +1748,44 @@ function renderSources(sources){
 function togSrcCat(hdr){hdr.classList.toggle('open');var body=hdr.nextElementSibling;if(body)body.classList.toggle('open');}
 function togSource(cat,idx){
   var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
-  if(sources[cat]&&sources[cat][idx])sources[cat][idx].on=!sources[cat][idx].on;
-  ssj('db_sources_v2',sources);renderSources(sources);
+  if(sources[cat]&&sources[cat][idx]){
+    sources[cat][idx].on=!sources[cat][idx].on;
+    ssj('db_sources_v2',sources);
+  }
+  var total=0;for(var c in sources){var items=sources[c]||[];var onCnt=items.filter(function(s){return s.on;}).length;total+=onCnt;var badge=document.getElementById('sc-'+c.replace(/[^a-zA-Z]/g,''));if(badge)badge.textContent=onCnt+'/'+items.length;}
+  var cnt=document.getElementById('srcCount');if(cnt)cnt.textContent=total;
 }
 function addSource(){
   var inp=document.getElementById('srcAddInp');var v=inp.value.trim();if(!v)return;
-  var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
-  if(!sources['사용자 추가'])sources['사용자 추가']=[];
   var isUrl=v.indexOf('http')===0;
-  sources['사용자 추가'].push({name:isUrl?v.replace(/https?:\/\/(www\.)?/,'').split('/')[0]:v,url:isUrl?v:'',on:true});
-  ssj('db_sources_v2',sources);renderSources(sources);inp.value='';showToast('소스 추가됨');
+  if(isUrl){
+    var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
+    if(!sources['사용자 추가'])sources['사용자 추가']=[];
+    sources['사용자 추가'].push({name:v.replace(/https?:\/\/(www\.)?/,'').split('/')[0],url:v,on:true});
+    ssj('db_sources_v2',sources);renderSources(sources);inp.value='';showToast('소스 추가됨');
+    return;
+  }
+  inp.disabled=true;
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var prompt='"'+v+'"의 공식 웹사이트 URL을 찾아줘. JSON만 반환: {"name":"공식 이름","url":"https://...","desc":"한줄 설명"}\n예: "toyokeizai" → {"name":"東洋経済オンライン","url":"https://toyokeizai.net/","desc":"일본 비즈니스 주간지"}\n"kedglobal" → {"name":"KED Global","url":"https://www.kedglobal.com/","desc":"한국경제 영문 뉴스"}\nJSON만 반환.';
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{inp.disabled=false;showToast('API 키 필요');return;}
+  showToast(v+' 검색 중...');
+  p.then(function(raw){
+    inp.disabled=false;
+    try{
+      var d=parseJ(raw);
+      if(d.url&&confirm(d.name+'\n'+d.url+'\n'+(d.desc||'')+'\n\n소스에 추가할까요?')){
+        var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
+        if(!sources['사용자 추가'])sources['사용자 추가']=[];
+        sources['사용자 추가'].push({name:d.name,url:d.url,on:true});
+        ssj('db_sources_v2',sources);renderSources(sources);showToast(d.name+' 추가됨');
+      }
+    }catch(e){showToast('URL을 찾지 못했습니다: '+v);}
+    inp.value='';
+  }).catch(function(e){inp.disabled=false;inp.value='';showToast('검색 실패');});
 }
 function delSource(cat,idx){
   var sources=sgj('db_sources_v2')||JSON.parse(JSON.stringify(defaultSources));
