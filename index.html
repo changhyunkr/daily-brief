@@ -46,8 +46,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 /* ── SETUP ── */
 .setup{position:fixed;inset:0;z-index:500;background:var(--bg);overflow-y:auto;
   -webkit-overflow-scrolling:touch;
-  padding:calc(var(--sat)+20px) var(--s4) calc(var(--sab)+20px);display:none}
-.setup.show{display:block}
+  padding:calc(var(--sat)+20px) var(--s4) calc(var(--sab)+20px)}
 .su-eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--accent);
   text-transform:uppercase;margin-bottom:var(--s4)}
 .su-h{font-size:28px;font-weight:700;letter-spacing:-.4px;margin-bottom:var(--s2)}
@@ -524,7 +523,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
   </div>
 
   <!-- ── MAIN (hidden until ready) ── -->
-  <div id="mainArea" style="display:none;flex:1;min-width:0;overflow:hidden;display:none;flex-direction:column">
+  <div id="mainArea" style="display:none;flex:1;min-width:0;overflow:hidden;flex-direction:column">
 
     <!-- NAV -->
     <div class="nav">
@@ -783,7 +782,8 @@ async function init() {
 
   const hasKey = S.get(K.claude) || S.get(K.openai);
   if (!hasKey) {
-    show('setupScreen');
+    // Setup screen is visible by default, just ensure it's shown
+    document.getElementById('setupScreen').style.display = '';
     return;
   }
 
@@ -815,12 +815,16 @@ async function init() {
 }
 
 function showMain() {
-  hide('setupScreen'); hide('loadingScreen');
+  // Hide setup & loading
+  const su = document.getElementById('setupScreen');
+  if (su) su.style.display = 'none';
+  const ld = document.getElementById('loadingScreen');
+  if (ld) { ld.classList.remove('show'); ld.style.display = 'none'; }
+  // Show main
   const ma = document.getElementById('mainArea');
+  if (ma) { ma.style.display = 'flex'; ma.style.flexDirection = 'column'; }
   const tb = document.getElementById('tabbar');
-  ma.style.display = 'flex';
-  ma.style.flexDirection = 'column';
-  tb.style.display = 'flex';
+  if (tb) tb.style.display = 'flex';
 }
 
 // ─── GITHUB FETCH ─────────────────────────────────────────────────────────────
@@ -1466,11 +1470,12 @@ async function analyzePaste() {
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
 function saveSetup() {
   const g=document.getElementById('si-gemini').value.trim();
-  const c=document.getElementById('si-claude').value.trim();
+  const cl=document.getElementById('si-claude').value.trim();
   const o=document.getElementById('si-openai').value.trim();
-  if (!c && !o) { showToast('Claude 또는 OpenAI 키 중 하나는 필요합니다'); return; }
-  if (g) S.set(K.gemini,g); if (c) S.set(K.claude,c); if (o) S.set(K.openai,o);
-  hide('setupScreen'); init();
+  if (!cl && !o) { showToast('Claude 또는 OpenAI 키 중 하나는 필요합니다'); return; }
+  if (g) S.set(K.gemini,g); if (cl) S.set(K.claude,cl); if (o) S.set(K.openai,o);
+  document.getElementById('setupScreen').style.display='none';
+  (async()=>{ try{ await init(); }catch(e){ console.error(e); showToast('오류: '+e.message); } })();
 }
 
 function saveKeys() {
@@ -1757,13 +1762,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ─── START ────────────────────────────────────────────────────────────────────
-try {
-  init();
-} catch(e) {
-  console.error('Init error:', e);
-  document.getElementById('loadingScreen').style.display = 'none';
-  show('setupScreen');
-}
+(async () => {
+  try {
+    await init();
+  } catch(e) {
+    console.error('Init error:', e);
+    document.getElementById('loadingScreen').classList.remove('show');
+    document.getElementById('loadingScreen').style.display = 'none';
+    // Setup screen is already visible by default - just make sure
+    document.getElementById('setupScreen').style.display = '';
+    // Show error message
+    const p = document.querySelector('#setupScreen .su-p');
+    if (p) {
+      const err = document.createElement('div');
+      err.style.cssText = 'padding:12px;background:rgba(255,59,48,.1);border-radius:8px;font-size:13px;color:#FF3B30;margin-top:12px';
+      err.textContent = '오류: ' + (e.message || String(e));
+      p.after(err);
+    }
+  }
+})();
 </script>
 </body>
 </html>
