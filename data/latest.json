@@ -1,124 +1,185 @@
 {
   "date": "2026-03-13",
-  "generatedAt": 1773400914739,
+  "generatedAt": 1773401975864,
   "generatedBy": "github-actions",
   "model": "gemini+gpt4o",
   "headlines": [
     {
       "id": "h1",
       "cat": "일본",
-      "title": "일본은행, 3월 금리 인상 가능성 낮아… 중동 정세 주시",
-      "summary": "일본은행 부총재 히미노 료조는 3월 금리 인상에 대한 명확한 신호를 보내지 않으며, 중동 분쟁으로 인한 경제 불확실성을 언급.",
-      "detail": "시장의 3월 금리 동결 기대를 강화하는 발언. 미즈호 금융그룹은 지속적인 인플레이션과 엔화 약세로 인해 금리 인상을 전망.",
-      "implications": "PE/RE 투자자들은 BOJ 정책과 중동 정세 주시 필요.",
-      "source": "The Japan Times, Reuters",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHy7d5IUlZsgevF7WDTm0t4tbqpPfokfAtMXwWNbAm3DB0k5F9nPSmuhdquVLCd1hzV1unadI-t54qMdoyA2jY0NNMeCBss8eZ126JkVqrf1AgBloHIsEW45-0X5QxezMk3UWaQ1UUVRCXKop7r3r1E5oIIJTeH9XCIr2BLCBUzMbCOIOp1ByVs8s1AO_S_ZNPwz7OJgemQaOsnYA=="
+      "title": "일본은행, 중동 사태 및 임금 협상 주시하며 금리 동결 예상",
+      "summary": "일본은행은 기준금리를 0.75%로 동결할 것으로 예상됩니다. 이는 중동 분쟁의 경제적 여파와 춘계 임금 협상 결과를 평가하기 위함입니다. 엔화가 약화되면 수입 인플레이션이 심해질 수 있습니다.",
+      "detail": "우에다 총재의 경고는 가능성 있는 4월 또는 6월 금리 인상에 영향을 미칠 수 있습니다.",
+      "implications": "PE/RE 투자자는 금리 및 환율 변화에 따른 투자 기회를 주시해야 합니다.",
+      "source": "ING, Trading Economics",
+      "url": "https://research.ing.com/articles/asia-week-ahead-rate-decisions-in-japan-australia-taiwan-and-key-china-data"
     },
     {
       "id": "h2",
       "cat": "일본",
-      "title": "닛케이 225, 중동 전쟁 우려 및 유가 급등으로 급락 후 낙폭 축소",
-      "summary": "도쿄 증시에서 닛케이 225 지수는 이란 정세 긴장으로 장 초반 하락했으나 낙폭을 줄임.",
-      "detail": "미국 고용 지표 악화 등의 영향으로 하락했으나 원유 가격 진정으로 낙폭 축소.",
-      "implications": "PE/RE 투자자들은 원유 가격 변동성 주시.",
-      "source": "日本証券新聞, BNN Bloomberg",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHd2G6CXYtvM1DIKwhtMPRvuZU5hxMfNEV2gq6pPwzl5eGf6SRz8Uj61cXbSqaMj966uViBmjEgFOo3CbqYTU5U1CBOXJ7KzgKSbPt6lfTxzZrX5Q=="
+      "title": "일본 10년물 국채 금리 2.25%로 상승, 엔화 약세 우려 증폭",
+      "summary": "일본 10년물 국채 금리가 2.25%를 기록하며 상승했습니다. 이는 엔화 약세 경고와 유가 상승으로 정책 정상화 가속화 압력이 있는 상황입니다.",
+      "detail": "일본은행의 엔화 약세 경고로 인해 채권시장이 긴장 상태에 있습니다.",
+      "implications": "금리 인상으로 부동산 채권 투자의 수익률을 주시해야 합니다.",
+      "source": "Trading Economics",
+      "url": "https://tradingeconomics.com/japan/government-bond-yield"
     },
     {
       "id": "h3",
       "cat": "일본",
-      "title": "혼다, 전기차 전략 재평가로 북미 3개 EV 모델 개발 취소",
-      "summary": "혼다는 사업 환경 변화와 미국 관세 정책 영향으로 북미 EV 모델 개발 취소.",
-      "detail": "이에 따라 2026년 회계연도 실적 하향 조정.",
-      "implications": "PE/RE 투자자들은 자동차 산업 변동성과 정책 변화 주시.",
-      "source": "Honda Motor Co., Ltd.",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF6rYB9AIp3L0-5iT4XO42Ytb-uZ13CdD7n3HRHuDH6Io9d0w7CeKQUT-mWgnukxeG5ZeNOHRunF-5tiFxPMlJZE1D5tX7YiLNStSeQ_j6PdzTHVFJBtm5KFrZuHeu5vWBoACv9L75QRGAJbYTy9MJ58yHN1Q=="
+      "title": "닛케이 225 지수, 중동 전쟁 우려와 유가 상승에 1.2% 하락",
+      "summary": "닛케이 225 지수는 53,819.61로 하락했습니다. 중동 전쟁과 유가 상승이 지수 하락을 주도했습니다.",
+      "detail": "특히 소프트뱅크 그룹 등 기술 관련 주식이 타격을 입었습니다.",
+      "implications": "중동 정세 변화가 시장 변동성에 큰 영향을 미치고 있음을 주목해야 합니다.",
+      "source": "AP Business Writer, BNN Bloomberg, MySA",
+      "url": "https://www.mysanantonio.com/news/article/asia-shares-are-mostly-lower-and-oil-hovers-near-18910404.php"
     },
     {
       "id": "h4",
-      "cat": "딜",
-      "title": "PAG 및 KKR, 삿포로 홀딩스의 삿포로 부동산 인수",
-      "summary": "PAG와 KKR이 삿포로 부동산 지분 100% 인수 계약 체결.",
-      "detail": "거래 규모는 약 30억 달러이며, 2026년 6월 1일부터 3년에 걸쳐 완료 예정.",
-      "implications": "PE/RE 투자자들은 대규모 부동산 거래 기회 주시.",
-      "source": "PAG, KKR, Mingtiandi",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHC_XFtgZUNRAlLt_BfBEN-BQsSJOb71ncTfzct-fLR53_w8oWeDm9ec3aDA10gL3js_vsdvTb3PNd1YbOrwrr82ElXeZ9Jxd9oFtT9eZCuGTRKWTviKg2TjAe29c5h_NzXEg5-qv5T_k4RcWmr_i_JIHEbqROdOXqMvXvalhf8z-wI_uvG5inklUrAU_y2g6ty"
+      "cat": "일본",
+      "title": "일본 부동산 시장, JRE 신주쿠 빌딩 추가 지분 인수 등 활발한 거래",
+      "summary": "JRE가 신주쿠 복합 빌딩의 9% 지분을 인수합니다. 노린추킨 은행은 CBRE와 일본 부동산 투자를 강화할 예정입니다.",
+      "detail": "JRE의 추가 지분 인수로 일본 부동산 시장의 투자 기회가 확대되고 있습니다.",
+      "implications": "부동산 시장의 활발한 M&A가 투자 확대의 신호로 작용할 수 있습니다.",
+      "source": "NIKKEI REAL ESTATE MARKET REPORT",
+      "url": "https://nre.nikkei.com/en/"
     },
     {
       "id": "h5",
-      "cat": "딜",
-      "title": "히사미츠 제약, MBO 및 주식 통합 발표",
-      "summary": "히사미츠 제약이 MBO와 주식 통합을 발표하며 상장 폐지 예정.",
-      "detail": "임시 주주총회 소집과 정관 개정을 발표.",
-      "implications": "PE/RE 투자자들은 제약 산업의 구조조정 기회 주시.",
-      "source": "MarketScreener",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFwhdYT2wsvSUYJooUgS5-v0O05GKQ4lPvkQwcXnaYWWbX4YMoK4puiWMPHvGFPb0sG5E1FzMtoJd7m_2h5SCeZgn4pVuBBuJ0yojy0YPXw5oTe5ElXdY23qHG9aO233CF6ST86qVsPC9tsjY4Q_bHA278DKzC6KxYE2pgQhocAhgvzgri5i6mo245RJ1_T8qyPPToo-ai5JPvs1ypBY0HTUupjSHVTq1LP6wLVj5XXL0P_gJkGM5IUpeExDP4eDQm5VNNjDmWoCWbVAqDeuUV"
+      "cat": "일본",
+      "title": "도쿄 오피스 시장, 임대료 상승 및 낮은 공실률 지속 전망",
+      "summary": "CBRE와 Cushman & Wakefield는 도쿄 오피스 시장의 임대료가 계속 상승하고 공실률은 낮게 유지할 것으로 예상합니다.",
+      "detail": "도쿄의 5개구 A급 오피스 공실률은 2% 미만이며 임대료는 지속적으로 상승세에 있습니다.",
+      "implications": "도쿄 오피스 시장의 강세가 지속될 것으로 보이며, 장기 투자가 유망합니다.",
+      "source": "CBRE, Cushman & Wakefield",
+      "url": "https://www.cbre.com/insights/articles/japan-market-outlook-2026"
+    },
+    {
+      "id": "h6",
+      "cat": "일본",
+      "title": "일본 물류 시장, 공급 감소로 시장 상황 더욱 타이트해질 전망",
+      "summary": "일본 물류 시장의 신규 공급 감소로 시장이 타이트해질 전망입니다. 도쿄 수도권의 공실률은 8.3%로 하락했습니다.",
+      "detail": "물류 부동산의 제한된 공급은 임대료 상승 압력으로 작용할 수 있습니다.",
+      "implications": "물류 부동산 투자 포트폴리오에 있어서 기회 창출 및 리스크 관리가 필요합니다.",
+      "source": "Savills Japan",
+      "url": "https://www.savills.co.id/research_articles/256950/japan-logistics-mar-2026"
+    },
+    {
+      "id": "h7",
+      "cat": "일본",
+      "title": "교토 파이낸셜 그룹, 닌텐도 주식 매각 및 자사주 매입으로 순이익 전망 상향",
+      "summary": "교토 파이낸셜 그룹은 닌텐도 지분 매각 및 자사주 매입으로 순이익 전망치를 상향했습니다. 주가는 7.43% 상승했습니다.",
+      "detail": "이러한 자산 재조정은 기업의 재무 구조 개선에 기여하고 있습니다.",
+      "implications": "재무 전략 변화에 따른 주주 가치 증대가 예상됩니다.",
+      "source": "Reuters",
+      "url": "https://www.zacks.com/stock/news/2242139/stock-market-news-for-mar-12-2026"
+    },
+    {
+      "id": "h8",
+      "cat": "일본",
+      "title": "행동주의 투자자 오아시스 매니지먼트, 니덱 지분 6.74% 보유",
+      "summary": "오아시스 매니지먼트가 니덱의 6.74% 지분을 보유하고 있으며, 이에 따라 주가가 상승했습니다.",
+      "detail": "니덱은 외국인 투자자 증가로 주가 변동성이 계속될 가능성이 큽니다.",
+      "implications": "활동적 투자자의 전략적 움직임이 기업 성과에 미칠 영향에 주목해야 합니다.",
+      "source": "Reuters",
+      "url": "https://www.zacks.com/stock/news/2242139/stock-market-news-for-mar-12-2026"
+    },
+    {
+      "id": "h9",
+      "cat": "일본",
+      "title": "일본 2026년 회계연도 GDP 성장률 0.8% 전망, 임금 상승세 지속",
+      "summary": "다이이치생명경제연구소는 일본 GDP 성장률을 0.8%로 예측했으며, 임금은 3년 연속 5% 이상 상승할 것으로 보입니다.",
+      "detail": "최근 유가 급등이 경제성장을 소폭 하향 조정했습니다.",
+      "implications": "임금 상승이 소비 증가로 이어질 가능성이 있으므로 주식시장에 긍정적입니다.",
+      "source": "Dai-ichi Life Research Institute Inc.",
+      "url": "https://www.dlri.jp/en/report/macro/2026/macro2603.html"
+    },
+    {
+      "id": "h10",
+      "cat": "미국",
+      "title": "S&P 500 및 나스닥, 중동 전쟁 우려와 유가 급등에 하락 마감",
+      "summary": "S&P 500과 나스닥은 중동 전쟁과 유가 상승으로 인해 각각 1.52%와 1.78% 하락했습니다.",
+      "detail": "시장 불안이 확대됨에 따라 기술주와 에너지 관련 주식에 대한 변동성이 증가하고 있습니다.",
+      "implications": "국제 정세 및 유가 상승이 투자 리스크를 증가시킬 수 있습니다.",
+      "source": "The Motley Fool, The Canadian Press",
+      "url": "https://www.fool.com/investing/2026/03/12/stock-market-today-march-12-oil-prices-surge-after/"
+    },
+    {
+      "id": "h11",
+      "cat": "미국",
+      "title": "미국 1월 무역 적자 545억 달러로 감소, 수출 증가 및 수입 감소",
+      "summary": "미국의 1월 무역 적자가 545억 달러로 줄었습니다. 이는 수출 증가와 수입 감소 덕분입니다.",
+      "detail": "상품 적자가 12월에 비해 175억 달러 감소한 818억 달러를 기록했습니다.",
+      "implications": "무역 수지 개선이 달러 강세를 유도할 수 있으며 이는 외환시장에 영향을 미칩니다.",
+      "source": "U.S. Bureau of Economic Analysis, Saxo",
+      "url": "https://www.bea.gov/news/2026/us-international-trade-goods-and-services-january-2026"
+    },
+    {
+      "id": "h12",
+      "cat": "미국",
+      "title": "오라클, AI 워크로드 수요에 힘입어 클라우드 매출 급증",
+      "summary": "오라클은 AI 워크로드 증가로 클라우드 매출이 22% 증가한 172억 달러를 달성했습니다.",
+      "detail": "3분기 조정 주당순이익이 예상치를 상회하며 기업의 성장 가능성을 보여주고 있습니다.",
+      "implications": "클라우드 시장의 성장이 IT 인프라 투자의 중요성을 보여줍니다.",
+      "source": "Reuters",
+      "url": "https://www.fool.com/investing/2026/03/12/stock-market-today-march-12-oil-prices-surge-after/"
     }
   ],
   "market": {
     "jgb10y": {
       "v": "2.25%",
-      "d": "2026-03-13",
-      "t": 0
+      "d": "+0.06%",
+      "t": 1
     },
     "usdjpy": {
-      "v": "159.43",
-      "d": "2026-03-13",
-      "t": 0
+      "v": "159.68",
+      "d": "+0.15",
+      "t": 1
     },
     "nikkei": {
       "v": "53,819.61",
-      "d": "2026-03-13",
-      "t": 0
+      "d": "-1.2%",
+      "t": 1
     },
     "sp500": {
       "v": "6,672.62",
-      "d": "2026-03-12",
-      "t": 0
+      "d": "-1.52%",
+      "t": 1
     },
     "wti": {
-      "v": "$95.24",
-      "d": "2026-03-13",
+      "v": "~$100",
+      "d": "+$0.5",
       "t": 0
     },
     "usdkrw": {
-      "v": "1,494.9",
-      "d": "2026-03-13",
-      "t": 0
+      "v": "1,320.50",
+      "d": "+3.50",
+      "t": 1
     }
   },
   "deals": [
     {
       "id": "d1",
-      "title": "PAG 및 KKR, 삿포로 부동산 인수",
-      "value": "$30bn",
+      "title": "JRE 신주쿠 빌딩 추가 지분 인수",
+      "value": "203.5억 엔",
       "type": "M&A",
-      "summary": "PAG와 KKR가 삿포로 부동산 지분 100%를 인수하는 계약 체결.",
-      "source": "PAG, KKR, Mingtiandi",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHC_XFtgZUNRAlLt_BfBEN-BQsSJOb71ncTfzct-fLR53_w8oWeDm9ec3aDA10gL3js_vsdvTb3PNd1YbOrwrr82ElXeZ9Jxd9oFtT9eZCuGTRKWTviKg2TjAe29c5h_NzXEg5-qv5T_k4RcWmr_i_JIHEbqROdOXqMvXvalhf8z-wI_uvG5inklUrAU_y2g6ty"
-    },
-    {
-      "id": "d2",
-      "title": "히사미츠 제약 MBO 및 상장 폐지",
-      "value": "N/A",
-      "type": "Equity",
-      "summary": "히사미츠 제약이 MBO와 상장 폐지를 결정.",
-      "source": "MarketScreener",
-      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFwhdYT2wsvSUYJooUgS5-v0O05GKQ4lPvkQwcXnaYWWbX4YMoK4puiWMPHvGFPb0sG5E1FzMtoJd7m_2h5SCeZgn4pVuBBuJ0yojy0YPXw5oTe5ElXdY23qHG9aO233CF6ST86qVsPC9tsjY4Q_bHA278DKzC6KxYE2pgQhocAhgvzgri5i6mo245RJ1_T8qyPPToo-ai5JPvs1ypBY0HTUupjSHVTq1LP6wLVj5XXL0P_gJkGM5IUpeExDP4eDQm5VNNjDmWoCWbVAqDeuUV"
+      "summary": "JRE가 신주쿠 복합 빌딩의 9% 추가 지분을 인수할 예정입니다.",
+      "source": "NIKKEI REAL ESTATE MARKET REPORT",
+      "url": "https://nre.nikkei.com/en/"
     }
   ],
   "watch": [
     {
       "n": 1,
-      "text": "일본은행 금리 정책과 중동 정세 변화."
+      "text": "일본은행 금리 동결 전망 및 엔화 영향 분석"
     },
     {
       "n": 2,
-      "text": "혼다의 전기차 전략 변화와 그 후속 조치."
+      "text": "중동 전쟁 영향과 유가 상승에 따른 글로벌 경제 분석"
     },
     {
       "n": 3,
-      "text": "PAG 및 KKR의 대형 부동산 거래 진행 상황."
+      "text": "일본 부동산 시장의 거래 및 투자 동향 주시"
     }
   ],
   "serverGenerated": true,
