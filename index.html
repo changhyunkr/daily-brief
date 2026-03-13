@@ -509,7 +509,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
-  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v13 · Built 2026-03-13 16:28 JST</div>
+  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v14 · Built 2026-03-14 v14</div>
   <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
@@ -569,15 +569,15 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
         <div id="cardsList"><div class="empty"><div class="empty-ico">📰</div><div class="empty-txt">불러오는 중...</div></div></div>
         <div class="player-bar" id="playerBar">
           <div class="pb-btns">
-            <button class="pb-btn" onclick="skip(-15)"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg></button>
-            <button class="pb-btn pb-play" onclick="togglePlay()"><svg id="bpIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-            <button class="pb-btn" onclick="skip(15)"><svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg></button>
+            <button class="pb-btn" onclick="pskip(-15)"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg></button>
+            <button class="pb-btn pb-play" onclick="ptoggle()"><svg id="bpIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <button class="pb-btn" onclick="pskip(15)"><svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg></button>
           </div>
-          <div class="pb-mid" onclick="switchTab('pod')">
+          <div class="pb-mid" onclick="goTab('pod')">
             <div class="pb-title" id="pbTitle">팟캐스트 ›</div>
             <div class="pb-prog"><div class="pb-fill" id="pbFill"></div></div>
           </div>
-          <button class="pb-spd" id="pbSpdBtn" onclick="cycleBriefSpd(this)">1.0×</button>
+          <button class="pb-spd" id="pbSpdBtn" onclick="pbCycleSpd(this)">1.0×</button>
         </div>
       </div>
 
@@ -595,15 +595,15 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
           </div>
         </div>
         <div class="full-player">
-          <div class="prog-track" id="progTrack" onclick="seekBar(event)">
+          <div class="prog-track" id="progTrack" onclick="pseek(event)">
             <div class="prog-fill" id="progFill"></div>
             <div class="prog-thumb" id="progThumb"></div>
           </div>
           <div class="time-row"><span id="curT">0:00</span><span id="totT">--:--</span></div>
           <div class="ctrl-row">
-            <button class="ctrl-btn" onclick="skip(-30)"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg><span>30</span></button>
-            <button class="ctrl-play" id="ctrlPlay" onclick="togglePlay()"><svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-            <button class="ctrl-btn" onclick="skip(30)"><svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg><span>30</span></button>
+            <button class="ctrl-btn" onclick="pskip(-30)"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg><span>30</span></button>
+            <button class="ctrl-play" id="ctrlPlay" onclick="ptoggle()"><svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <button class="ctrl-btn" onclick="pskip(30)"><svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg><span>30</span></button>
           </div>
           <div class="opts-row">
             <button class="spd-btn" onclick="setSpd(.9,this)">0.9×</button>
@@ -678,8 +678,8 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
           <div class="set-lbl">스케줄</div>
           <div class="set-grp">
             <div class="set-inp-row"><input type="time" id="schedTime" value="06:00" style="width:100%;background:transparent;border:none;outline:none;font-size:17px;font-weight:500;color:var(--t1);min-height:var(--tap)"></div>
-            <button class="set-btn" onclick="saveSchedule()">스케줄 저장</button>
-            <button class="set-btn" onclick="preGenTomorrow()">내일 브리핑 미리 생성 →</button>
+            <button class="set-btn" onclick="saveSched()">스케줄 저장</button>
+            <button class="set-btn" onclick="preGenTom()">내일 브리핑 미리 생성 →</button>
             <div style="padding:var(--s2) var(--s4) var(--s3);font-size:13px;color:var(--accent)" id="schedLabel"></div>
           </div>
           <div class="set-lbl">탭 설정</div>
@@ -698,7 +698,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v13<br>Built 2026-03-13 16:28 JST</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v14<br>Built 2026-03-14 v14</div>
         </div>
       </div>
 
@@ -707,23 +707,23 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 
   <!-- TAB BAR -->
   <nav class="tabbar" id="tabbar" style="display:none">
-    <button class="tb-btn on" id="tbb-brief" onclick="switchTab('brief')">
+    <button class="tb-btn on" id="tbb-brief" onclick="goTab('brief')">
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
       <span class="tb-lbl">브리핑</span>
     </button>
-    <button class="tb-btn" id="tbb-pod" onclick="switchTab('pod')">
+    <button class="tb-btn" id="tbb-pod" onclick="goTab('pod')">
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg></div>
       <span class="tb-lbl">팟캐스트</span>
     </button>
-    <button class="tb-btn" id="tbb-chat" onclick="switchTab('chat')">
+    <button class="tb-btn" id="tbb-chat" onclick="goTab('chat')">
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
       <span class="tb-lbl">AI 질문</span>
     </button>
-    <button class="tb-btn" id="tbb-search" onclick="switchTab('search')">
+    <button class="tb-btn" id="tbb-search" onclick="goTab('search')">
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
       <span class="tb-lbl">검색</span>
     </button>
-    <button class="tb-btn" id="tbb-settings" onclick="switchTab('settings')">
+    <button class="tb-btn" id="tbb-settings" onclick="goTab('settings')">
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
       <span class="tb-lbl">설정</span>
     </button>
@@ -740,7 +740,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-/* Daily Brief v13 — clean ES5, no template literals, no const/let at top scope */
+/* Daily Brief v14 — clean ES5, no template literals, no const/let at top scope */
 
 /* ── STORAGE ─────────────────────────────────────────────── */
 var _mem = {};
@@ -755,12 +755,12 @@ function skeys(){try{if(_ls){var a=[];for(var i=0;i<localStorage.length;i++)a.pu
 
 /* ── STATE ───────────────────────────────────────────────── */
 var curDate=todayStr(),curBrief=null,curCat='all',curLen='short';
-var cfg={autoGen:true,japanTab:true,koreaTab:false,usTab:true,dealTab:true,trendTab:true};
+var cfg={autoGen:true,japanMode:true,koreaMode:false,usMode:true,dealMode:true,trendMode:true,podAutoGen:false};
 var psecs=[],pidx=0,spd=1.0,elapsed=0,totalSec=0;
 var playing=false,paused=false,timerRef=null;
 var voices=[],selVoice=null,useOai=false,oaiVoice='nova',audioEl=null;
 var chatHist=[];
-var catCls={'글로벌':'cg','일본':'cj','미국':'cu','한국':'ck','아시아':'ca','매크로':'cm','딜':'cd','화제':'ct'};
+var catCls={'글로벌':'c-글로벌','일본':'c-일본','미국':'c-미국','한국':'c-한국','아시아':'c-아시아','매크로':'c-매크로','딜':'c-딜','화제':'c-화제'};
 
 /* ── SETUP ───────────────────────────────────────────────── */
 function saveSetup(){
@@ -777,19 +777,20 @@ function saveSetup(){
   if(cv)ss('db_claude',cv);
   if(ov)ss('db_openai',ov);
   // Never reload — reload loses keys if localStorage blocked
-  document.getElementById('setup').style.display='none';
+  document.getElementById('setupScreen').style.display='none';
   startApp();
 }
 
 /* ── INIT ────────────────────────────────────────────────── */
 function init(){
   if(!sg('db_claude')&&!sg('db_openai'))return;
-  document.getElementById('setup').style.display='none';
+  document.getElementById('setupScreen').style.display='none';
   startApp();
 }
 
 function startApp(){
-  document.getElementById('app').style.display='flex';
+  var ma=document.getElementById('mainArea');if(ma){ma.style.display='flex';ma.style.flexDirection='column';}
+  var tb=document.getElementById('tabbar');if(tb)tb.style.display='flex';
   loadCfg();loadVoices();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
   updateDateUI();updateCounts();loadSchedUI();checkSched();
@@ -817,7 +818,7 @@ function stepDone(n){var s=document.getElementById('ls'+n),i=document.getElement
 
 /* ── AUTO GEN ────────────────────────────────────────────── */
 function autoGen(date){
-  var ld=document.getElementById('loading');if(ld)ld.style.display='flex';
+  var ld=document.getElementById('loadingScreen');if(ld)ld.style.display='flex';
   stepOn(0);
   fetchGemini(date).then(function(raw){
     stepDone(0);stepOn(1);return structureAI(raw,date);
@@ -858,7 +859,7 @@ function fetchGemini(date){
 /* ── STRUCTURE AI ────────────────────────────────────────── */
 function structureAI(raw,date){
   var ckey=sg('db_claude'),okey=sg('db_openai');
-  var jp=cfg.japanTab!==false;
+  var jp=cfg.japanMode!==false;
   var schema='{"date":"'+date+'","generatedAt":'+Date.now()+',"model":"auto",'
     +'"headlines":[{"id":"h1","cat":"일본","title":"헤드라인","summary":"2문장","detail":"3-4문장","implications":"임플리케이션","source":"Nikkei","url":"https://..."}],'
     +'"market":{"jgb10y":{"v":"1.52%","d":"+3bp","t":1},"usdjpy":{"v":"148.2","d":"-0.4","t":-1},"nikkei":{"v":"38,240","d":"-0.6%","t":-1},"sp500":{"v":"5,698","d":"+0.8%","t":1},"wti":{"v":"$71.8","d":"-0.4%","t":-1},"usdkrw":{"v":"1,338","d":"+1","t":-1}},'
@@ -895,15 +896,15 @@ function structureAI(raw,date){
 function parseJ(txt){var s=txt.indexOf('{'),e=txt.lastIndexOf('}');if(s<0)throw new Error('JSON not found');return JSON.parse(txt.slice(s,e+1));}
 
 /* ── RENDER ──────────────────────────────────────────────── */
-function renderBrief(data){curBrief=data;renderMkt(data.market);renderCards(data.headlines,curCat);var el=document.getElementById('podD');if(el)el.textContent=dateLbl(data.date);}
+function renderBrief(data){curBrief=data;renderMkt(data.market);renderCards(data.headlines,curCat);var el=document.getElementById('podDateLbl');if(el)el.textContent=dateLbl(data.date);}
 
 function renderMkt(m){
   if(!m)return;
   var flds=[m.jgb10y,m.usdjpy,m.nikkei,m.sp500,m.wti,m.usdkrw];
   for(var i=0;i<6;i++){var f=flds[i];if(!f)continue;
     var ve=document.getElementById('mv'+i),ce=document.getElementById('mc'+i);
-    if(ve){ve.textContent=f.v;ve.className='mc-v '+(f.t===1?'up':f.t===-1?'dn':'na');}
-    if(ce){ce.textContent=f.d;ce.className='mc-c '+(f.t===1?'up':f.t===-1?'dn':'na');}
+    if(ve){ve.textContent=f.v;ve.className='mkt-v '+(f.t===1?'up':f.t===-1?'dn':'na');}
+    if(ce){ce.textContent=f.d;ce.className='mkt-c '+(f.t===1?'up':f.t===-1?'dn':'na');}
   }
 }
 
@@ -911,22 +912,22 @@ function renderCards(hl,filter){
   var el=document.getElementById('cardsList');
   var items=(filter&&filter!=='all')?(hl||[]).filter(function(h){return h.cat===filter;}):(hl||[]);
   if(!items.length){el.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">해당 카테고리 없음</div></div>';return;}
-  var html='<div class="sec">헤드라인</div><div class="grp">';
+  var html='<div class="sec-hdr">헤드라인</div><div class="card-group">';
   for(var i=0;i<items.length;i++){
-    var h=items[i],cls=catCls[h.cat]||'cg';
-    html+='<div class="nrow" onclick="openSheet(\'h\',\''+esc(h.id)+'\')"><div class="nbody"><span class="ncat '+cls+'">'+esc(h.cat)+'</span><div class="ntitle">'+esc(h.title)+'</div><div class="nsum">'+esc(h.summary||'')+'</div></div><div class="nright"><span class="nsrc">'+esc(h.source||'')+'</span><span class="nchev">›</span></div></div>';
+    var h=items[i],cls=catCls[h.cat]||'c-글로벌';
+    html+='<div class="news-row" onclick="openSheet(\'h\',\''+esc(h.id)+'\')"><div class="news-body"><span class="ncat '+cls+'">'+esc(h.cat)+'</span><div class="n-title">'+esc(h.title)+'</div><div class="n-sum">'+esc(h.summary||'')+'</div></div><div class="news-right"><span class="n-src">'+esc(h.source||'')+'</span><span class="n-chev">›</span></div></div>';
   }
   html+='</div>';
   if((!filter||filter==='all'||filter==='딜')&&curBrief&&curBrief.deals&&curBrief.deals.length){
-    html+='<div class="sec">딜 하이라이트</div>';
+    html+='<div class="sec-hdr">딜 하이라이트</div>';
     for(var di=0;di<curBrief.deals.length;di++){
       var d=curBrief.deals[di];
-      html+='<div class="deal" onclick="openSheet(\'d\',\''+esc(d.id)+'\')"><div class="deal-badge">'+esc(d.type||'딜')+'</div><div class="deal-t">'+esc(d.title)+'</div><div class="deal-v">'+esc(d.value||'')+'</div><div class="deal-s">'+esc(d.summary||'')+'</div><div class="deal-src">'+esc(d.source||'')+'</div></div>';
+      html+='<div class="deal-card" onclick="openSheet(\'d\',\''+esc(d.id)+'\')"><div class="deal-badge">'+esc(d.type||'딜')+'</div><div class="deal-title">'+esc(d.title)+'</div><div class="deal-val">'+esc(d.value||'')+'</div><div class="deal-sum">'+esc(d.summary||'')+'</div><div class="deal-src">'+esc(d.source||'')+'</div></div>';
     }
   }
   if((!filter||filter==='all')&&curBrief&&curBrief.watch&&curBrief.watch.length){
-    html+='<div class="sec">Key Watch</div><div class="grp">';
-    for(var wi=0;wi<curBrief.watch.length;wi++){var w=curBrief.watch[wi];html+='<div class="wrow"><span class="wn">#'+w.n+'</span><span class="wt">'+esc(w.text)+'</span></div>';}
+    html+='<div class="sec-hdr">Key Watch</div><div class="card-group">';
+    for(var wi=0;wi<curBrief.watch.length;wi++){var w=curBrief.watch[wi];html+='<div class="watch-row"><span class="watch-n">#'+w.n+'</span><span class="watch-t">'+esc(w.text)+'</span></div>';}
     html+='</div>';
   }
   el.innerHTML=html;
@@ -946,19 +947,19 @@ function filterCat(cat,btn){
 function openSheet(type,id){
   if(!curBrief)return;
   var item=findById(type==='h'?curBrief.headlines:curBrief.deals,id);if(!item)return;
-  var cls=catCls[item.cat||item.type||'딜']||'cd';
-  var html='<span class="ncat '+cls+'" style="margin:var(--s3) 0 var(--s2);display:inline-flex">'+esc(item.cat||item.type||'딄')+'</span>'
+  var cls=catCls[item.cat||item.type||'딜']||'c-딜';
+  var html='<span class="ncat '+cls+'" style="margin:var(--s3) 0 var(--s2);display:inline-flex">'+esc(item.cat||item.type||'딜')+'</span>'
     +'<div class="sh-title">'+esc(item.title)+'</div>'
     +'<div class="sh-body">'+esc(item.detail||item.summary||'')+'</div>';
-  if(item.implications)html+='<div class="sh-imp"><div class="sh-imp-l">투자 임플리케이션</div><div class="sh-imp-t">'+esc(item.implications)+'</div></div>';
+  if(item.implications)html+='<div class="sh-imp"><div class="sh-imp-lbl">투자 임플리케이션</div><div class="sh-imp-txt">'+esc(item.implications)+'</div></div>';
   html+='<div class="sh-footer"><span class="sh-src">'+esc(item.source||'')+'</span>'+(item.url&&item.url.startsWith('http')?'<a class="sh-link" href="'+item.url+'" target="_blank">원문</a>':'')+'</div>';
-  html+='<div class="sh-acts"><button class="sh-act primary" onclick="closeSheet();topicPodcast(\''+esc(item.title)+'\')">팟캐스트 생성</button>'
-    +'<button class="sh-act secondary" onclick="closeSheet();askAbout(\''+esc(item.title)+'\')">AI에게 질문</button></div>'
+  html+='<div style="display:flex;gap:var(--s2);margin:var(--s4) 0"><button class="sh-close" style="background:var(--accent);color:#000" onclick="closeSheet();topicPodcast(\''+esc(item.title)+'\')">팟캐스트 생성</button>'
+    +'<button class="sh-close" onclick="closeSheet();askAbout(\''+esc(item.title)+'\')">AI에게 질문</button></div>'
     +'<button class="sh-close" onclick="closeSheet()">닫기</button>';
   document.getElementById('sheetBody').innerHTML=html;
-  document.getElementById('ov').classList.add('on');document.getElementById('sheet').classList.add('on');
+  document.getElementById('ov').classList.add('show');document.getElementById('sheet').classList.add('show');
 }
-function closeSheet(){document.getElementById('ov').classList.remove('on');document.getElementById('sheet').classList.remove('on');}
+function closeSheet(){document.getElementById('ov').classList.remove('show');document.getElementById('sheet').classList.remove('show');}
 function findById(arr,id){if(!arr)return null;for(var i=0;i<arr.length;i++)if(arr[i].id===id)return arr[i];return null;}
 
 /* ── PODCAST ─────────────────────────────────────────────── */
@@ -990,14 +991,14 @@ function parsePod(txt){
   for(var i=1;i<parts.length;i+=2){var body=parts[i+1]?parts[i+1].trim():'';if(body)psecs.push({name:parts[i].trim(),text:body});}
   pidx=0;totalSec=Math.ceil(psecs.reduce(function(s,x){return s+x.text.length;},0)/6.5/spd);
   document.getElementById('totT').textContent=fmtT(totalSec);renderPsecs();
-  document.getElementById('playerBar').classList.add('on');
+  document.getElementById('playerBar').classList.add('show');
   document.getElementById('pbTitle').textContent=dateLbl(curDate)+' 팟캐스트 >';
 }
 
 function renderPsecs(){
   var el=document.getElementById('podSecList');if(!psecs.length)return;
-  var html='<div class="psec-grp">';
-  for(var i=0;i<psecs.length;i++){html+='<div class="psec-row'+(i===pidx?' now':'')+'" onclick="jumpPod('+i+')">'+'<span class="psec-n">'+pad2(i+1)+'</span><span class="psec-name">'+esc(psecs[i].name)+'</span><span class="psec-dur">'+fmtT(Math.ceil(psecs[i].text.length/6.5/spd))+'</span></div>';}
+  var html='<div class="pod-sec-group">';
+  for(var i=0;i<psecs.length;i++){html+='<div class="pod-sec-row'+(i===pidx?' playing':'')+'" onclick="jumpPod('+i+')">'+'<span class="ps-n">'+pad2(i+1)+'</span><span class="ps-name">'+esc(psecs[i].name)+'</span><span class="ps-dur">'+fmtT(Math.ceil(psecs[i].text.length/6.5/spd))+'</span></div>';}
   el.innerHTML=html+'</div>';
 }
 
@@ -1005,7 +1006,7 @@ function renderPsecs(){
 function loadVoices(){
   voices=speechSynthesis.getVoices();var sel=document.getElementById('voiceSel');if(!sel)return;
   sel.innerHTML='';var okey=sg('db_openai');
-  if(okey){var ov=['nova','alloy','shimmer','echo','onyx'];for(var i=0;i<ov.length;i++){var o=document.createElement('option');o.value='oai:'+ov[i];o.textContent='+ '+ov[i];sel.appendChild(o);}useOai=true;var tts=document.getElementById('podTts');if(tts)tts.textContent='OpenAI TTS 고품질';}
+  if(okey){var ov=['nova','alloy','shimmer','echo','onyx'];for(var i=0;i<ov.length;i++){var o=document.createElement('option');o.value='oai:'+ov[i];o.textContent='+ '+ov[i];sel.appendChild(o);}useOai=true;var tts=document.getElementById('ttsModeLabel');if(tts)tts.textContent='OpenAI TTS 고품질';}
   var ko=voices.filter(function(v){return v.lang.startsWith('ko');});
   for(var j=0;j<ko.length;j++){var op=document.createElement('option');op.value=String(voices.indexOf(ko[j]));op.textContent=ko[j].name;sel.appendChild(op);}
   if(!okey&&ko.length){selVoice=ko[0];sel.value=String(voices.indexOf(ko[0]));}
@@ -1037,7 +1038,7 @@ function speakFrom(idx){
   stopAll();pidx=idx;
   if(useOai&&sg('db_openai')){
     var fullTxt=psecs.slice(idx).map(function(s){return s.name+'.\n'+s.text;}).join('\n\n');
-    var stEl=document.getElementById('ttsSt');if(stEl){stEl.textContent='음성 생성 중...';stEl.style.display='block';}
+    var stEl=document.getElementById('ttsStatus');if(stEl){stEl.textContent='음성 생성 중...';stEl.style.display='block';}
     fetch('https://api.openai.com/v1/audio/speech',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+sg('db_openai')},body:JSON.stringify({model:'tts-1',voice:oaiVoice,input:fullTxt,speed:spd,response_format:'mp3'})})
     .then(function(res){if(stEl)stEl.style.display='none';if(!res.ok){useOai=false;speakSec(pidx);return;}return res.blob().then(function(blob){audioEl=new Audio(URL.createObjectURL(blob));audioEl.playbackRate=spd;audioEl.ontimeupdate=function(){if(!audioEl)return;elapsed=Math.floor(audioEl.currentTime);if(audioEl.duration)totalSec=Math.floor(audioEl.duration);updateProg();var acc=0;for(var i=0;i<psecs.length;i++){var l=Math.ceil(psecs[i].text.length/6.5/spd);if(elapsed<acc+l){if(pidx!==i){pidx=i;renderPsecs();}break;}acc+=l;}};audioEl.onended=function(){playing=false;paused=false;setIco(true);elapsed=0;updateProg();};audioEl.play();playing=true;paused=false;setIco(false);});})
     .catch(function(){if(stEl)stEl.style.display='none';useOai=false;speakSec(pidx);});
@@ -1061,7 +1062,7 @@ function secAt(s){var acc=0,r=0;for(var i=0;i<psecs.length;i++){var l=Math.ceil(
 function pseek(e){var b=document.getElementById('progTrack');var p=Math.max(0,Math.min(1,e.offsetX/b.offsetWidth));elapsed=Math.floor(p*totalSec);if(audioEl){audioEl.currentTime=elapsed;updateProg();return;}var i=secAt(elapsed);if(playing)speakFrom(i);else{pidx=i;renderPsecs();}updateProg();}
 function startTimer(){clearInterval(timerRef);timerRef=setInterval(function(){if(!audioEl){elapsed++;updateProg();if(elapsed>=totalSec)clearInterval(timerRef);}},1000);}
 function updateProg(){var p=totalSec>0?Math.min(100,elapsed/totalSec*100):0,pct=p+'%';var pf=document.getElementById('progFill');if(pf)pf.style.width=pct;var pt=document.getElementById('progThumb');if(pt)pt.style.left=pct;var ct=document.getElementById('curT');if(ct)ct.textContent=fmtT(elapsed);if(audioEl&&audioEl.duration){var tt=document.getElementById('totT');if(tt)tt.textContent=fmtT(Math.floor(audioEl.duration));}var bf=document.getElementById('pbFill');if(bf)bf.style.width=pct;}
-function setIco(play){var ico=play?'<path d="M8 5v14l11-7z"/>':'<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';['playIco','bpIco'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=ico;});var pb=document.getElementById('playerBar');if(pb)pb.classList.toggle('on',psecs.length>0);}
+function setIco(play){var ico=play?'<path d="M8 5v14l11-7z"/>':'<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';['playIco','bpIco'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=ico;});var pb=document.getElementById('playerBar');if(pb)pb.classList.toggle('show',psecs.length>0);}
 
 /* ── CHAT ────────────────────────────────────────────────── */
 function sendChat(){
@@ -1076,7 +1077,7 @@ function sendChat(){
   else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:800,messages:[{role:'system',content:sys}].concat(msgs)})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   p.then(function(text){thinkEl.remove();addMsg('ai',text||'응답 없음');chatHist.push({role:'assistant',content:text||''});var el=document.getElementById('chatMsgs');el.scrollTop=el.scrollHeight;}).catch(function(e){thinkEl.remove();addMsg('ai','오류: '+e.message);});
 }
-function addMsg(role,text,cls){var el=document.getElementById('chatMsgs');var d=document.createElement('div');d.className='cmsg '+role+(cls?' '+cls:'');d.innerHTML='<div class="cbub">'+esc(text).replace(/\n/g,'<br>')+'</div>';el.appendChild(d);el.scrollTop=el.scrollHeight;return d;}
+function addMsg(role,text,cls){var el=document.getElementById('chatMsgs');var d=document.createElement('div');d.className='chat-msg '+role+(cls?' '+cls:'');d.innerHTML='<div class="chat-bubble">'+esc(text).replace(/\n/g,'<br>')+'</div>';el.appendChild(d);el.scrollTop=el.scrollHeight;return d;}
 function askAbout(topic){goTab('chat');document.getElementById('chatInp').value=topic+'에 대해 더 자세히 알려줘';sendChat();}
 
 /* ── TOPIC PODCAST ───────────────────────────────────────── */
@@ -1098,8 +1099,8 @@ function doSearch(){
   var allK=skeys().filter(function(k){return k.startsWith('db_brief_');});
   var matches=[];allK.forEach(function(k){try{var d=sgj(k);if(d&&JSON.stringify(d).toLowerCase().indexOf(q.toLowerCase())>=0)matches.push(d);}catch(e){}});
   var html='';
-  if(matches.length){html+='<div class="sec">과거 브리핑 ('+matches.length+'건)</div>';matches.slice(0,8).forEach(function(m){var hl=(m.headlines||[]).filter(function(h){return JSON.stringify(h).toLowerCase().indexOf(q.toLowerCase())>=0;})[0];html+='<div class="sri" onclick="loadDateBrief(\''+m.date+'\')"><div class="sri-d">'+dateLbl(m.date)+'</div><div class="sri-t">'+esc(hl&&hl.title||m.date+' 브리핑')+'</div><div class="sri-p">'+esc(hl&&hl.summary||'')+'</div></div>';});}
-  html+='<div class="sec">AI 생성</div><div class="empty"><button class="empty-btn" id="_sgb">「'+esc(q)+'」분석 생성</button></div>';
+  if(matches.length){html+='<div class="sec-hdr">과거 브리핑 ('+matches.length+'건)</div>';matches.slice(0,8).forEach(function(m){var hl=(m.headlines||[]).filter(function(h){return JSON.stringify(h).toLowerCase().indexOf(q.toLowerCase())>=0;})[0];html+='<div class="srch-r-item" onclick="loadDateBrief(\''+m.date+'\')"><div class="sri-date">'+dateLbl(m.date)+'</div><div class="sri-title">'+esc(hl&&hl.title||m.date+' 브리핑')+'</div><div class="sri-prev">'+esc(hl&&hl.summary||'')+'</div></div>';});}
+  html+='<div class="sec-hdr">AI 생성</div><div class="empty"><button class="empty-btn" id="_sgb">「'+esc(q)+'」분석 생성</button></div>';
   res.innerHTML=html;var btn=document.getElementById('_sgb');if(btn)btn.addEventListener('click',function(){genCustom(q);});
 }
 function loadDateBrief(date){curDate=date;updateDateUI();var d=sgj('db_brief_'+date);if(d){renderBrief(d);goTab('brief');}}
@@ -1110,7 +1111,7 @@ function genCustom(q){
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
   else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
-  p.then(function(text){res.innerHTML='<div class="sec">「'+esc(q)+'」</div><div style="margin:0 var(--s4) var(--s4);padding:var(--s4);background:var(--e1);border-radius:var(--r3);font-size:15px;color:var(--t2);line-height:1.8">'+esc(text).replace(/\n/g,'<br>')+'</div><div style="padding:0 var(--s4) var(--s4)"><button class="empty-btn" id="_spb">팟캐스트로 듣기</button></div>';var sb=document.getElementById('_spb');if(sb)sb.addEventListener('click',function(){topicPodcast(q);});}).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
+  p.then(function(text){res.innerHTML='<div class="sec-hdr">「'+esc(q)+'」</div><div style="margin:0 var(--s4) var(--s4);padding:var(--s4);background:var(--e1);border-radius:var(--r3);font-size:15px;color:var(--t2);line-height:1.8">'+esc(text).replace(/\n/g,'<br>')+'</div><div style="padding:0 var(--s4) var(--s4)"><button class="empty-btn" id="_spb">팟캐스트로 듣기</button></div>';var sb=document.getElementById('_spb');if(sb)sb.addEventListener('click',function(){topicPodcast(q);});}).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
 /* ── PASTE ───────────────────────────────────────────────── */
@@ -1122,7 +1123,7 @@ function analyzePaste(){
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
   else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
-  p.then(function(raw){var item=parseJ(raw);item.id='paste_'+Date.now();item.url='';if(curBrief){curBrief.headlines.unshift(item);ssj('db_brief_'+curDate,curBrief);renderCards(curBrief.headlines,curCat);}var cls=catCls[item.cat]||'cg';res.innerHTML='<div class="grp" style="margin:0 var(--s4)"><div class="nrow"><div class="nbody"><span class="ncat '+cls+'">'+esc(item.cat)+'</span><div class="ntitle">'+esc(item.title)+'</div><div class="nsum">'+esc(item.summary)+'</div></div></div></div>';document.getElementById('pasteArea').value='';showToast('브리핑에 추가됐습니다');}).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
+  p.then(function(raw){var item=parseJ(raw);item.id='paste_'+Date.now();item.url='';if(curBrief){curBrief.headlines.unshift(item);ssj('db_brief_'+curDate,curBrief);renderCards(curBrief.headlines,curCat);}var cls=catCls[item.cat]||'c-글로벌';res.innerHTML='<div class="card-group" style="margin:0 var(--s4)"><div class="news-row"><div class="news-body"><span class="ncat '+cls+'">'+esc(item.cat)+'</span><div class="n-title">'+esc(item.title)+'</div><div class="n-sum">'+esc(item.summary)+'</div></div></div></div>';document.getElementById('pasteArea').value='';showToast('브리핑에 추가됐습니다');}).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
 /* ── SETTINGS ────────────────────────────────────────────── */
@@ -1139,7 +1140,7 @@ function loadCfg(){
   updateCatTabs();
 }
 function togSetting(key){cfg[key]=!cfg[key];var el=document.getElementById('tog-'+key);if(el)el.classList.toggle('on',cfg[key]);ssj('db_cfg',cfg);updateCatTabs();}
-function updateCatTabs(){var map={'japanTab':'cb-j','koreaTab':'cb-k','usTab':'cb-u','dealTab':'cb-d','trendTab':'cb-t'};for(var key in map){var el=document.getElementById(map[key]);if(!el)continue;el.style.display=(key==='koreaTab'?cfg.koreaTab:(cfg[key]!==false))?'':'none';}}
+function updateCatTabs(){var map={'japanMode':'cb-일본','koreaMode':'cb-한국','usMode':'cb-미국','dealMode':'cb-딜','trendMode':'cb-화제'};for(var key in map){var el=document.getElementById(map[key]);if(!el)continue;el.style.display=(cfg[key]!==false)?'':'none';}}
 function updateCounts(){var n=skeys().filter(function(k){return k.startsWith('db_brief_');}).length;var sc=document.getElementById('storedCnt');if(sc)sc.textContent=n+'일';var ec=document.getElementById('estCost');if(ec)ec.textContent='~$'+(n*0.04).toFixed(2)+'/월';}
 function clearOld(){if(!confirm('30일 이전 데이터를 삭제할까요?'))return;var cut=new Date();cut.setDate(cut.getDate()-30);var n=0;skeys().filter(function(k){return k.startsWith('db_');}).forEach(function(k){var m=k.match(/(\d{4}-\d{2}-\d{2})/);if(m&&new Date(m[1])<cut){sr(k);n++;}});updateCounts();showToast(n+'개 삭제됐습니다');}
 
@@ -1148,13 +1149,13 @@ function checkSched(){var t=sg('db_sched')||'06:00';var now=new Date();if(now.ge
 function silentGen(date){if(!sg('db_claude')&&!sg('db_openai'))return;var ex=sgj('db_brief_'+date);if(ex&&!isStale(ex))return;fetchGemini(date).catch(function(){return null;}).then(function(r){return structureAI(r,date);}).then(function(b){b.date=date;ssj('db_brief_'+date,b);updateCounts();if(curDate===date)renderBrief(b);showToast(dateLbl(date)+' 브리핑 준비됨');}).catch(function(e){console.warn('Silent gen:',e.message);});}
 function saveSched(){var t=document.getElementById('schedTime').value;ss('db_sched',t);updateSchedLbl(t);showToast('매일 '+t+' 이후 열면 브리핑이 준비됩니다');}
 function loadSchedUI(){var t=sg('db_sched')||'06:00';var el=document.getElementById('schedTime');if(el)el.value=t;updateSchedLbl(t);}
-function updateSchedLbl(t){var el=document.getElementById('schedLbl');if(!el)return;var pts=t.split(':');var h=parseInt(pts[0]),m=parseInt(pts[1]);var now=new Date(),next=new Date(now);next.setHours(h,m,0,0);if(next<=now)next.setDate(next.getDate()+1);var diff=Math.round((next-now)/60000);el.textContent=t+' · '+(Math.floor(diff/60)>0?Math.floor(diff/60)+'시간 '+(diff%60)+'분 후':(diff%60)+'분 후');}
+function updateSchedLbl(t){var el=document.getElementById('schedLabel');if(!el)return;var pts=t.split(':');var h=parseInt(pts[0]),m=parseInt(pts[1]);var now=new Date(),next=new Date(now);next.setHours(h,m,0,0);if(next<=now)next.setDate(next.getDate()+1);var diff=Math.round((next-now)/60000);el.textContent=t+' · '+(Math.floor(diff/60)>0?Math.floor(diff/60)+'시간 '+(diff%60)+'분 후':(diff%60)+'분 후');}
 function preGenTom(){var tom=new Date();tom.setDate(tom.getDate()+1);var ts=tom.toISOString().slice(0,10);if(sgj('db_brief_'+ts)&&!isStale(sgj('db_brief_'+ts))){showToast(dateLbl(ts)+' 이미 준비됨');return;}showToast('내일 브리핑 생성 시작...');silentGen(ts);}
 
 /* ── NAV / TABS ──────────────────────────────────────────── */
-function navDate(d){var dt=new Date(curDate+'T00:00:00');dt.setDate(dt.getDate()+d);var nd=dt.toISOString().slice(0,10);if(nd>todayStr())return;curDate=nd;updateDateUI();stopAll();elapsed=0;psecs=[];curBrief=null;document.getElementById('playerBar').classList.remove('on');var c=sgj('db_brief_'+nd);if(c)renderBrief(c);else renderEmpty('📰',dateLbl(nd)+' 없음','지금 생성',function(){autoGen(nd);});}
-function updateDateUI(){var el=document.getElementById('dateLbl');if(el)el.textContent=dateLbl(curDate);var nb=document.getElementById('nextBtn');if(nb)nb.disabled=curDate>=todayStr();var pd=document.getElementById('podD');if(pd)pd.textContent=dateLbl(curDate);}
-function goTab(id){var panes=document.querySelectorAll('.pane');for(var i=0;i<panes.length;i++)panes[i].classList.remove('on');var tbbs=document.querySelectorAll('.tbb');for(var i=0;i<tbbs.length;i++)tbbs[i].classList.remove('on');var pane=document.getElementById('pane-'+id);if(pane)pane.classList.add('on');var tbb=document.getElementById('tbb-'+id);if(tbb)tbb.classList.add('on');if(id==='pod'&&!psecs.length&&sgj('db_brief_'+curDate))genPod(curDate,curLen);}
+function navDate(d){var dt=new Date(curDate+'T00:00:00');dt.setDate(dt.getDate()+d);var nd=dt.toISOString().slice(0,10);if(nd>todayStr())return;curDate=nd;updateDateUI();stopAll();elapsed=0;psecs=[];curBrief=null;document.getElementById('playerBar').classList.remove('show');var c=sgj('db_brief_'+nd);if(c)renderBrief(c);else renderEmpty('📰',dateLbl(nd)+' 없음','지금 생성',function(){autoGen(nd);});}
+function updateDateUI(){var el=document.getElementById('dateLbl');if(el)el.textContent=dateLbl(curDate);var nb=document.getElementById('nextBtn');if(nb)nb.disabled=curDate>=todayStr();var pd=document.getElementById('podDateLbl');if(pd)pd.textContent=dateLbl(curDate);}
+function goTab(id){var panes=document.querySelectorAll('.pane');for(var i=0;i<panes.length;i++)panes[i].classList.remove('on');var tbbs=document.querySelectorAll('.tb-btn');for(var i=0;i<tbbs.length;i++)tbbs[i].classList.remove('on');var pane=document.getElementById('pane-'+id);if(pane)pane.classList.add('on');var tbb=document.getElementById('tbb-'+id);if(tbb)tbb.classList.add('on');if(id==='pod'&&!psecs.length&&sgj('db_brief_'+curDate))genPod(curDate,curLen);}
 
 /* ── HELPERS ─────────────────────────────────────────────── */
 function todayStr(){return new Date().toISOString().slice(0,10);}
@@ -1164,7 +1165,7 @@ function fmtT(s){return Math.floor(s/60)+':'+pad2(s%60);}
 function pad2(n){return n<10?'0'+n:String(n);}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function delay(ms){return new Promise(function(r){setTimeout(r,ms);});}
-function showToast(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},3000);}
+function showToast(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},3000);}
 
 /* ── KEYBOARD ────────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded',function(){
@@ -1173,7 +1174,11 @@ window.addEventListener('DOMContentLoaded',function(){
 });
 
 /* ── START ───────────────────────────────────────────────── */
-init();
+try{init();}catch(e){
+  console.error('init error:',e);
+  var err=document.getElementById('su-err');
+  if(err){err.textContent='초기화 오류: '+e.message;err.style.display='block';}
+}
 
 </script>
 </body>
