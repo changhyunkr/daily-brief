@@ -448,6 +448,46 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 .chat-send:active{opacity:.75}
 .chat-send svg{width:16px;height:16px;fill:#000}
 
+/* ── TOOLS PANE ── */
+.tool-pills{display:flex;gap:var(--s2);padding:0 0 var(--s3);overflow-x:auto;scrollbar-width:none}
+.tool-pills::-webkit-scrollbar{display:none}
+.tool-panel{margin-top:var(--s2)}
+
+/* Deal tracker */
+.dt-card{background:var(--e1);border-radius:var(--r3);padding:var(--s3) var(--s4);margin-bottom:var(--s3)}
+.dt-head{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s2)}
+.dt-title{flex:1;font-size:15px;font-weight:600;color:var(--t1)}
+.dt-status{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.dt-status.announced{background:rgba(10,132,255,.15);color:var(--blue)}
+.dt-status.progress{background:rgba(255,214,10,.15);color:#FFD60A}
+.dt-status.closed{background:rgba(48,209,88,.15);color:var(--green)}
+.dt-status.failed{background:rgba(255,59,48,.15);color:var(--red)}
+.dt-meta{font-size:12px;color:var(--t3);line-height:1.5;margin-bottom:var(--s2)}
+.dt-actions{display:flex;gap:var(--s2)}
+.dt-act{height:28px;padding:0 var(--s3);border-radius:var(--r1);border:.5px solid var(--sep2);
+  background:transparent;color:var(--t2);font-size:12px;cursor:pointer}
+.dt-act:active{opacity:.6}
+.dt-act.del{color:var(--red);border-color:rgba(255,59,48,.3)}
+
+/* Alert keywords */
+.al-chip{display:inline-flex;align-items:center;gap:var(--s1);padding:4px 10px 4px 12px;
+  border-radius:16px;background:var(--accent-bg);border:1px solid var(--accent-bdr);
+  margin:var(--s1);font-size:13px;color:var(--accent);font-weight:500}
+.al-chip button{width:18px;height:18px;border-radius:50%;border:none;background:rgba(212,168,67,.2);
+  color:var(--accent);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.al-chip button:active{opacity:.6}
+.alert-match{border-left:3px solid var(--accent)!important;background:var(--accent-bg)!important}
+
+/* Weekly memo */
+.memo-doc{background:var(--e1);border-radius:var(--r3);padding:var(--s4);margin-top:var(--s3)}
+.memo-h1{font-size:18px;font-weight:700;color:var(--t1);margin-bottom:var(--s3);
+  padding-bottom:var(--s2);border-bottom:2px solid var(--accent)}
+.memo-h2{font-size:14px;font-weight:700;color:var(--accent);text-transform:uppercase;
+  letter-spacing:.06em;margin:var(--s4) 0 var(--s2)}
+.memo-p{font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:var(--s2)}
+.memo-bullet{font-size:14px;color:var(--t2);line-height:1.7;padding-left:var(--s4);
+  border-left:2px solid var(--sep);margin-bottom:var(--s1)}
+
 /* ── NAV ACTION BUTTON ── */
 .nav-act{width:var(--tap);height:var(--tap);border:none;background:transparent;
   color:var(--accent);cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -559,7 +599,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
-  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v15 · Built 2026-03-14 v15</div>
+  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v16 · Built 2026-03-14 v16</div>
   <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
@@ -713,6 +753,67 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
         </div>
       </div>
 
+      <!-- TOOLS -->
+      <div class="pane" id="pane-tools">
+        <div class="set-wrap">
+          <div class="tool-pills">
+            <button class="chip on" id="tp-comp" onclick="showTool('comp')">📊 Comp</button>
+            <button class="chip" id="tp-deals" onclick="showTool('deals')">💼 Deal Tracker</button>
+            <button class="chip" id="tp-memo" onclick="showTool('memo')">📋 Weekly Memo</button>
+            <button class="chip" id="tp-alert" onclick="showTool('alert')">🔔 Alert</button>
+          </div>
+
+          <!-- COMP TABLE -->
+          <div class="tool-panel" id="tool-comp">
+            <div class="set-lbl">Comparable Company Analysis</div>
+            <div class="set-grp">
+              <div class="srch-bar" style="margin:0;border:none;border-bottom:.5px solid var(--sep)">
+                <input id="compInp" type="text" placeholder="기업명 입력 (예: ソニー, 삼성전자)" autocomplete="off" style="flex:1;background:transparent;border:none;outline:none;font-size:16px;color:var(--t1)">
+                <button class="srch-go" onclick="genComp()">생성</button>
+              </div>
+              <div style="padding:var(--s2) var(--s4);font-size:12px;color:var(--t3);line-height:1.5">기업명을 입력하면 동종 업계 5-8개사 비교 테이블을 AI가 생성합니다. EV/EBITDA, PER, PBR, ROE, 배당수익률 등 포함.</div>
+            </div>
+            <div id="compResult"></div>
+          </div>
+
+          <!-- DEAL TRACKER -->
+          <div class="tool-panel" id="tool-deals" style="display:none">
+            <div class="set-lbl">Deal Watchlist</div>
+            <div class="set-grp">
+              <div class="srch-bar" style="margin:0;border:none;border-bottom:.5px solid var(--sep)">
+                <input id="dealAddInp" type="text" placeholder="딜 이름 추가 (예: Seven & i TOB)" autocomplete="off" style="flex:1;background:transparent;border:none;outline:none;font-size:16px;color:var(--t1)">
+                <button class="srch-go" onclick="addDeal()">추가</button>
+              </div>
+            </div>
+            <div id="dealList"></div>
+            <button class="set-btn" onclick="refreshDeals()" style="margin-top:var(--s3)">전체 업데이트 (AI)</button>
+          </div>
+
+          <!-- WEEKLY MEMO -->
+          <div class="tool-panel" id="tool-memo" style="display:none">
+            <div class="set-lbl">주간 투자위원회 메모</div>
+            <div class="set-grp">
+              <div style="padding:var(--s3) var(--s4);font-size:14px;color:var(--t2);line-height:1.6">이번 주 브리핑을 종합해 IC 보고용 1페이지 메모를 자동 생성합니다.</div>
+              <button class="set-btn" style="color:var(--accent)" onclick="genWeeklyMemo()">이번 주 메모 생성</button>
+            </div>
+            <div id="memoResult"></div>
+          </div>
+
+          <!-- ALERTS -->
+          <div class="tool-panel" id="tool-alert" style="display:none">
+            <div class="set-lbl">키워드 알림</div>
+            <div class="set-grp">
+              <div style="padding:var(--s2) var(--s4);font-size:12px;color:var(--t3);line-height:1.5">키워드를 등록하면 브리핑에서 매칭되는 기사를 하이라이트합니다.</div>
+              <div class="srch-bar" style="margin:0;border:none;border-bottom:.5px solid var(--sep)">
+                <input id="alertAddInp" type="text" placeholder="키워드 추가 (예: 블랙스톤, データセンター)" autocomplete="off" style="flex:1;background:transparent;border:none;outline:none;font-size:16px;color:var(--t1)">
+                <button class="srch-go" onclick="addAlert()">추가</button>
+              </div>
+            </div>
+            <div id="alertList"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- SETTINGS -->
       <div class="pane" id="pane-settings">
         <div class="set-wrap">
@@ -766,7 +867,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v15<br>Built 2026-03-14 v15</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v16<br>Built 2026-03-14 v16</div>
         </div>
       </div>
 
@@ -791,6 +892,10 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
       <span class="tb-lbl">검색</span>
     </button>
+    <button class="tb-btn" id="tbb-tools" onclick="goTab('tools')">
+      <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
+      <span class="tb-lbl">도구</span>
+    </button>
     <button class="tb-btn" id="tbb-settings" onclick="goTab('settings')">
       <div class="tb-ico"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
       <span class="tb-lbl">설정</span>
@@ -808,7 +913,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-/* Daily Brief v15 — clean ES5, no template literals, no const/let at top scope */
+/* Daily Brief v16 — clean ES5, no template literals, no const/let at top scope */
 
 /* ── STORAGE ─────────────────────────────────────────────── */
 var _mem = {};
@@ -859,7 +964,7 @@ function init(){
 function startApp(){
   var ma=document.getElementById('mainArea');if(ma){ma.style.display='flex';ma.style.flexDirection='column';}
   var tb=document.getElementById('tabbar');if(tb)tb.style.display='flex';
-  loadCfg();loadVoices();loadSources();
+  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
   updateDateUI();updateCounts();loadSchedUI();checkSched();
   var cached=sgj('db_brief_'+curDate);
@@ -991,8 +1096,8 @@ function renderCards(hl,filter){
   if(!items.length){el.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">해당 카테고리 없음</div></div>';return;}
   var html='<div class="sec-hdr">헤드라인</div><div class="card-group">';
   for(var i=0;i<items.length;i++){
-    var h=items[i],cls=catCls[h.cat]||'c-글로벌';
-    html+='<div class="news-row" onclick="openSheet(\'h\',\''+esc(h.id)+'\')"><div class="news-body"><span class="ncat '+cls+'">'+esc(h.cat)+'</span><div class="n-title">'+esc(h.title)+'</div><div class="n-sum">'+esc(h.summary||'')+'</div></div><div class="news-right"><span class="n-src">'+esc(h.source||'')+'</span><span class="n-chev">›</span></div></div>';
+    var h=items[i],cls=catCls[h.cat]||'c-글로벌',am=isAlertMatch(h)?' alert-match':'';
+    html+='<div class="news-row'+am+'" onclick="openSheet(\'h\',\''+esc(h.id)+'\')"><div class="news-body"><span class="ncat '+cls+'">'+esc(h.cat)+'</span>'+(am?'<span style="font-size:10px;color:var(--accent);margin-left:4px">🔔</span>':'')+'<div class="n-title">'+esc(h.title)+'</div><div class="n-sum">'+esc(h.summary||'')+'</div></div><div class="news-right"><span class="n-src">'+esc(h.source||'')+'</span><span class="n-chev">›</span></div></div>';
   }
   html+='</div>';
   if((!filter||filter==='all'||filter==='딜')&&curBrief&&curBrief.deals&&curBrief.deals.length){
@@ -1361,6 +1466,186 @@ function delSource(idx){
   var sources=sgj('db_sources')||defaultSources.slice();
   sources.splice(idx,1);ssj('db_sources',sources);renderSources(sources);showToast('소스 삭제됨');
 }
+
+/* ── TOOLS TAB ──────────────────────────────────────────── */
+function showTool(id){
+  var panels=['comp','deals','memo','alert'];
+  panels.forEach(function(p){
+    var el=document.getElementById('tool-'+p);if(el)el.style.display=(p===id)?'':'none';
+    var tb=document.getElementById('tp-'+p);if(tb)tb.classList.toggle('on',p===id);
+  });
+}
+
+/* ── COMP TABLE ─────────────────────────────────────────── */
+function genComp(){
+  var q=document.getElementById('compInp').value.trim();if(!q)return;
+  var res=document.getElementById('compResult');
+  res.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">'+esc(q)+' 동종 비교 분석 중...</div></div>';
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var prompt='당신은 일본/한국/글로벌 PE 투자 전문 애널리스트입니다.\n\n"'+q+'"의 Comparable Company Analysis를 JSON으로 반환하세요:\n'
+    +'{"target":"'+q+'","sector":"업종","comps":[\n'
+    +'  {"name":"기업명","ticker":"코드","mktCap":"시총","evEbitda":"EV/EBITDA","per":"PER","pbr":"PBR","roe":"ROE%","divYld":"배당률%","revGrowth":"매출성장률%","note":"특이사항"}\n'
+    +'],"summary":"비교 분석 요약 3-4문장. '+q+'의 상대적 포지션, 프리미엄/디스카운트 근거, PE 관점 시사점"}\n'
+    +'5-8개 동종기업 포함. 수치는 최신 available data 기준. JSON만 반환.';
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">API 키 필요</div></div>';return;}
+  p.then(function(raw){
+    try{
+      var d=parseJ(raw);
+      var html='<div style="margin-top:var(--s3)"><div class="sec-hdr">'+esc(d.target||q)+' — '+esc(d.sector||'')+'</div>';
+      html+='<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 0 var(--s3)"><table class="rich-table" style="min-width:600px"><thead><tr>'
+        +'<th>기업</th><th>Ticker</th><th>시총</th><th>EV/EBITDA</th><th>PER</th><th>PBR</th><th>ROE</th><th>배당률</th><th>매출성장</th><th>비고</th></tr></thead><tbody>';
+      (d.comps||[]).forEach(function(c){
+        html+='<tr><td style="font-weight:600;white-space:nowrap">'+esc(c.name)+'</td><td>'+esc(c.ticker||'')+'</td><td>'+esc(c.mktCap||'')+'</td><td>'+esc(c.evEbitda||'')+'</td><td>'+esc(c.per||'')+'</td><td>'+esc(c.pbr||'')+'</td><td>'+esc(c.roe||'')+'</td><td>'+esc(c.divYld||'')+'</td><td>'+esc(c.revGrowth||'')+'</td><td style="font-size:12px;color:var(--t3)">'+esc(c.note||'')+'</td></tr>';
+      });
+      html+='</tbody></table></div>';
+      if(d.summary)html+='<div style="padding:var(--s3) var(--s4);background:var(--e1);border-radius:var(--r3);font-size:14px;color:var(--t2);line-height:1.7;border-left:3px solid var(--accent)">'+esc(d.summary).replace(/\n/g,'<br>')+'</div>';
+      html+='</div>';
+      res.innerHTML=html;
+    }catch(e){res.innerHTML='<div style="padding:var(--s4);font-size:14px;color:var(--t2);line-height:1.7">'+esc(raw).replace(/\n/g,'<br>')+'</div>';}
+  }).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
+}
+
+/* ── DEAL TRACKER ───────────────────────────────────────── */
+function loadDeals(){
+  var deals=sgj('db_watchdeals')||[];
+  renderDeals(deals);
+}
+function renderDeals(deals){
+  var el=document.getElementById('dealList');if(!el)return;
+  if(!deals.length){el.innerHTML='<div class="empty" style="padding:var(--s5)"><div class="empty-txt">관심 딜을 추가하세요</div></div>';return;}
+  var statMap={announced:'Announced',progress:'진행중',closed:'Closed',failed:'무산'};
+  var html='';
+  deals.forEach(function(d,i){
+    html+='<div class="dt-card"><div class="dt-head"><div class="dt-title">'+esc(d.name)+'</div>'
+      +'<span class="dt-status '+esc(d.status||'announced')+'">'+esc(statMap[d.status]||d.status||'Announced')+'</span></div>';
+    if(d.meta)html+='<div class="dt-meta">'+esc(d.meta)+'</div>';
+    if(d.updated)html+='<div style="font-size:11px;color:var(--t4);margin-bottom:var(--s2)">업데이트: '+esc(d.updated)+'</div>';
+    html+='<div class="dt-actions">'
+      +'<button class="dt-act" onclick="updateDealStatus('+i+')">상태 변경</button>'
+      +'<button class="dt-act" onclick="refreshSingleDeal('+i+')">AI 업데이트</button>'
+      +'<button class="dt-act del" onclick="removeDeal('+i+')">삭제</button>'
+      +'</div></div>';
+  });
+  el.innerHTML=html;
+}
+function addDeal(){
+  var inp=document.getElementById('dealAddInp');var name=inp.value.trim();if(!name)return;
+  var deals=sgj('db_watchdeals')||[];
+  deals.push({name:name,status:'announced',meta:'',added:todayStr(),updated:''});
+  ssj('db_watchdeals',deals);renderDeals(deals);inp.value='';showToast(name+' 추가됨');
+}
+function removeDeal(idx){
+  var deals=sgj('db_watchdeals')||[];deals.splice(idx,1);ssj('db_watchdeals',deals);renderDeals(deals);showToast('삭제됨');
+}
+function updateDealStatus(idx){
+  var deals=sgj('db_watchdeals')||[];
+  var cycle=['announced','progress','closed','failed'];
+  var cur=deals[idx].status||'announced';
+  var next=cycle[(cycle.indexOf(cur)+1)%cycle.length];
+  deals[idx].status=next;deals[idx].updated=todayStr();
+  ssj('db_watchdeals',deals);renderDeals(deals);
+}
+function refreshSingleDeal(idx){
+  var deals=sgj('db_watchdeals')||[];var d=deals[idx];if(!d)return;
+  showToast(d.name+' 업데이트 중...');
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var prompt='"'+d.name+'" 딜의 최신 상태를 알려줘. JSON으로:\n{"status":"announced|progress|closed|failed","meta":"현재 상태 2-3문장 요약. 가격, 구조, 타임라인, 규제 승인 등"}\nJSON만 반환.';
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:500,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else return;
+  p.then(function(raw){
+    try{var u=parseJ(raw);deals[idx].status=u.status||deals[idx].status;deals[idx].meta=u.meta||deals[idx].meta;deals[idx].updated=todayStr();ssj('db_watchdeals',deals);renderDeals(deals);showToast(d.name+' 업데이트됨');}
+    catch(e){showToast('업데이트 실패');}
+  }).catch(function(){showToast('업데이트 실패');});
+}
+function refreshDeals(){
+  var deals=sgj('db_watchdeals')||[];
+  if(!deals.length){showToast('딜이 없습니다');return;}
+  showToast(deals.length+'개 딜 업데이트 중...');
+  var chain=Promise.resolve();
+  deals.forEach(function(d,i){chain=chain.then(function(){return new Promise(function(ok){refreshSingleDeal(i);setTimeout(ok,2000);});});});
+}
+
+/* ── WEEKLY MEMO ────────────────────────────────────────── */
+function genWeeklyMemo(){
+  var res=document.getElementById('memoResult');
+  res.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">이번 주 브리핑 분석 중...</div></div>';
+  var weekData=[];
+  var now=new Date();
+  for(var i=6;i>=0;i--){
+    var d=new Date(now);d.setDate(d.getDate()-i);
+    var ds=d.toISOString().slice(0,10);
+    var b=sgj('db_brief_'+ds);if(b)weekData.push(b);
+  }
+  if(!weekData.length){res.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">이번 주 브리핑 데이터가 없습니다</div></div>';return;}
+  var briefSummary=weekData.map(function(b){
+    return b.date+': '+(b.headlines||[]).slice(0,5).map(function(h){return h.cat+' '+h.title;}).join('; ')
+      +(b.deals?'; Deals: '+b.deals.slice(0,3).map(function(d){return d.title;}).join(', '):'');
+  }).join('\n');
+  var deals=sgj('db_watchdeals')||[];
+  var dealCtx=deals.length?'\n워치리스트:\n'+deals.map(function(d){return d.name+' ('+d.status+'): '+(d.meta||'');}).join('\n'):'';
+  var ckey=sg('db_claude'),okey=sg('db_openai');
+  var prompt='당신은 일본 PE/부동산 투자펀드의 시니어 애널리스트입니다.\n이번 주 브리핑 데이터:\n'+briefSummary.slice(0,5000)+dealCtx+'\n\n위 내용을 기반으로 투자위원회(IC) 보고용 주간 메모를 JSON으로 작성:\n'
+    +'{"title":"Weekly Memo: 3/X~3/X","sections":[\n'
+    +'  {"h":"Executive Summary","body":"이번 주 핵심 테마 3-4문장"},\n'
+    +'  {"h":"매크로 & 마켓","bullets":["포인트1","포인트2","포인트3"]},\n'
+    +'  {"h":"일본 포커스","bullets":["포인트1","포인트2"]},\n'
+    +'  {"h":"딜 & M&A","bullets":["포인트1","포인트2"]},\n'
+    +'  {"h":"워치리스트 업데이트","bullets":["포인트1"]},\n'
+    +'  {"h":"다음 주 Key Watch","bullets":["포인트1","포인트2","포인트3"]}\n'
+    +']}\nJSON만 반환.';
+  var p;
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">API 키 필요</div></div>';return;}
+  p.then(function(raw){
+    try{
+      var m=parseJ(raw);
+      var html='<div class="memo-doc"><div class="memo-h1">'+esc(m.title||'Weekly IC Memo')+'</div>';
+      (m.sections||[]).forEach(function(sec){
+        html+='<div class="memo-h2">'+esc(sec.h)+'</div>';
+        if(sec.body)html+='<div class="memo-p">'+esc(sec.body).replace(/\n/g,'<br>')+'</div>';
+        if(sec.bullets)(sec.bullets||[]).forEach(function(b){html+='<div class="memo-bullet">'+esc(b)+'</div>';});
+      });
+      html+='</div>';
+      res.innerHTML=html;
+    }catch(e){res.innerHTML='<div style="padding:var(--s4);font-size:14px;color:var(--t2);line-height:1.7;background:var(--e1);border-radius:var(--r3);margin-top:var(--s3)">'+esc(raw).replace(/\n/g,'<br>')+'</div>';}
+  }).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
+}
+
+/* ── ALERTS ─────────────────────────────────────────────── */
+function loadAlerts(){
+  var alerts=sgj('db_alerts')||[];
+  renderAlerts(alerts);
+}
+function renderAlerts(alerts){
+  var el=document.getElementById('alertList');if(!el)return;
+  if(!alerts.length){el.innerHTML='<div style="padding:var(--s3) var(--s4);font-size:13px;color:var(--t3)">등록된 키워드 없음</div>';return;}
+  var html='<div style="padding:var(--s3) var(--s4);display:flex;flex-wrap:wrap">';
+  alerts.forEach(function(a,i){html+='<div class="al-chip">'+esc(a)+'<button onclick="removeAlert('+i+')">×</button></div>';});
+  html+='</div>';el.innerHTML=html;
+}
+function addAlert(){
+  var inp=document.getElementById('alertAddInp');var v=inp.value.trim();if(!v)return;
+  var alerts=sgj('db_alerts')||[];
+  if(alerts.indexOf(v)<0)alerts.push(v);
+  ssj('db_alerts',alerts);renderAlerts(alerts);inp.value='';showToast(v+' 알림 추가됨');
+  if(curBrief)renderCards(curBrief.headlines,curCat);
+}
+function removeAlert(idx){
+  var alerts=sgj('db_alerts')||[];alerts.splice(idx,1);ssj('db_alerts',alerts);renderAlerts(alerts);
+  if(curBrief)renderCards(curBrief.headlines,curCat);
+}
+function isAlertMatch(item){
+  var alerts=sgj('db_alerts')||[];if(!alerts.length)return false;
+  var txt=JSON.stringify(item).toLowerCase();
+  for(var i=0;i<alerts.length;i++){if(txt.indexOf(alerts[i].toLowerCase())>=0)return true;}
+  return false;
+}
 function loadCfg(){
   var saved=sgj('db_cfg');if(saved){for(var k in saved)cfg[k]=saved[k];}
   var togs=document.querySelectorAll('[id^="tog-"]');for(var i=0;i<togs.length;i++){var key=togs[i].id.replace('tog-','');if(key in cfg)togs[i].classList.toggle('on',cfg[key]!==false);}
@@ -1406,6 +1691,9 @@ function showToast(msg){var t=document.getElementById('toast');if(!t)return;t.te
 window.addEventListener('DOMContentLoaded',function(){
   var si=document.getElementById('srchInp');if(si)si.addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
   var ci=document.getElementById('chatInp');if(ci)ci.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+  var cpi=document.getElementById('compInp');if(cpi)cpi.addEventListener('keydown',function(e){if(e.key==='Enter')genComp();});
+  var dai=document.getElementById('dealAddInp');if(dai)dai.addEventListener('keydown',function(e){if(e.key==='Enter')addDeal();});
+  var ali=document.getElementById('alertAddInp');if(ali)ali.addEventListener('keydown',function(e){if(e.key==='Enter')addAlert();});
 });
 
 /* ── START ───────────────────────────────────────────────── */
