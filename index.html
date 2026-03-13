@@ -1469,13 +1469,42 @@ async function analyzePaste() {
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────
 function saveSetup() {
-  const g=document.getElementById('si-gemini').value.trim();
-  const cl=document.getElementById('si-claude').value.trim();
-  const o=document.getElementById('si-openai').value.trim();
-  if (!cl && !o) { showToast('Claude 또는 OpenAI 키 중 하나는 필요합니다'); return; }
-  if (g) S.set(K.gemini,g); if (cl) S.set(K.claude,cl); if (o) S.set(K.openai,o);
-  document.getElementById('setupScreen').style.display='none';
-  (async()=>{ try{ await init(); }catch(e){ console.error(e); showToast('오류: '+e.message); } })();
+  try {
+    const g = document.getElementById('si-gemini').value.trim();
+    const cl = document.getElementById('si-claude').value.trim();
+    const o = document.getElementById('si-openai').value.trim();
+    if (!cl && !o) {
+      alert('Claude 또는 OpenAI 키 중 하나는 필요합니다');
+      return;
+    }
+    if (g) S.set(K.gemini, g);
+    if (cl) S.set(K.claude, cl);
+    if (o) S.set(K.openai, o);
+    // Hide setup, show app directly
+    document.getElementById('setupScreen').style.display = 'none';
+    showMain();
+    updateDateUI();
+    updateCounts();
+    loadSchedUI();
+    checkSched();
+    // Now generate
+    (async () => {
+      try {
+        const cached = S.getJ(K.brief(curDate));
+        if (cached && !isStale(cached)) { renderBrief(cached); return; }
+        const remote = await fetchGithub(curDate);
+        if (remote) { S.setJ(K.brief(curDate), remote); renderBrief(remote); return; }
+        if (settings.autoGen) await autoGen(curDate);
+        else renderEmpty('📰','브리핑 없음','지금 생성',()=>autoGen(curDate));
+      } catch(e) {
+        console.error('Generate error:', e);
+        renderEmpty('❌','생성 실패: '+e.message,'다시 시도',()=>autoGen(curDate));
+      }
+    })();
+  } catch(e) {
+    console.error('saveSetup error:', e);
+    alert('오류: ' + e.message);
+  }
 }
 
 function saveKeys() {
