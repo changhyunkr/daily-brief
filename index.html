@@ -617,7 +617,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
     </div>
     <button class="su-btn" onclick="saveSetup()">시작하기</button>
-  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v20 · Built 2026-03-14 v20</div>
+  <div style="font-size:11px;color:var(--t3);margin-top:var(--s3);text-align:center">Daily Brief v22 · Built 2026-03-14 v22</div>
   <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(255,59,48,.12);border-radius:8px;font-size:14px;color:#FF3B30;line-height:1.5"></div>
   </div>
 
@@ -901,7 +901,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v20<br>Built 2026-03-14 v20</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v22<br>Built 2026-03-14 v22</div>
         </div>
       </div>
 
@@ -947,7 +947,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 <div class="toast" id="toast"></div>
 
 <script>
-/* Daily Brief v20 — clean ES5, no template literals, no const/let at top scope */
+/* Daily Brief v22 — clean ES5, no template literals, no const/let at top scope */
 
 /* ── STORAGE ─────────────────────────────────────────────── */
 var _mem = {};
@@ -1003,6 +1003,13 @@ function startApp(){
   updateDateUI();updateCounts();loadSchedUI();checkSched();
   var cached=sgj('db_brief_'+curDate);
   if(cached&&!isStale(cached)){renderBrief(cached);return;}
+  var lastFail=parseInt(sg('db_lastfail')||'0');
+  var cooldown=120000;
+  if(Date.now()-lastFail<cooldown){
+    var ago=Math.round((Date.now()-lastFail)/1000);
+    renderEmpty('⏳','마지막 생성 시도 실패 ('+ago+'초 전)\nAPI rate limit 대기 중','수동 생성',function(){sr('db_lastfail');autoGen(curDate);});
+    return;
+  }
   fetchGithub(curDate).then(function(r){
     if(r){ssj('db_brief_'+curDate,r);renderBrief(r);}
     else if(cfg.autoGen){autoGen(curDate);}
@@ -1036,7 +1043,11 @@ function stepDone(n){var s=document.getElementById('ls'+n),i=document.getElement
 function autoGen(date){
   var ld=document.getElementById('loadingScreen');if(ld)ld.style.display='flex';
   stepOn(0);
-  fetchGemini(date).then(function(raw){
+  fetchGemini(date).catch(function(e){
+    console.warn('Gemini failed ('+e.message+'), falling back to Claude search');
+    showToast('Gemini 실패, Claude로 대체 중...');
+    return null;
+  }).then(function(raw){
     stepDone(0);stepOn(1);return structureAI(raw,date);
   }).then(function(brief){
     stepDone(1);stepOn(2);ssj('db_brief_'+date,brief);stepDone(2);stepOn(3);return delay(600);
@@ -1044,12 +1055,16 @@ function autoGen(date){
     stepDone(3);return delay(400);
   }).then(function(){
     if(ld)ld.style.display='none';
+    sr('db_lastfail');
     var b=sgj('db_brief_'+date);if(b)renderBrief(b);
     updateCounts();
   }).catch(function(err){
     if(ld)ld.style.display='none';
     console.error('autoGen:',err);
-    renderEmpty('X','생성 실패: '+err.message,'다시 시도',function(){autoGen(date);});
+    ss('db_lastfail',String(Date.now()));
+    var is429=err.message&&err.message.indexOf('429')>=0;
+    var msg=is429?'Gemini rate limit — 2분 후 다시 시도해주세요':'생성 실패: '+err.message;
+    renderEmpty('X',msg,'다시 시도',function(){sr('db_lastfail');autoGen(date);});
   });
 }
 
@@ -1088,14 +1103,24 @@ function fetchGemini(date){
     +'\n- Include exact numbers and daily change. Write N/A if not found.'
     +'\n\nReturn 10-20 items. Quality over quantity. NO fabrication.'
     +getFocusPrompt();
+  return geminiCall(key,prompt,0);
+}
+function geminiCall(key,prompt,attempt){
   return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+key,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.1,maxOutputTokens:10000}})
-  }).then(function(r){if(!r.ok)throw new Error('Gemini '+r.status);return r.json();})
-  .then(function(j){
-    var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
-    if(!parts)throw new Error('Gemini empty');
-    return parts.filter(function(p){return p.text;}).map(function(p){return p.text;}).join('\n');
+  }).then(function(r){
+    if(r.status===429&&attempt<2){
+      var wait=(attempt+1)*15000;
+      showToast('Gemini rate limit, '+Math.round(wait/1000)+'초 후 재시도...');
+      return delay(wait).then(function(){return geminiCall(key,prompt,attempt+1);});
+    }
+    if(!r.ok)throw new Error('Gemini '+r.status);
+    return r.json().then(function(j){
+      var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
+      if(!parts)throw new Error('Gemini empty');
+      return parts.filter(function(p){return p.text;}).map(function(p){return p.text;}).join('\n');
+    });
   });
 }
 
@@ -1369,7 +1394,7 @@ function speakSec(idx){
   speechSynthesis.speak(u);playing=true;paused=false;setIco(false);startTimer();
 }
 
-function stopAll(){if(audioEl){audioEl.pause();audioEl=null;}speechSynthesis.cancel();playing=false;paused=false;clearInterval(timerRef);setIco(true);}
+function stopAll(){try{if(audioEl){audioEl.pause();audioEl=null;}}catch(e){}try{speechSynthesis.cancel();}catch(e){}playing=false;paused=false;clearInterval(timerRef);setIco(true);}
 function pskip(d){elapsed=Math.max(0,Math.min(elapsed+d,totalSec));if(audioEl){audioEl.currentTime=elapsed;updateProg();return;}var i=secAt(elapsed);if(playing)speakFrom(i);else{pidx=i;renderPsecs();}updateProg();}
 function jumpPod(i){var s=0;for(var j=0;j<i;j++)s+=Math.ceil(psecs[j].text.length/6.5/spd);elapsed=s;if(audioEl){audioEl.currentTime=s;if(!playing){audioEl.play();playing=true;paused=false;setIco(false);}return;}if(playing)speakFrom(i);else{pidx=i;renderPsecs();}updateProg();}
 function secAt(s){var acc=0,r=0;for(var i=0;i<psecs.length;i++){var l=Math.ceil(psecs[i].text.length/6.5/spd);if(acc+l>s){r=i;break;}acc+=l;r=i;}return r;}
@@ -1936,7 +1961,7 @@ function genWeeklyMemo(){
   var now=new Date();
   for(var i=6;i>=0;i--){
     var d=new Date(now);d.setDate(d.getDate()-i);
-    var ds=d.toISOString().slice(0,10);
+    var ds=localDateStr(d);
     var b=sgj('db_brief_'+ds);if(b)weekData.push(b);
   }
   if(!weekData.length){res.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">이번 주 브리핑 데이터가 없습니다</div></div>';return;}
@@ -1991,17 +2016,19 @@ function addAlert(){
   var inp=document.getElementById('alertAddInp');var v=inp.value.trim();if(!v)return;
   var alerts=sgj('db_alerts')||[];
   if(alerts.indexOf(v)<0)alerts.push(v);
-  ssj('db_alerts',alerts);renderAlerts(alerts);inp.value='';showToast(v+' 알림 추가됨');
+  ssj('db_alerts',alerts);_alertCache=null;renderAlerts(alerts);inp.value='';showToast(v+' 알림 추가됨');
   if(curBrief)renderCards(curBrief.headlines,curCat);
 }
 function removeAlert(idx){
-  var alerts=sgj('db_alerts')||[];alerts.splice(idx,1);ssj('db_alerts',alerts);renderAlerts(alerts);
+  var alerts=sgj('db_alerts')||[];alerts.splice(idx,1);ssj('db_alerts',alerts);_alertCache=null;renderAlerts(alerts);
   if(curBrief)renderCards(curBrief.headlines,curCat);
 }
+var _alertCache=null;
 function isAlertMatch(item){
-  var alerts=sgj('db_alerts')||[];if(!alerts.length)return false;
+  if(!_alertCache)_alertCache=sgj('db_alerts')||[];
+  if(!_alertCache.length)return false;
   var txt=JSON.stringify(item).toLowerCase();
-  for(var i=0;i<alerts.length;i++){if(txt.indexOf(alerts[i].toLowerCase())>=0)return true;}
+  for(var i=0;i<_alertCache.length;i++){if(txt.indexOf(_alertCache[i].toLowerCase())>=0)return true;}
   return false;
 }
 function loadCfg(){
@@ -2023,20 +2050,34 @@ function updateCounts(){var n=skeys().filter(function(k){return k.startsWith('db
 function clearOld(){if(!confirm('30일 이전 데이터를 삭제할까요?'))return;var cut=new Date();cut.setDate(cut.getDate()-30);var n=0;skeys().filter(function(k){return k.startsWith('db_');}).forEach(function(k){var m=k.match(/(\d{4}-\d{2}-\d{2})/);if(m&&new Date(m[1])<cut){sr(k);n++;}});updateCounts();showToast(n+'개 삭제됐습니다');}
 
 /* ── SCHEDULE ────────────────────────────────────────────── */
-function checkSched(){var t=sg('db_sched')||'06:00';var now=new Date();if(now.getHours()>=21){var tom=new Date(now);tom.setDate(tom.getDate()+1);var ts=tom.toISOString().slice(0,10);if(sg('db_lastpre')!==ts&&!sgj('db_brief_'+ts)){ss('db_lastpre',ts);setTimeout(function(){silentGen(ts);},5000);}}updateSchedLbl(t);}
+function checkSched(){var t=sg('db_sched')||'06:00';var now=new Date();if(now.getHours()>=21){var tom=new Date(now);tom.setDate(tom.getDate()+1);var ts=localDateStr(tom);if(sg('db_lastpre')!==ts&&!sgj('db_brief_'+ts)){ss('db_lastpre',ts);setTimeout(function(){silentGen(ts);},5000);}}updateSchedLbl(t);}
 function silentGen(date){if(!sg('db_claude')&&!sg('db_openai'))return;var ex=sgj('db_brief_'+date);if(ex&&!isStale(ex))return;fetchGemini(date).catch(function(){return null;}).then(function(r){return structureAI(r,date);}).then(function(b){b.date=date;ssj('db_brief_'+date,b);updateCounts();if(curDate===date)renderBrief(b);showToast(dateLbl(date)+' 브리핑 준비됨');}).catch(function(e){console.warn('Silent gen:',e.message);});}
 function saveSched(){var t=document.getElementById('schedTime').value;ss('db_sched',t);updateSchedLbl(t);showToast('매일 '+t+' 이후 열면 브리핑이 준비됩니다');}
 function loadSchedUI(){var t=sg('db_sched')||'06:00';var el=document.getElementById('schedTime');if(el)el.value=t;updateSchedLbl(t);}
 function updateSchedLbl(t){var el=document.getElementById('schedLabel');if(!el)return;var pts=t.split(':');var h=parseInt(pts[0]),m=parseInt(pts[1]);var now=new Date(),next=new Date(now);next.setHours(h,m,0,0);if(next<=now)next.setDate(next.getDate()+1);var diff=Math.round((next-now)/60000);el.textContent=t+' · '+(Math.floor(diff/60)>0?Math.floor(diff/60)+'시간 '+(diff%60)+'분 후':(diff%60)+'분 후');}
-function preGenTom(){var tom=new Date();tom.setDate(tom.getDate()+1);var ts=tom.toISOString().slice(0,10);if(sgj('db_brief_'+ts)&&!isStale(sgj('db_brief_'+ts))){showToast(dateLbl(ts)+' 이미 준비됨');return;}showToast('내일 브리핑 생성 시작...');silentGen(ts);}
+function preGenTom(){var tom=new Date();tom.setDate(tom.getDate()+1);var ts=localDateStr(tom);if(sgj('db_brief_'+ts)&&!isStale(sgj('db_brief_'+ts))){showToast(dateLbl(ts)+' 이미 준비됨');return;}showToast('내일 브리핑 생성 시작...');silentGen(ts);}
 
 /* ── NAV / TABS ──────────────────────────────────────────── */
-function navDate(d){var dt=new Date(curDate+'T00:00:00');dt.setDate(dt.getDate()+d);var nd=dt.toISOString().slice(0,10);if(nd>todayStr())return;curDate=nd;updateDateUI();stopAll();elapsed=0;psecs=[];curBrief=null;document.getElementById('playerBar').classList.remove('show');var c=sgj('db_brief_'+nd);if(c)renderBrief(c);else renderEmpty('📰',dateLbl(nd)+' 없음','지금 생성',function(){autoGen(nd);});}
+function navDate(d){
+  var dt=new Date(curDate+'T12:00:00');dt.setDate(dt.getDate()+d);
+  var nd=localDateStr(dt);if(nd>todayStr())return;
+  curDate=nd;updateDateUI();
+  elapsed=0;psecs=[];curBrief=null;
+  document.getElementById('playerBar').classList.remove('show');
+  document.getElementById('cardsList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">불러오는 중...</div></div>';
+  if(playing)try{stopAll();}catch(e){}
+  setTimeout(function(){
+    var c=sgj('db_brief_'+nd);
+    if(c){renderBrief(c);}
+    else{renderEmpty('📰',dateLbl(nd)+' 없음','지금 생성',function(){autoGen(nd);});}
+  },50);
+}
 function updateDateUI(){var el=document.getElementById('dateLbl');if(el)el.textContent=dateLbl(curDate);var nb=document.getElementById('nextBtn');if(nb)nb.disabled=curDate>=todayStr();var pd=document.getElementById('podDateLbl');if(pd)pd.textContent=dateLbl(curDate);}
 function goTab(id){var panes=document.querySelectorAll('.pane');for(var i=0;i<panes.length;i++)panes[i].classList.remove('on');var tbbs=document.querySelectorAll('.tb-btn');for(var i=0;i<tbbs.length;i++)tbbs[i].classList.remove('on');var pane=document.getElementById('pane-'+id);if(pane)pane.classList.add('on');var tbb=document.getElementById('tbb-'+id);if(tbb)tbb.classList.add('on');if(id==='pod'&&!psecs.length&&sgj('db_brief_'+curDate))genPod(curDate,curLen);}
 
 /* ── HELPERS ─────────────────────────────────────────────── */
-function todayStr(){return new Date().toISOString().slice(0,10);}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());}
+function localDateStr(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());}
 function dateLbl(d){return new Date(d+'T00:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});}
 function isStale(d){return !d.generatedAt||(Date.now()-d.generatedAt>12*3600*1000);}
 function fmtT(s){return Math.floor(s/60)+':'+pad2(s%60);}
