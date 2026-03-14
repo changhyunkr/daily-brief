@@ -155,16 +155,20 @@ async function structureWithOpenAI(rawNews, date) {
   if (!OPENAI_KEY) return null;
   console.log('Step 2 (OpenAI fallback)...');
   const prompt = `Structure this news into a daily investment brief JSON for ${date} JST.
+CRITICAL: Only use information from the raw data below. NEVER fabricate. If fewer items exist, return fewer.
 ${rawNews ? `News:\n${rawNews.slice(0, 6000)}` : 'Search for top news for Japan PE/RE investor.'}
-Return ONLY JSON: {"date":"${date}","generatedAt":${Date.now()},"generatedBy":"github-actions","model":"gemini+gpt4o","headlines":[{"id":"h1","cat":"일본","title":"Korean title","summary":"Korean summary","detail":"Korean detail","implications":"PE/RE angle","source":"Source","url":"https://url"}],"market":{"jgb10y":{"v":"—","d":"—","t":0},"usdjpy":{"v":"—","d":"—","t":0},"nikkei":{"v":"—","d":"—","t":0},"sp500":{"v":"—","d":"—","t":0},"wti":{"v":"—","d":"—","t":0},"usdkrw":{"v":"—","d":"—","t":0}},"deals":[{"id":"d1","title":"Deal","value":"$Xbn","type":"M&A","summary":"Summary","source":"Source","url":"https://url"}],"watch":[{"n":1,"text":"Watch1"},{"n":2,"text":"Watch2"},{"n":3,"text":"Watch3"}]}
-14-18 headlines, 4-8 deals. Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국`;
+Return ONLY JSON: {"date":"${date}","generatedAt":${Date.now()},"generatedBy":"github-actions","model":"gemini+gpt4o","headlines":[{"id":"h1","cat":"일본","title":"구체적 헤드라인","time":"3/14 06:30","summary":"팩트 기반 2문장","detail":"3-4문장 분석","implications":"구체적 수치 시나리오 + 포트폴리오 영향 + action item","source":"실제 출처","url":"실제 URL 또는 빈문자열"}],"market":{"jgb10y":{"v":"실제수치 또는 N/A","d":"변동 또는 —","t":0},"usdjpy":{"v":"","d":"","t":0},"nikkei":{"v":"","d":"","t":0},"sp500":{"v":"","d":"","t":0},"wti":{"v":"","d":"","t":0},"usdkrw":{"v":"","d":"","t":0}},"deals":[{"id":"d1","title":"실제 딜명","time":"3/14","value":"금액","type":"유형","summary":"요약","source":"출처","url":"URL"}],"watch":[{"n":1,"text":"관전1"},{"n":2,"text":"관전2"},{"n":3,"text":"관전3"}]}
+Include ONLY real items. Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국`;
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
     body: JSON.stringify({ model: 'gpt-4o', max_tokens: 5000, messages: [{ role: 'user', content: prompt }] })
   });
-  if (!res.ok) throw new Error(`OpenAI: ${res.status}`);
+  if (!res.ok) {
+    const errBody = await res.text().catch(() => '');
+    throw new Error(`OpenAI ${res.status}: ${errBody.slice(0, 200)}`);
+  }
   const json = await res.json();
   console.log('  ✓ OpenAI done');
   return parseJSON(json.choices[0].message.content);

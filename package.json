@@ -1,6 +1,7 @@
 {
   "name": "daily-brief-generator",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "type": "module",
   "description": "Automated daily briefing generator for Japan PE/RE investor",
   "main": "generate.js",
   "dependencies": {
