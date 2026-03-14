@@ -2,17 +2,13 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Daily Brief">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme:dark)">
-<meta name="theme-color" content="#FAF7F2" media="(prefers-color-scheme:light)">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Daily Brief</title>
-<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
 :root{--bg:#000;--card:#111;--s2:#1A1A1A;--s3:#242424;--t1:#E8E6E0;--t2:#A09A90;--t3:#7A756E;--accent:#C9A84C;--accent-bg:rgba(201,168,76,.08);--cat1:#C45A6A;--cat2:#5B8EC0;--cat3:#9070C0;--green:#2D8B6A;--red:#C45A5A;--sep:rgba(255,255,255,.06);--r:12px;--sat:env(safe-area-inset-top,44px);--sab:env(safe-area-inset-bottom,20px);--serif:'Fraunces',Georgia,serif;--sans:'Plus Jakarta Sans',sans-serif}
 .light{--bg:#FAF7F2;--card:#FFF;--s2:#F0EBE3;--s3:#E4DDD3;--t1:#1A1A1A;--t2:#5C5650;--t3:#8A8480;--accent:#A38232;--accent-bg:rgba(163,130,50,.07);--cat1:#7A1D2A;--cat2:#2C5282;--cat3:#6A3296;--green:#1B7A4E;--red:#7A1D2A;--sep:rgba(0,0,0,.08)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -20,7 +16,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 .app{display:flex;flex-direction:column;height:100%}
 
 /* NAV */
-.nav{padding:48px 14px 4px;display:flex;align-items:center;gap:6px;position:relative}
+.nav{padding:calc(var(--sat) + 4px) 14px 4px;display:flex;align-items:center;gap:6px;position:relative}
 .nav-brand{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--accent)}
 .date-nav{display:flex;align-items:center;gap:5px;position:absolute;left:50%;transform:translateX(-50%)}
 .date-nav b{font-size:14px;font-weight:600;color:var(--t2);min-width:82px;text-align:center}
@@ -181,269 +177,308 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 .pp-skip{width:40px;height:40px;position:relative;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .pp-skip svg{width:40px;height:40px}
 .pp-play{width:56px;height:56px;border-radius:50%;background:var(--t1);color:var(--bg);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
-
-/* ═══ SETUP ═══ */
+#mainArea.show{display:flex!important;flex-direction:column;flex:1;min-width:0;overflow:hidden}
 .setup{position:fixed;inset:0;z-index:500;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(var(--sat)+20px) 16px calc(var(--sab)+20px)}
 .su-eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
 .su-h{font-family:var(--serif);font-size:28px;font-weight:700;margin-bottom:8px}
 .su-p{font-size:15px;color:var(--t2);line-height:1.6;margin-bottom:20px}
 .cost-box{background:var(--card);border:1px solid var(--sep);border-radius:12px;overflow:hidden;margin-bottom:16px}
-.cost-row{display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--sep);font-size:15px}
-.cost-row:last-child{border-bottom:none}
-.cost-free{color:var(--green);font-weight:500}.cost-gold{color:var(--accent);font-weight:500}.cost-dim{color:var(--t3)}
+.cost-row{display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--sep);font-size:15px}.cost-row:last-child{border-bottom:none}
+.cost-free{color:var(--green)}.cost-gold{color:var(--accent)}.cost-dim{color:var(--t3)}
 .inp-group{background:var(--card);border:1px solid var(--sep);border-radius:12px;overflow:hidden;margin-bottom:16px}
-.inp-row{padding:0 16px;border-bottom:1px solid var(--sep);min-height:44px;display:flex;align-items:center;gap:12px}
-.inp-row:last-child{border-bottom:none}
+.inp-row{padding:0 16px;border-bottom:1px solid var(--sep);min-height:44px;display:flex;align-items:center;gap:12px}.inp-row:last-child{border-bottom:none}
 .inp-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
 .ico-g{background:linear-gradient(135deg,#4285F4,#34A853)}.ico-a{background:linear-gradient(135deg,#CC785C,#E8927C)}.ico-o{background:linear-gradient(135deg,#10a37f,#0d8a6b)}
 .inp-label{font-size:13px;font-weight:500}.inp-sub{font-size:11px;color:var(--t3)}
 .badge-free{font-size:10px;font-weight:600;color:var(--green);background:rgba(45,139,106,.12);padding:1px 6px;border-radius:4px;margin-left:6px}
-.badge-opt{font-size:10px;font-weight:600;color:var(--t3);background:var(--s2);padding:1px 6px;border-radius:4px;margin-left:6px}
-.api-inp{width:100%;background:transparent;border:none;outline:none;font-size:14px;color:var(--t1);padding:8px 0;font-family:ui-monospace,Menlo,monospace;min-height:36px}
-.api-inp::placeholder{color:var(--t3);font-family:var(--sans)}
-.su-btn{width:100%;height:50px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:17px;font-weight:600;cursor:pointer;margin-top:8px}
-.su-btn:active{opacity:.75}
-/* ═══ LOADING ═══ */
-.loading{position:fixed;inset:0;z-index:400;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:32px}
-.loading.show{display:flex}
-.ld-logo{font-family:var(--serif);font-size:12px;font-weight:600;letter-spacing:.2em;color:var(--t3);text-transform:uppercase}
-.ld-steps{width:100%;max-width:280px}
-.ld-step{display:flex;align-items:center;gap:12px;padding:8px 0;opacity:.25;transition:opacity .4s}
-.ld-step.on{opacity:1}.ld-step.ok{opacity:.55}
-.ld-dot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--sep);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px}
-.ld-dot.spin{border-color:var(--accent);border-top-color:transparent;animation:spin .7s linear infinite}
-.ld-dot.done{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-@keyframes spin{to{transform:rotate(360deg)}}
-.ld-txt{font-size:14px;color:var(--t2)}
-/* ═══ PANES ═══ */
-.pane{display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px}
-.pane::-webkit-scrollbar{display:none}
-.pane.on{display:block}
-/* ═══ CHAT ═══ */
-.chat-wrap{display:flex;flex-direction:column;height:100%}
-.chat-msgs{flex:1;overflow-y:auto;padding:12px 14px}
-.chat-msg{margin-bottom:12px}.chat-bubble{padding:10px 14px;border-radius:12px;font-size:15px;line-height:1.6;max-width:85%}
-.chat-msg.ai .chat-bubble{background:var(--card);border:1px solid var(--sep);color:var(--t2)}
-.chat-msg.user .chat-bubble{background:var(--accent);color:#000;margin-left:auto}
-.chat-bar{display:flex;gap:6px;padding:8px 14px;border-top:1px solid var(--sep)}
-.chat-inp{flex:1;height:36px;border-radius:18px;border:1px solid var(--sep);background:var(--s2);padding:0 14px;font-size:14px;color:var(--t1);outline:none;font-family:var(--sans)}
-.chat-send{width:36px;height:36px;border-radius:50%;border:none;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center}
-.chat-send svg{width:16px;height:16px;fill:#000}
-/* ═══ SEARCH ═══ */
-.srch-wrap{padding:12px 14px}.srch-bar{display:flex;gap:8px;margin-bottom:12px}
-.srch-bar input{flex:1;height:36px;border-radius:12px;border:1px solid var(--sep);background:var(--s2);padding:0 14px;font-size:14px;color:var(--t1);outline:none}
-.srch-go{height:36px;padding:0 16px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:14px;font-weight:600}
-.paste-box{background:var(--card);border:1px solid var(--sep);border-radius:var(--r);padding:14px;margin-bottom:12px}
-.paste-hdr-t{font-size:15px;font-weight:600;margin-bottom:4px}.paste-hdr-s{font-size:13px;color:var(--t3);line-height:1.5;margin-bottom:8px}
-.paste-ta{width:100%;height:100px;border:1px solid var(--sep);border-radius:8px;background:var(--s2);color:var(--t1);font-size:14px;padding:10px;resize:none;outline:none;font-family:var(--sans)}
-.paste-actions{display:flex;gap:8px;margin-top:8px}
-.paste-go{flex:1;height:36px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:14px;font-weight:600}
-.paste-clr{height:36px;padding:0 16px;border-radius:12px;border:1px solid var(--sep);background:var(--s2);color:var(--t3);font-size:14px}
-/* ═══ SETTINGS ═══ */
-.set-wrap{padding:12px 14px calc(var(--sab)+20px)}
-.set-lbl{font-size:13px;font-weight:700;color:var(--t3);padding:16px 0 6px;letter-spacing:.04em;text-transform:uppercase}
-.set-grp{background:var(--card);border:1px solid var(--sep);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
-.set-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--sep);min-height:44px;cursor:pointer}
-.set-row:last-child{border-bottom:none}
-.set-row-lbl{font-size:15px;flex:1}.set-row-val{font-size:15px;color:var(--t3)}
-.set-inp{width:100%;background:transparent;border:none;outline:none;font-size:15px;color:var(--t1);padding:12px 16px}
-.set-inp-row{border-bottom:1px solid var(--sep)}.set-inp-row:last-child{border-bottom:none}
-.set-btn{width:100%;padding:12px;border:none;background:transparent;color:var(--accent);font-size:15px;font-weight:500;border-top:1px solid var(--sep);cursor:pointer}
-.set-btn.danger{color:var(--red)}
-.ios-tog{width:51px;height:31px;border-radius:15.5px;border:none;background:var(--s3);position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}
-.ios-tog.on{background:var(--accent)}
-.ios-tog::after{content:'';position:absolute;width:27px;height:27px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.ios-tog.on::after{transform:translateX(20px)}
-.api-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--sep)}.api-row:last-child{border-bottom:none}
-.api-info{display:flex;flex-direction:column;gap:2px;min-width:70px}.api-name{font-size:14px;font-weight:500}.api-status{font-size:11px;color:var(--t3)}
-.api-del{width:28px;height:28px;border-radius:50%;border:1px solid var(--sep);background:var(--s2);color:var(--red);font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
-.tool-pills{display:flex;gap:6px;padding:0 0 12px;overflow-x:auto}
-.chip{padding:6px 14px;border-radius:14px;border:1px solid var(--sep);background:transparent;color:var(--t3);font-size:13px;font-weight:600;white-space:nowrap}
-.chip.on{background:var(--accent-bg);border-color:rgba(201,168,76,.3);color:var(--accent)}
-.tool-panel{margin-bottom:16px}
-.src-add-row{display:flex;gap:8px;padding:8px 16px;border-bottom:1px solid var(--sep)}
-.src-add-inp{flex:1;background:transparent;border:none;outline:none;font-size:14px;color:var(--t1)}
-.src-add-btn{background:var(--accent);color:#000;border:none;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600}
-/* ═══ SHEET ═══ */
-.ov{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s}
-.ov.show{opacity:1;pointer-events:auto}
-.sheet{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--card);border-radius:16px 16px 0 0;max-height:85vh;overflow:hidden;transform:translateY(100%);transition:transform .3s}
-.sheet.show{transform:translateY(0)}
-.sheet-handle-wrap{display:flex;justify-content:center;padding:10px 0 6px}
-.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--s3)}
-.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 32px;max-height:calc(85vh - 40px)}
-.sh-title{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.3;margin-bottom:12px}
-.sh-body{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:12px}
-.sh-imp{padding:12px 14px;background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;margin-bottom:12px}
-.sh-imp-lbl{font-size:11px;font-weight:700;color:var(--accent);margin-bottom:4px}
-.sh-imp-txt{font-size:14px;color:var(--t2);line-height:1.55}
-.sh-footer{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.sh-src{font-size:13px;color:var(--t3)}.sh-link{font-size:14px;color:var(--accent);font-weight:600;text-decoration:none}
-.sh-close{width:100%;padding:12px;border-radius:12px;border:1px solid var(--sep);background:var(--s2);color:var(--t2);font-size:15px;font-weight:500;margin-bottom:8px;cursor:pointer}
-.ncat{font-size:12px;font-weight:700;padding:2px 8px;border-radius:8px;display:inline-flex}
-.c-일본,.c-일본{background:rgba(196,90,106,.1);color:var(--cat1)}.c-미국{background:rgba(91,142,192,.1);color:var(--cat2)}.c-한국{background:rgba(144,112,192,.1);color:var(--cat3)}.c-글로벌,.c-매크로{background:rgba(201,168,76,.1);color:var(--accent)}.c-딜{background:rgba(45,139,106,.1);color:var(--green)}.c-화제{background:rgba(192,112,160,.1);color:#C070A0}.c-아시아{background:rgba(201,168,76,.1);color:var(--accent)}
-/* ═══ PODCAST OVERLAY ═══ */
-.pod-ov{display:none;position:fixed;inset:0;z-index:100;background:var(--bg);flex-direction:column}
-.pod-ov.show{display:flex}
-.pod-top{padding:calc(var(--sat)+4px) 14px 6px;display:flex;align-items:center;border-bottom:1px solid var(--sep)}
-.pod-down{font-size:20px;color:var(--t3);background:none;border:none;padding:4px;cursor:pointer}
-.pod-top-info{flex:1;text-align:center}.pod-top-t{font-size:14px;font-weight:600}.pod-top-s{font-size:12px;color:var(--t3)}
-.pod-len{display:flex;justify-content:center;gap:6px;padding:8px 0;border-bottom:1px solid var(--sep)}
-.pod-len button{font-size:13px;padding:5px 14px;border-radius:14px;border:1px solid var(--sep);background:transparent;color:var(--t3);font-weight:600;cursor:pointer}
-.pod-len button.on{background:var(--accent-bg);border-color:rgba(201,168,76,.3);color:var(--accent)}
-.pod-tabs{display:flex;padding:0 20px;border-bottom:1px solid var(--sep)}
-.pod-tab{flex:1;text-align:center;padding:8px 0;font-size:13px;font-weight:600;color:var(--t3);border:none;border-bottom:2px solid transparent;background:none;cursor:pointer}
-.pod-tab.on{color:var(--accent);border-bottom-color:var(--accent)}
-.pod-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 16px 20px}
-.pod-body::-webkit-scrollbar{display:none}
-.ps{padding:10px 0;border-bottom:1px solid var(--sep);display:flex;gap:8px;align-items:flex-start;cursor:pointer}
-.ps.playing{background:var(--accent-bg);margin:0 -8px;padding:10px 8px;border-radius:10px;border:none}
-.ps-n{font-size:14px;font-weight:700;color:var(--accent);min-width:20px;margin-top:1px}
-.ps-body{flex:1}.ps-name{font-size:15px;font-weight:600;margin-bottom:2px}.ps-sum{font-size:13px;color:var(--t2);line-height:1.4}
-.ps-dur{font-size:12px;color:var(--t3);flex-shrink:0;margin-top:1px}
-.lyrics{padding:16px 0}.ll{font-size:16px;color:var(--t3);line-height:2;padding:2px 0;transition:color .3s}
-.ll.active{color:var(--t1);font-weight:600}.ll.past{opacity:.4}
-.copy-btn{margin-top:12px;padding:10px;width:100%;border-radius:10px;border:1px solid var(--sep);background:var(--s2);color:var(--t2);font-size:14px;font-weight:600;text-align:center;cursor:pointer}
-.pod-player{border-top:1px solid var(--sep);background:var(--card);padding:8px 20px calc(var(--sab)+4px)}
-.pp-prog{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.pp-time{font-size:11px;color:var(--t3);font-variant-numeric:tabular-nums;min-width:32px}
-.pp-time:last-child{text-align:right}
-.pp-bar{flex:1;height:4px;background:var(--s3);border-radius:2px;cursor:pointer}
-.pp-fill{height:100%;background:var(--accent);border-radius:2px;width:0%}
-.pp-ctrls{display:flex;align-items:center;justify-content:center;gap:28px}
-.pp-spd{font-size:14px;font-weight:700;color:var(--accent);background:none;border:none;min-width:28px;cursor:pointer}
-.pp-skip{width:40px;height:40px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.pp-skip svg{width:40px;height:40px}
-.pp-play{width:56px;height:56px;border-radius:50%;background:var(--t1);color:var(--bg);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
-/* ═══ TOAST ═══ */
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--sep);color:var(--t2);padding:10px 20px;border-radius:12px;font-size:14px;opacity:0;transition:all .3s;z-index:200;pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center}
-.empty-ico{font-size:40px;margin-bottom:12px}.empty-txt{font-size:15px;color:var(--t3);line-height:1.5}
-.empty-btn{margin-top:12px;padding:10px 20px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:15px;font-weight:600;cursor:pointer}
-
+.badge-opt{font-size:10px;color:var(--t3);background:var(--s2);padding:1px 6px;border-radius:4px;margin-left:6px}
+.api-inp{width:100%;background:transparent;border:none;outline:none;font-size:14px;color:var(--t1);padding:8px 0;font-family:ui-monospace,Menlo,monospace;min-height:36px}.api-inp::placeholder{color:var(--t3)}
+.su-btn{width:100%;height:50px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:17px;font-weight:600;cursor:pointer}.su-btn:active{opacity:.75}
+.loading{position:fixed;inset:0;z-index:400;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:32px}.loading.show{display:flex}
+.ld-logo{font-family:var(--serif);font-size:12px;font-weight:600;letter-spacing:.2em;color:var(--t3)}.ld-steps{width:100%;max-width:280px}
+.ld-step{display:flex;align-items:center;gap:12px;padding:8px 0;opacity:.25;transition:opacity .4s}.ld-step.on{opacity:1}.ld-step.ok{opacity:.55}
+.ld-dot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--sep);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px}.ld-dot.spin{border-color:var(--accent);border-top-color:transparent;animation:spin .7s linear infinite}.ld-dot.done{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+@keyframes spin{to{transform:rotate(360deg)}}.ld-txt{font-size:14px;color:var(--t2)}
+.pane{display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px}.pane::-webkit-scrollbar{display:none}.pane.on{display:block}
+.chat-wrap{display:flex;flex-direction:column;height:100%}.chat-msgs{flex:1;overflow-y:auto;padding:12px 14px}.chat-msg{margin-bottom:12px}.chat-bubble{padding:10px 14px;border-radius:12px;font-size:15px;line-height:1.6;max-width:85%}.chat-msg.ai .chat-bubble{background:var(--card);border:1px solid var(--sep);color:var(--t2)}.chat-msg.user .chat-bubble{background:var(--accent);color:#000;margin-left:auto}.chat-bar{display:flex;gap:6px;padding:8px 14px;border-top:1px solid var(--sep)}.chat-inp{flex:1;height:36px;border-radius:18px;border:1px solid var(--sep);background:var(--s2);padding:0 14px;font-size:14px;color:var(--t1);outline:none}.chat-send{width:36px;height:36px;border-radius:50%;border:none;background:var(--accent);color:#000;display:flex;align-items:center;justify-content:center}.chat-send svg{width:16px;height:16px;fill:#000}
+.srch-wrap{padding:12px 14px}.srch-bar{display:flex;gap:8px;margin-bottom:12px}.srch-bar input{flex:1;height:36px;border-radius:12px;border:1px solid var(--sep);background:var(--s2);padding:0 14px;font-size:14px;color:var(--t1);outline:none}.srch-go{height:36px;padding:0 16px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:14px;font-weight:600}
+.paste-box{background:var(--card);border:1px solid var(--sep);border-radius:var(--r);padding:14px;margin-bottom:12px}.paste-hdr-t{font-size:15px;font-weight:600;margin-bottom:4px}.paste-ta{width:100%;height:100px;border:1px solid var(--sep);border-radius:8px;background:var(--s2);color:var(--t1);font-size:14px;padding:10px;resize:none;outline:none}.paste-actions{display:flex;gap:8px;margin-top:8px}.paste-go{flex:1;height:36px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:14px;font-weight:600}.paste-clr{height:36px;padding:0 16px;border-radius:12px;border:1px solid var(--sep);background:var(--s2);color:var(--t3);font-size:14px}
+.set-wrap{padding:12px 14px calc(var(--sab)+20px)}.set-lbl{font-size:13px;font-weight:700;color:var(--t3);padding:16px 0 6px;letter-spacing:.04em;text-transform:uppercase}.set-grp{background:var(--card);border:1px solid var(--sep);border-radius:var(--r);overflow:hidden;margin-bottom:8px}.set-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--sep);min-height:44px;cursor:pointer}.set-row:last-child{border-bottom:none}.set-row-lbl{font-size:15px;flex:1}.set-row-val{font-size:15px;color:var(--t3)}.set-inp{width:100%;background:transparent;border:none;outline:none;font-size:15px;color:var(--t1);padding:12px 16px}.set-inp-row{border-bottom:1px solid var(--sep)}.set-inp-row:last-child{border-bottom:none}.set-btn{width:100%;padding:12px;border:none;background:transparent;color:var(--accent);font-size:15px;font-weight:500;border-top:1px solid var(--sep);cursor:pointer}.set-btn.danger{color:var(--red)}
+.ios-tog{width:51px;height:31px;border-radius:15.5px;border:none;background:var(--s3);position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}.ios-tog.on{background:var(--accent)}.ios-tog::after{content:"";position:absolute;width:27px;height:27px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}.ios-tog.on::after{transform:translateX(20px)}
+.api-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--sep)}.api-row:last-child{border-bottom:none}.api-info{display:flex;flex-direction:column;gap:2px;min-width:70px}.api-name{font-size:14px;font-weight:500}.api-status{font-size:11px;color:var(--t3)}.api-del{width:28px;height:28px;border-radius:50%;border:1px solid var(--sep);background:var(--s2);color:var(--red);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.tool-pills{display:flex;gap:6px;padding:0 0 12px;overflow-x:auto}.chip{padding:6px 14px;border-radius:14px;border:1px solid var(--sep);background:transparent;color:var(--t3);font-size:13px;font-weight:600;white-space:nowrap}.chip.on{background:var(--accent-bg);border-color:rgba(201,168,76,.3);color:var(--accent)}.tool-panel{margin-bottom:16px}
+.src-add-row{display:flex;gap:8px;padding:8px 16px;border-bottom:1px solid var(--sep)}.src-add-inp{flex:1;background:transparent;border:none;outline:none;font-size:14px;color:var(--t1)}.src-add-btn{background:var(--accent);color:#000;border:none;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600}
+.ov{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s}.ov.show{opacity:1;pointer-events:auto}.sheet{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--card);border-radius:16px 16px 0 0;max-height:85vh;overflow:hidden;transform:translateY(100%);transition:transform .3s}.sheet.show{transform:translateY(0)}.sheet-handle-wrap{display:flex;justify-content:center;padding:10px 0 6px}.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--s3)}.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 32px;max-height:calc(85vh - 40px)}
+.sh-title{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.3;margin-bottom:12px}.sh-body{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:12px}.sh-imp{padding:12px 14px;background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;margin-bottom:12px}.sh-imp-lbl{font-size:11px;font-weight:700;color:var(--accent);margin-bottom:4px}.sh-imp-txt{font-size:14px;color:var(--t2);line-height:1.55}.sh-footer{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.sh-src{font-size:13px;color:var(--t3)}.sh-link{font-size:14px;color:var(--accent);font-weight:600;text-decoration:none}.sh-close{width:100%;padding:12px;border-radius:12px;border:1px solid var(--sep);background:var(--s2);color:var(--t2);font-size:15px;font-weight:500;margin-bottom:8px;cursor:pointer}
+.ncat{font-size:12px;font-weight:700;padding:2px 8px;border-radius:8px;display:inline-flex}.c-일본{background:rgba(196,90,106,.1);color:var(--cat1)}.c-미국{background:rgba(91,142,192,.1);color:var(--cat2)}.c-한국{background:rgba(144,112,192,.1);color:var(--cat3)}.c-글로벌,.c-매크로{background:rgba(201,168,76,.1);color:var(--accent)}.c-딜{background:rgba(45,139,106,.1);color:var(--green)}.c-화제{background:rgba(192,112,160,.1);color:#C070A0}.c-아시아{background:rgba(201,168,76,.1);color:var(--accent)}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center}.empty-ico{font-size:40px;margin-bottom:12px}.empty-txt{font-size:15px;color:var(--t3);line-height:1.5}.empty-btn{margin-top:12px;padding:10px 20px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:15px;font-weight:600;cursor:pointer}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--sep);color:var(--t2);padding:10px 20px;border-radius:12px;font-size:14px;opacity:0;transition:all .3s;z-index:200;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 <div class="app">
-  <!-- SETUP -->
-  <div class="setup" id="setupScreen">
-    <div class="su-eyebrow">Daily Brief</div>
-    <div class="su-h">시작하기</div>
-    <div class="su-p">API 키를 설정하면 매일 자동으로 브리핑이 준비됩니다.</div>
-    <div class="cost-box"><div class="cost-row"><span>Gemini (뉴스 수집)</span><span class="cost-free">무료</span></div><div class="cost-row"><span>Claude (분석)</span><span class="cost-gold">~$1–2/월</span></div><div class="cost-row"><span>OpenAI (폴백)</span><span class="cost-dim">선택</span></div></div>
-    <div class="inp-group">
-      <div class="inp-row"><div class="inp-ico ico-g">G</div><div><div class="inp-label">Gemini<span class="badge-free">무료</span></div><div class="inp-sub">aistudio.google.com</div></div></div>
-      <div class="inp-row"><input class="api-inp" id="si-gemini" type="text" autocomplete="off" placeholder="AIza..."></div>
-      <div class="inp-row" style="border-top:1px solid var(--sep)"><div class="inp-ico ico-a">A</div><div><div class="inp-label">Claude</div><div class="inp-sub">console.anthropic.com</div></div></div>
-      <div class="inp-row"><input class="api-inp" id="si-claude" type="text" autocomplete="off" placeholder="sk-ant-api03-..."></div>
-      <div class="inp-row" style="border-top:1px solid var(--sep)"><div class="inp-ico ico-o">O</div><div><div class="inp-label">OpenAI<span class="badge-opt">선택</span></div><div class="inp-sub">platform.openai.com</div></div></div>
-      <div class="inp-row"><input class="api-inp" id="si-openai" type="text" autocomplete="off" placeholder="sk-proj-..."></div>
-    </div>
-    <button class="su-btn" onclick="saveSetup()">시작하기</button>
-    <div style="font-size:11px;color:var(--t3);margin-top:8px;text-align:center">Daily Brief v25</div>
-    <div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(196,90,106,.12);border-radius:8px;font-size:14px;color:var(--red);line-height:1.5"></div>
-  </div>
-  <!-- LOADING -->
-  <div class="loading" id="loadingScreen"><div class="ld-logo">Daily Brief</div><div class="ld-steps">
-    <div class="ld-step" id="ls0"><div class="ld-dot" id="li0"></div><span class="ld-txt">뉴스 수집 중</span></div>
-    <div class="ld-step" id="ls1"><div class="ld-dot" id="li1"></div><span class="ld-txt">AI 분석 및 구조화</span></div>
-    <div class="ld-step" id="ls2"><div class="ld-dot" id="li2"></div><span class="ld-txt">마켓 데이터 정리</span></div>
-    <div class="ld-step" id="ls3"><div class="ld-dot" id="li3"></div><span class="ld-txt">완성</span></div>
-  </div></div>
-  <!-- MAIN -->
-  <div id="mainArea" style="display:none;flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column">
-    <div class="nav">
-      <div class="nav-brand">Brief</div>
-      <div class="date-nav"><button id="navPrev" onclick="navDay(-1)">‹</button><b id="navDateLbl">—</b><button id="navNext" onclick="navDay(1)">›</button></div>
-      <div class="nb"><button onclick="rerunToday()" style="font-size:12px">↻</button></div>
-    </div>
-    <div class="rates" id="ratesBar"></div>
-    <div class="rs" id="rs"><div class="rs-top"><span class="rs-name" id="rsN"></span><span class="rs-val" id="rsV"></span><span class="rs-chg" id="rsC"></span><button class="rs-x" onclick="document.getElementById('rs').classList.remove('show')">✕</button></div><div class="rs-chart"><svg viewBox="0 0 300 44" preserveAspectRatio="none"><polyline points="0,40 40,36 80,34 120,28 160,24 200,18 240,14 280,10 300,8" fill="none" stroke="var(--accent)" stroke-width="2" opacity=".5"/></svg></div><div class="rs-why" id="rsW"></div></div>
-    <div style="flex:1;overflow:hidden;display:flex;flex-direction:column">
-      <!-- FEED -->
-      <div class="pane on" id="pane-feed">
-        <div class="audio" onclick="openPod()"><button class="au-play" onclick="event.stopPropagation();openPod()">▶</button><div class="au-info"><div class="au-t">오늘의 팟캐스트</div><div class="au-s" id="podDateLbl">—</div></div><div class="au-len"><button class="au-c on" onclick="event.stopPropagation();pickLen('short',this)">5분</button><button class="au-c" onclick="event.stopPropagation();pickLen('medium',this)">10분</button><button class="au-c" onclick="event.stopPropagation();pickLen('long',this)">20분</button></div></div>
-        <div id="cardsList"><div class="empty"><div class="empty-ico">📰</div><div class="empty-txt">불러오는 중...</div></div></div>
-        <div id="pastDays"></div>
-      </div>
-      <!-- RESEARCH -->
-      <div class="pane" id="pane-research">
-        <div class="srch-wrap">
-          <div class="srch-bar"><input id="srchInp" type="search" placeholder="뉴스 검색..." autocomplete="off" onkeydown="if(event.key==='Enter')doSearch()"><button class="srch-go" onclick="doSearch()">검색</button></div>
-          <div class="paste-box"><div class="paste-hdr-t">유료 기사 분석</div><div class="paste-hdr-s">닛케이·FT·Bloomberg 기사를 붙여넣으면 AI가 분석</div><textarea class="paste-ta" id="pasteArea" placeholder="기사 전문 붙여넣기..."></textarea><div class="paste-actions"><button class="paste-go" onclick="analyzePaste()">AI 분석</button><button class="paste-clr" onclick="document.getElementById('pasteArea').value=''">지우기</button></div></div>
-          <div id="pasteResult"></div><div id="srchResults"></div>
-        </div>
-        <div class="chat-wrap">
-          <div class="chat-msgs" id="chatMsgs"><div class="chat-msg ai"><div class="chat-bubble">브리핑이나 일본 PE/부동산에 대해 무엇이든 물어보세요.</div></div></div>
-          <div class="chat-bar"><input class="chat-inp" id="chatInp" placeholder="질문하기..." autocomplete="off" onkeydown="if(event.key==='Enter')sendChat()"><button class="chat-send" onclick="sendChat()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div>
-        </div>
-      </div>
-      <div class="pane" id="pane-brief" style="display:none"></div>
-      <div class="pane" id="pane-pod" style="display:none"><div id="podH" style="display:none"></div><div id="ttsModeLabel" style="display:none"></div><div id="ttsStatus" style="display:none"></div></div>
-      <div class="pane" id="pane-chat" style="display:none"></div>
-      <div class="pane" id="pane-search" style="display:none"></div>
-      <div class="pane" id="pane-deepdive" style="display:none"><div id="ddContent"></div></div>
-      <!-- TOOLS -->
-      <div class="pane" id="pane-tools"><div class="set-wrap">
-        <div class="tool-pills"><button class="chip on" id="tp-comp" onclick="showTool('comp')">📊 Comp</button><button class="chip" id="tp-deals" onclick="showTool('deals')">💼 Deal Tracker</button><button class="chip" id="tp-memo" onclick="showTool('memo')">📋 Weekly Memo</button><button class="chip" id="tp-alert" onclick="showTool('alert')">🔔 Alert</button></div>
-        <div class="tool-panel" id="tool-comp"><div class="set-lbl">Comparable Company Analysis</div><div class="set-grp"><div style="display:flex;gap:8px;padding:8px 16px"><input id="compInp" type="text" placeholder="기업명 입력" style="flex:1;background:transparent;border:none;outline:none;font-size:15px;color:var(--t1)"><button class="srch-go" onclick="genComp()">생성</button></div></div><div id="compResult"></div></div>
-        <div class="tool-panel" id="tool-deals" style="display:none"><div class="set-lbl">Deal Watchlist</div><div class="set-grp"><div style="display:flex;gap:8px;padding:8px 16px"><input id="dealAddInp" type="text" placeholder="딜 이름 추가" style="flex:1;background:transparent;border:none;outline:none;font-size:15px;color:var(--t1)"><button class="srch-go" onclick="addDeal()">추가</button></div></div><div id="dealList"></div></div>
-        <div class="tool-panel" id="tool-memo" style="display:none"><div class="set-lbl">주간 투자위원회 메모</div><div class="set-grp"><button class="set-btn" style="color:var(--accent)" onclick="genWeeklyMemo()">이번 주 메모 생성</button></div><div id="memoResult"></div></div>
-        <div class="tool-panel" id="tool-alert" style="display:none"><div class="set-lbl">키워드 알림</div><div class="set-grp"><div style="display:flex;gap:8px;padding:8px 16px"><input id="alertAddInp" type="text" placeholder="키워드 추가" style="flex:1;background:transparent;border:none;outline:none;font-size:15px;color:var(--t1)"><button class="srch-go" onclick="addAlert()">추가</button></div></div><div id="alertList"></div></div>
-      </div></div>
-      <!-- SETTINGS -->
-      <div class="pane" id="pane-settings"><div class="set-wrap">
-        <div class="set-lbl">API 키</div><div class="set-grp">
-          <div class="api-row"><div class="api-ico ico-g">G</div><div class="api-info"><span class="api-name">Gemini<span class="badge-free">무료</span></span><span class="api-status" id="st-gemini">미설정</span></div><input class="set-inp" id="set-gemini" type="password" placeholder="AIza..." style="flex:1"><button class="api-del" id="del-gemini" onclick="delKey('gemini')" style="display:none">×</button></div>
-          <div class="api-row"><div class="api-ico ico-a">A</div><div class="api-info"><span class="api-name">Claude</span><span class="api-status" id="st-claude">미설정</span></div><input class="set-inp" id="set-claude" type="password" placeholder="sk-ant-..." style="flex:1"><button class="api-del" id="del-claude" onclick="delKey('claude')" style="display:none">×</button></div>
-          <div class="api-row"><div class="api-ico ico-o">O</div><div class="api-info"><span class="api-name">OpenAI<span class="badge-opt">선택</span></span><span class="api-status" id="st-openai">미설정</span></div><input class="set-inp" id="set-openai" type="password" placeholder="sk-proj-..." style="flex:1"><button class="api-del" id="del-openai" onclick="delKey('openai')" style="display:none">×</button></div>
-          <button class="set-btn" style="color:var(--accent)" onclick="saveAndValidateKeys()">키 저장 + 검증</button><div id="keyValidResult" style="display:none;padding:8px 16px;font-size:13px"></div>
-        </div>
-        <div class="set-lbl">테마</div><div class="set-grp"><div style="display:flex;gap:8px;padding:12px 16px;overflow-x:auto" id="themeList"></div></div>
-        <div class="set-lbl">브리핑 포커스</div><div class="set-grp"><div style="padding:8px 16px;font-size:12px;color:var(--t3)">국가 × 섹터 조합</div><div style="padding:4px 16px"><span style="font-size:12px;font-weight:600;color:var(--t3)">국가</span></div><div id="focusCountries" style="padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:4px"></div><div style="padding:4px 16px;border-top:1px solid var(--sep)"><span style="font-size:12px;font-weight:600;color:var(--t3)">섹터</span></div><div id="focusSectors" style="padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:4px"></div><div style="padding:8px 16px;border-top:1px solid var(--sep)"><div id="focusPreview" style="font-size:13px;color:var(--accent)">전체</div></div></div>
-        <div class="set-lbl">마켓 모드</div><div class="set-grp"><div style="display:flex;gap:8px;padding:12px 16px"><button class="chip" id="mm-jp" onclick="setMarketMode('jp')">🇯🇵 일본</button><button class="chip" id="mm-kr" onclick="setMarketMode('kr')">🇰🇷 한국</button><button class="chip" id="mm-both" onclick="setMarketMode('both')">🌏 양쪽</button></div></div>
-        <div class="set-lbl">표시 설정</div><div class="set-grp"><div class="set-row" onclick="togSetting('autoGen')"><span class="set-row-lbl">자동 생성</span><button class="ios-tog on" id="tog-autoGen"></button></div><div class="set-row" onclick="togSetting('podAutoGen')"><span class="set-row-lbl">팟캐스트 자동생성</span><button class="ios-tog" id="tog-podAutoGen"></button></div></div>
-        <div class="set-lbl">스케줄</div><div class="set-grp"><div class="set-inp-row"><input type="time" id="schedTime" value="06:00" style="width:100%;background:transparent;border:none;outline:none;font-size:17px;color:var(--t1);min-height:44px;padding:0 16px"></div><button class="set-btn" onclick="saveSched()">스케줄 저장</button><div style="padding:8px 16px;font-size:13px;color:var(--accent)" id="schedLabel"></div></div>
-        <div class="set-lbl">GitHub 서버</div><div class="set-grp"><div class="set-inp-row"><input class="set-inp" id="set-github" placeholder="https://raw.githubusercontent.com/USER/REPO/main"></div><button class="set-btn" onclick="saveGithub()">저장</button></div>
-        <div class="set-lbl">뉴스 소스 (<span id="srcCount">0</span>개)</div><div id="srcCatList"></div><div class="set-grp"><div class="src-add-row"><input class="src-add-inp" id="srcAddInp" placeholder="소스 추가..."><button class="src-add-btn" onclick="addSource()">추가</button></div><div style="display:flex;gap:8px;padding:8px 16px"><button class="set-btn" style="flex:1;margin:0" onclick="resetSources()">기본값</button><button class="set-btn" style="flex:1;margin:0;color:var(--red)" onclick="clearAllSources()">전체 삭제</button></div></div>
-        <div class="set-lbl">데이터</div><div class="set-grp"><div class="set-row"><span class="set-row-lbl">저장된 브리핑</span><span class="set-row-val" id="storedCnt">0일</span></div><div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div></div>
-        <button class="set-btn danger" onclick="clearOld()">30일 이전 삭제</button>
-        <div style="padding:16px;font-size:12px;color:var(--t3);text-align:center">Daily Brief v25</div>
-      </div></div>
+  <div class="setup" id="setupScreen"><div class="su-eyebrow">Daily Brief</div><div class="su-h">시작하기</div><div class="su-p">API 키를 설정하면 자동으로 브리핑이 준비됩니다.</div><div class="cost-box"><div class="cost-row"><span>Gemini</span><span class="cost-free">무료</span></div><div class="cost-row"><span>Claude</span><span class="cost-gold">~$1-2/월</span></div><div class="cost-row"><span>OpenAI</span><span class="cost-dim">선택</span></div></div><div class="inp-group"><div class="inp-row"><div class="inp-ico ico-g">G</div><div><div class="inp-label">Gemini<span class="badge-free">무료</span></div></div></div><div class="inp-row"><input class="api-inp" id="si-gemini" type="text" placeholder="AIza..."></div><div class="inp-row" style="border-top:1px solid var(--sep)"><div class="inp-ico ico-a">A</div><div><div class="inp-label">Claude</div></div></div><div class="inp-row"><input class="api-inp" id="si-claude" type="text" placeholder="sk-ant-..."></div><div class="inp-row" style="border-top:1px solid var(--sep)"><div class="inp-ico ico-o">O</div><div><div class="inp-label">OpenAI<span class="badge-opt">선택</span></div></div></div><div class="inp-row"><input class="api-inp" id="si-openai" type="text" placeholder="sk-proj-..."></div></div><button class="su-btn" onclick="saveSetup()">시작하기</button><div style="font-size:11px;color:var(--t3);margin-top:8px;text-align:center">v25</div><div id="su-err" style="display:none;margin-top:12px;padding:12px;background:rgba(196,90,106,.12);border-radius:8px;font-size:14px;color:var(--red)"></div></div>
+  <div class="loading" id="loadingScreen"><div class="ld-logo">Daily Brief</div><div class="ld-steps"><div class="ld-step" id="ls0"><div class="ld-dot" id="li0"></div><span class="ld-txt">뉴스 수집</span></div><div class="ld-step" id="ls1"><div class="ld-dot" id="li1"></div><span class="ld-txt">AI 분석</span></div><div class="ld-step" id="ls2"><div class="ld-dot" id="li2"></div><span class="ld-txt">마켓 데이터</span></div><div class="ld-step" id="ls3"><div class="ld-dot" id="li3"></div><span class="ld-txt">완성</span></div></div></div>
+  <div id="mainArea" style="display:none">
+  <div class="nav">
+    <div class="nav-brand">Brief</div>
+    <div class="date-nav"><button onclick="navDay(-1)">‹</button><b id="navDateLbl">—</b><button onclick="navDay(1)">›</button></div>
+    <div class="nb">
+      <button onclick="document.body.classList.toggle('light')">◐</button>
+      <button onclick="rerunToday()">↻</button>
     </div>
   </div>
-  <!-- BOTTOM BAR -->
+
+  <!-- RATES -->
+  <div class="rates">
+    <div class="rate" onclick="toggleRS('jpy')">
+      <div class="rate-top"><span class="rate-l">$/¥</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,4 9,5 16,6 23,8 30,10 37,12" stroke="var(--red)" opacity=".5"/></svg></div>
+      <div class="rate-bot"><span class="rate-v">148.22</span><span class="rate-d neg">-0.4</span></div>
+    </div>
+    <div class="rate" onclick="toggleRS('tibor')">
+      <div class="rate-top"><span class="rate-l">3M TIBOR</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,12 9,10 16,8 23,6 30,4 37,2" stroke="var(--green)" opacity=".5"/></svg></div>
+      <div class="rate-bot"><span class="rate-v">0.525%</span><span class="rate-d pos">+2bp</span></div>
+    </div>
+    <div class="rate" onclick="toggleRS('n225')">
+      <div class="rate-top"><span class="rate-l">N225</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,10 9,8 16,11 23,6 30,3 37,4" stroke="var(--green)" opacity=".5"/></svg></div>
+      <div class="rate-bot"><span class="rate-v">38,807</span><span class="rate-d pos">+1.2%</span></div>
+    </div>
+    <div class="rate" onclick="toggleRS('jreit')">
+      <div class="rate-top"><span class="rate-l">J-REIT</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,3 9,5 16,7 23,9 30,11 37,13" stroke="var(--red)" opacity=".5"/></svg></div>
+      <div class="rate-bot"><span class="rate-v">1,822</span><span class="rate-d neg">-2.1%</span></div>
+    </div>
+    <div class="rate" onclick="toggleRS('cap')">
+      <div class="rate-top"><span class="rate-l">Cap Rate</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,13 9,11 16,10 23,8 30,5 37,3" stroke="var(--green)" opacity=".5"/></svg></div>
+      <div class="rate-bot"><span class="rate-v">3.52%</span><span class="rate-d pos">+5bp</span></div>
+    </div>
+    <div class="rate" onclick="toggleRS('jgb')">
+      <div class="rate-top"><span class="rate-l">JGB 10Y</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,13 9,11 16,9 23,7 30,4 37,2" stroke="var(--green)" opacity=".5"/></svg></div>
+      <div class="rate-bot"><span class="rate-v">1.525%</span><span class="rate-d pos">+3bp</span></div>
+    </div>
+    <button class="rate-edit">✎</button>
+  </div>
+
+  <div class="rs" id="rs">
+    <div class="rs-top"><span class="rs-name" id="rsN"></span><span class="rs-val" id="rsV"></span><span class="rs-chg" id="rsC"></span><button class="rs-x" onclick="document.getElementById('rs').classList.remove('show')">✕</button></div>
+    <div class="rs-chart"><svg viewBox="0 0 300 44" preserveAspectRatio="none"><polyline points="0,40 40,36 80,34 120,28 160,24 200,18 240,14 280,10 300,8" fill="none" stroke="var(--accent)" stroke-width="2" opacity=".5"/></svg></div>
+    <div class="rs-why" id="rsW"></div>
+  </div>
+
+  <div class="pane on" id="pane-feed" style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px">
+    <div class="audio" onclick="openPod()">
+      <button class="au-play" onclick="event.stopPropagation();openPod()">▶</button>
+      <div class="au-info"><div class="au-t">오늘의 팟캐스트</div><div class="au-s" id="podDateLbl">—</div></div>
+      <div class="au-len"><button class="au-c on">5분</button><button class="au-c">10분</button><button class="au-c">20분</button></div>
+    </div>
+
+    <div id="cardsList">
+    <!-- sample cards cleared by JS -->
+    <div class="sec"><span class="sec-handle">⠿</span><span class="sec-t">일본</span><span class="sec-c">3</span><span class="sec-sp"></span><span class="sec-more">전체 →</span></div>
+    <div class="story-scroll">
+      <div class="s-card">
+        <div class="s-head"><span class="s-cat" style="color:var(--cat1)">일본 · 금융정책</span><span class="s-src">Nikkei · 06:30</span></div>
+        <div class="s-title">BOJ 우에다, 4월 추가 금리인상 시사 — 시장 62% 반영</div>
+        <div class="s-sum">우에다 총재가 참의원 답변에서 춘투 임금 상승 확인 시 추가 인상 검토 발언. JGB 10Y 1.525%로 2008년 이후 최고치 경신.</div>
+        <div class="s-imp">
+          <div class="s-imp-lbl">투자 임플리케이션</div>
+          <div class="s-imp-txt">캡레이트 3.5→3.8% 확대 압력. 2024 취득 LTV 65%+ 건 리파이 스트레스 테스트 필요. 변동금리 fixed 전환 검토 시점. CBRE Q1 서베이 (4월) 주시.</div>
+        </div>
+        <div class="s-bottom"><a class="s-link">원문 검색</a><span class="s-bottom-sp"></span><button class="s-act">deepdive</button><button class="s-act" onclick="openPod()">pod</button><button class="s-act">ai</button></div>
+      </div>
+      <div class="s-card">
+        <div class="s-head"><span class="s-cat" style="color:var(--cat1)">일본 · 통상</span><span class="s-src">Bloomberg · 07:00</span></div>
+        <div class="s-title">트럼프, 일본산 자동차 25% 관세 서명 — 도요타 -5.3%</div>
+        <div class="s-sum">25% 관세 행정명령. 도요타 -5.3%, 혼다 -6.8%, 부품사 평균 -4.1%. 엔화 동반 약세로 이중 타격.</div>
+        <div class="s-imp">
+          <div class="s-imp-lbl">투자 임플리케이션</div>
+          <div class="s-imp-txt">제조업 테넌트 실적 악화 시 사이타마/군마 산업용 부동산 수요 둔화. 물류 공실률 모니터링. LP 헤지비용 2.8→3.5% 상승 전망.</div>
+        </div>
+        <div class="s-bottom"><a class="s-link">원문 검색</a><span class="s-bottom-sp"></span><button class="s-act">deepdive</button><button class="s-act" onclick="openPod()">pod</button><button class="s-act">ai</button></div>
+      </div>
+      <div class="s-card">
+        <div class="s-head"><span class="s-cat" style="color:var(--cat1)">일본 · J-REIT</span><span class="s-src">日経不動産 · 07:30</span></div>
+        <div class="s-title">동경건물 REIT, 마루노우치 오피스 2동 추가 취득 — NOI 4.8%</div>
+        <div class="s-sum">스폰서 파이프라인 활용. PO 없이 차입으로 자금 조달. 약 203억 엔으로 JRE 포트폴리오 강화.</div>
+        <div class="s-imp">
+          <div class="s-imp-lbl">투자 임플리케이션</div>
+          <div class="s-imp-txt">A급 도심 오피스 선호 지속 확인. 스폰서 REIT 차입 매입 트렌드. NAV 프리미엄 축소 중인 물류 REIT와 대조적.</div>
+        </div>
+        <div class="s-bottom"><a class="s-link">원문 검색</a><span class="s-bottom-sp"></span><button class="s-act">deepdive</button><button class="s-act" onclick="openPod()">pod</button><button class="s-act">ai</button></div>
+      </div>
+    </div>
+
+    <!-- MACRO -->
+    <div class="sec"><span class="sec-handle">⠿</span><span class="sec-t">글로벌 · 매크로</span><span class="sec-c">3</span><span class="sec-sp"></span></div>
+    <div class="compact" onclick="togCompact(this)">
+      <div class="c-row1"><div class="c-dot" style="background:var(--cat2)"></div>
+      <div class="c-body"><div class="c-head"><span class="c-cat">미국 · Reuters</span><span class="c-time">22:30</span></div><div class="c-title">미국 PPI -0.1% — 6월 인하 82%</div><div class="c-insight">→ J-REIT 스프레드 확대. 매입 윈도우</div></div>
+      <div class="c-acts"><button class="c-act" onclick="event.stopPropagation()">deepdive</button><button class="c-act" onclick="event.stopPropagation();openPod()">pod</button><button class="c-act" onclick="event.stopPropagation()">ai</button></div></div>
+      <div class="c-expand"><div class="c-detail">Core PPI 0.0%로 2020년 이후 최저. Fed 6월 인하 확률 70→82%.</div></div>
+    </div>
+    <div class="compact" onclick="togCompact(this)">
+      <div class="c-row1"><div class="c-dot" style="background:var(--cat2)"></div>
+      <div class="c-body"><div class="c-head"><span class="c-cat">미국 · Bloomberg</span><span class="c-time">05:12</span></div><div class="c-title">트럼프, 일본산 자동차 25% 관세 — ¥149.8</div><div class="c-insight">→ LP 헤지비용 2.8→3.5%. 캐피탈콜 Q4 검토</div></div>
+      <div class="c-acts"><button class="c-act" onclick="event.stopPropagation()">deepdive</button><button class="c-act" onclick="event.stopPropagation()">ai</button></div></div>
+      <div class="c-expand"><div class="c-detail">도요타·혼다 시간외 5-7% 하락.</div></div>
+    </div>
+    <div class="compact" onclick="togCompact(this)">
+      <div class="c-row1"><div class="c-dot" style="background:var(--cat2)"></div>
+      <div class="c-body"><div class="c-head"><span class="c-cat">중국 · Reuters</span><span class="c-time">04:00</span></div><div class="c-title">PBOC MLF 10bp 인하 — 부동산 부양</div><div class="c-insight">→ 인바운드 재가속. 호텔/리테일 수혜</div></div>
+      <div class="c-acts"><button class="c-act" onclick="event.stopPropagation()">ai</button></div></div>
+      <div class="c-expand"><div class="c-detail">주요 30개 도시 주택판매 전주 +12%.</div></div>
+    </div>
+
+    <!-- KOREA -->
+    <div class="sec"><span class="sec-handle">⠿</span><span class="sec-t">한국</span><span class="sec-c">1</span><span class="sec-sp"></span></div>
+    <div class="compact" onclick="togCompact(this)">
+      <div class="c-row1"><div class="c-dot" style="background:var(--cat3)"></div>
+      <div class="c-body"><div class="c-head"><span class="c-cat">반도체 · 한경</span><span class="c-time">07:15</span></div><div class="c-title">삼성전자 파운드리 분할 — +18조원</div><div class="c-insight">→ 분할 시 일본 소부장 EV/EBITDA 리레이팅</div></div>
+      <div class="c-acts"><button class="c-act" onclick="event.stopPropagation();openPod()">pod</button><button class="c-act" onclick="event.stopPropagation()">ai</button></div></div>
+      <div class="c-expand"><div class="c-detail">인텔 벤치마크. 이사회 내부 논의 단계.</div></div>
+    </div>
+
+    <!-- DEALS -->
+    <div class="sec"><span class="sec-handle">⠿</span><span class="sec-t">Deal flow</span><span class="sec-c">3</span><span class="sec-sp"></span></div>
+    <div class="story-scroll">
+      <div class="d-card">
+        <div class="d-head"><div class="d-angle" style="background:rgba(45,139,106,.1);color:var(--green)">포트폴리오 매각</div><span class="d-src">Reuters · 03:45</span></div>
+        <div class="d-title">블랙스톤, 시나가와 물류허브 인수 확정</div>
+        <div class="d-val">JPY 120bn · Cap 4.1% · NOI 5.2%</div>
+        <div class="d-bg"><b>딜 배경:</b> GLR 펀드 만기 도래로 포트폴리오 처분. 캡레이트 4.1%는 2023년 대비 +30bp — 바이어 마켓 전환 시그널.</div>
+        <div class="d-bottom"><a class="s-link">원문 검색</a><span class="s-bottom-sp"></span><button class="s-act">deepdive</button><button class="s-act" onclick="openPod()">pod</button><button class="s-act">ai</button></div>
+      </div>
+      <div class="d-card">
+        <div class="d-head"><div class="d-angle" style="background:rgba(201,168,76,.1);color:var(--accent)">액티비스트</div><span class="d-src">Nikkei · 06:00</span></div>
+        <div class="d-title">히타치 빌딩시스템즈 MBO — KKR 주도</div>
+        <div class="d-val">JPY 280bn · EV/EBITDA 11.2x</div>
+        <div class="d-bg"><b>딜 배경:</b> 엘리엇이 비핵심 매각 압박. KKR 경영진 MBO. 안정 CF → 레버리지 플레이. Q3 2026 클로징.</div>
+        <div class="d-bottom"><a class="s-link">원문 검색</a><span class="s-bottom-sp"></span><button class="s-act">deepdive</button><button class="s-act">ai</button></div>
+      </div>
+      <div class="d-card">
+        <div class="d-head"><div class="d-angle" style="background:rgba(144,112,192,.1);color:var(--cat3)">그린필드</div><span class="d-src">DSA · 01:20</span></div>
+        <div class="d-title">Bain Capital, 한국 데이터센터 플랫폼</div>
+        <div class="d-val">KRW 500bn committed</div>
+        <div class="d-bg"><b>딜 배경:</b> AWS 서울 리전 확장. 전력 인프라 선확보가 핵심. GP 주도 value-add 플레이.</div>
+        <div class="d-bottom"><a class="s-link">원문 검색</a><span class="s-bottom-sp"></span><button class="s-act">deepdive</button><button class="s-act">ai</button></div>
+      </div>
+    </div>
+
+    </div><div id="pastDays"></div>
+    <!-- PAST -->
+    <div class="past-hdr"><span class="past-date">3월 13일 목</span><div class="past-line"></div></div>
+    <div class="story-scroll">
+      <div class="s-card" style="opacity:.65">
+        <div class="s-head"><span class="s-cat" style="color:var(--cat1)">일본 · 부동산</span><span class="s-src">Nikkei · 3/13</span></div>
+        <div class="s-title">미쓰이부동산, 도쿄역 북측 재개발 착공 — JPY 800bn</div>
+        <div class="s-sum">총 사업비 JPY 800bn. 2030년 완공 예정. 오피스+상업+호텔 복합개발.</div>
+        <div class="s-imp">
+          <div class="s-imp-lbl">투자 임플리케이션</div>
+          <div class="s-imp-txt">마루노우치/야에스 공급 증가. 2028년부터 기존 빌딩 공실 압력.</div>
+        </div>
+        <div class="s-bottom"><a class="s-link">원문 검색</a></div>
+      </div>
+      <div class="s-card" style="opacity:.65">
+        <div class="s-head"><span class="s-cat" style="color:var(--cat2)">미국 · 금융정책</span><span class="s-src">Bloomberg · 3/13</span></div>
+        <div class="s-title">Fed 월러 이사, "5월 인하 아직 성급" 발언</div>
+        <div class="s-sum">인플레이션 데이터 추가 확인 필요 강조. 6월 첫 인하 시나리오 유지.</div>
+        <div class="s-imp">
+          <div class="s-imp-lbl">투자 임플리케이션</div>
+          <div class="s-imp-txt">미국 high-for-longer 시 엔캐리 지속. 일본 자산 외국인 수요 유지.</div>
+        </div>
+        <div class="s-bottom"><a class="s-link">원문 검색</a></div>
+      </div>
+    </div>
+  </div>
+
   <div class="btm" id="tabbar" style="display:none">
-    <div class="intel-row"><input class="intel-inp" id="intelInp" placeholder="Search or ask AI..." onkeydown="if(event.key==='Enter'){goTab('research');document.getElementById('chatInp').value=this.value;this.value='';sendChat();}"><button class="intel-send" onclick="var v=document.getElementById('intelInp');if(v.value){goTab('research');document.getElementById('chatInp').value=v.value;v.value='';sendChat();}"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div>
+    <div class="intel-row">
+      <input class="intel-inp" id="intelInp" placeholder="Search or ask AI..." onkeydown="if(event.key==='Enter'){goTab('research');document.getElementById('chatInp').value=this.value;this.value='';sendChat();}">
+      <button class="intel-send"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+    </div>
     <div class="tab-row">
-      <button class="tb on" id="tbb-feed" onclick="goTab('feed')"><div class="tb-ico"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg></div>Feed</button>
-      <button class="tb" id="tbb-research" onclick="goTab('research')"><div class="tb-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></div>Research</button>
-      <button class="tb" id="tbb-tools" onclick="goTab('tools')"><div class="tb-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>Tools</button>
-      <button class="tb" id="tbb-settings" onclick="goTab('settings')"><div class="tb-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>Settings</button>
+      <button class="tb on"><div class="tb-ico"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg></div>Feed</button>
+      <button class="tb"><div class="tb-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></div>Research</button>
+      <button class="tb"><div class="tb-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>Tools</button>
+      <button class="tb"><div class="tb-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>Settings</button>
     </div>
   </div>
 </div>
-<div class="ov" id="ov" onclick="closeSheet()"></div>
-<div class="sheet" id="sheet"><div class="sheet-handle-wrap"><div class="sheet-handle"></div></div><div class="sheet-scroll" id="sheetBody"></div></div>
-<div class="toast" id="toast"></div>
-<!-- PODCAST OVERLAY -->
-<div class="pod-ov" id="podOverlay">
-  <div class="pod-top"><button class="pod-down" onclick="closePod()">↓</button><div class="pod-top-info"><div class="pod-top-t" id="podTitle">팟캐스트</div><div class="pod-top-s">AI 생성</div></div><div style="width:36px"></div></div>
-  <div class="pod-len"><button class="on" onclick="pickLen('short',this)">5분</button><button onclick="pickLen('medium',this)">10분</button><button onclick="pickLen('long',this)">20분</button></div>
-  <div class="pod-tabs"><button class="pod-tab on" onclick="showPodPanel('sec',this)">섹션</button><button class="pod-tab" onclick="showPodPanel('scr',this)">스크립트</button></div>
-  <div class="pod-body"><div id="podSecList"><div class="empty"><div class="empty-ico">🎙</div><div class="empty-txt">길이를 선택하면 팟캐스트가 생성됩니다</div></div></div><div id="scriptPanel" style="display:none"><div id="scriptText"></div></div></div>
+
+<!-- ═══ PODCAST ═══ -->
+<div class="pod" id="pod">
+  <div class="pod-top">
+    <button class="pod-down" onclick="closePod()">↓</button>
+    <div class="pod-top-info"><div class="pod-top-t">BOJ 금리인상 — 포트폴리오 임팩트</div><div class="pod-top-s">AI 생성 · 3월 14일</div></div>
+    <div class="pod-top-r"></div>
+  </div>
+  <div class="pod-len">
+    <button class="on">5분</button>
+    <button>10분</button>
+    <button>20분</button>
+  </div>
+  <div class="pod-tabs">
+    <button class="pod-tab on" onclick="showP('sec',this)">섹션</button>
+    <button class="pod-tab" onclick="showP('scr',this)">스크립트</button>
+  </div>
+  <div class="pod-body">
+    <div class="pod-panel" id="p-sec">
+      <div class="ps playing"><span class="ps-n">1</span><div class="ps-body"><div class="ps-name">왜 지금 중요한가</div><div class="ps-sum">JGB 10Y 2008년 최고치 경신 배경과 시장 반응</div></div><span class="ps-dur">0:48</span></div>
+      <div class="ps"><span class="ps-n">2</span><div class="ps-body"><div class="ps-name">핵심 팩트 & 수치</div><div class="ps-sum">캡레이트 확대 시나리오별 리파이 영향</div></div><span class="ps-dur">1:02</span></div>
+      <div class="ps"><span class="ps-n">3</span><div class="ps-body"><div class="ps-name">숨겨진 의미</div><div class="ps-sum">BOJ 커뮤니케이션 변화와 2006년 사이클 비교</div></div><span class="ps-dur">1:15</span></div>
+      <div class="ps"><span class="ps-n">4</span><div class="ps-body"><div class="ps-name">투자 액션</div><div class="ps-sum">방어 전략 3가지와 CBRE Q1 활용법</div></div><span class="ps-dur">0:55</span></div>
+    </div>
+    <div class="pod-panel" id="p-scr" style="display:none">
+      <div class="lyrics">
+        <div class="ll past">오늘 아침 JGB 십년물 수익률이 일점오이오퍼센트를 찍었습니다.</div>
+        <div class="ll past">이천팔년 이후 최고치입니다.</div>
+        <div class="ll active">왜 이게 중요하냐면, 이 숫자 하나가 도쿄 오피스 시장 전체의 밸류에이션 기준을 바꿀 수 있기 때문입니다.</div>
+        <div class="ll">우에다 총재는 참의원에서 사월 추가 인상을 시사했고,</div>
+        <div class="ll">시장은 이십오bp 인상 확률을 육십이퍼센트로 반영하고 있습니다.</div>
+        <div class="ll">JGB가 일점육퍼센트를 돌파하면,</div>
+        <div class="ll">도쿄 A급 오피스 캡레이트는 삼점오에서 삼점팔까지 확대될 가능성이 있습니다.</div>
+        <div class="ll">이천이십사년 상반기에 삼점이에서 삼점삼으로 매입한 포트폴리오가 있다면,</div>
+        <div class="ll">장부가치 하락이 현실화됩니다.</div>
+        <div class="ll">특히 LTV 육십오퍼센트 이상 레버리지 건은</div>
+        <div class="ll">리파이 시점에 covenant 이슈가 생길 수 있습니다.</div>
+      </div>
+      <button class="copy-btn" onclick="copyScript()">스크립트 전체 복사</button>
+    </div>
+  </div>
+  <!-- Player -->
   <div class="pod-player">
-    <div class="pp-prog"><span class="pp-time" id="curT">0:00</span><div class="pp-bar" id="progTrack" onclick="pseek(event)"><div class="pp-fill" id="progFill"></div></div><span class="pp-time" id="totT">--:--</span></div>
+    <div class="pp-prog">
+      <span class="pp-time">1:31</span>
+      <div class="pp-bar"><div class="pp-fill"></div></div>
+      <span class="pp-time">-1:03</span>
+    </div>
     <div class="pp-ctrls">
-      <button class="pp-spd" id="pbSpdBtn" onclick="pbCycleSpd(this)">1×</button>
-      <button class="pp-skip" onclick="pskip(-15)"><svg viewBox="0 0 44 44"><path d="M22 6a16 16 0 110 32 16 16 0 010-32" fill="none" stroke="var(--t1)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="90 10.5"/><path d="M22 2v8l-6-4z" fill="var(--t1)"/><text x="22" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--t1)" font-family="var(--sans)">15</text></svg></button>
-      <button class="pp-play" id="ctrlPlay" onclick="ptoggle()"><svg id="playIco" viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button>
-      <button class="pp-skip" onclick="pskip(30)"><svg viewBox="0 0 44 44"><path d="M22 6a16 16 0 100 32 16 16 0 000-32" fill="none" stroke="var(--t1)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="90 10.5"/><path d="M22 2v8l6-4z" fill="var(--t1)"/><text x="22" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--t1)" font-family="var(--sans)">30</text></svg></button>
-      <select style="font-size:12px;background:var(--s2);color:var(--t3);border:1px solid var(--sep);border-radius:8px;padding:4px" id="voiceSel" onchange="pickVoice()"></select>
+      <button class="pp-spd">1×</button>
+      <!-- Back 15s -->
+      <button class="pp-skip">
+        <svg viewBox="0 0 44 44">
+          <path d="M22 6a16 16 0 110 32 16 16 0 010-32" fill="none" stroke="var(--t1)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="90 10.5"/>
+          <path d="M22 2v8l-6-4z" fill="var(--t1)"/>
+          <text x="22" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--t1)" font-family="var(--sans)">15</text>
+        </svg>
+      </button>
+      <button class="pp-play">
+        <svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7z" fill="var(--bg)"/></svg>
+      </button>
+      <!-- Forward 30s -->
+      <button class="pp-skip">
+        <svg viewBox="0 0 44 44">
+          <path d="M22 6a16 16 0 100 32 16 16 0 000-32" fill="none" stroke="var(--t1)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="90 10.5"/>
+          <path d="M22 2v8l6-4z" fill="var(--t1)"/>
+          <text x="22" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--t1)" font-family="var(--sans)">30</text>
+        </svg>
+      </button>
+      <button class="pp-spd" style="font-size:16px">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="var(--t3)"/></svg>
+      </button>
     </div>
   </div>
 </div>
+
 <script>
 
 /* Daily Brief v22 — clean ES5, no template literals, no const/let at top scope */
@@ -496,7 +531,7 @@ function init(){
 }
 
 function startApp(){
-  var ma=document.getElementById('mainArea');if(ma){ma.style.display='flex';ma.style.flexDirection='column';}
+  var ma=document.getElementById('mainArea');if(ma){ma.style.display='';ma.classList.add('show');}
   var tb=document.getElementById('tabbar');if(tb)tb.style.display='flex';
   loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();loadTheme();updateKeyUI();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
@@ -1837,5 +1872,7 @@ function genDeepDive(id){
 }
 
 </script>
+<div class="ov" id="ov" onclick="closeSheet()"></div><div class="sheet" id="sheet"><div class="sheet-handle-wrap"><div class="sheet-handle"></div></div><div class="sheet-scroll" id="sheetBody"></div></div><div class="toast" id="toast"></div>
+<div class="pod-ov" id="podOverlay"><div class="pod-top"><button class="pod-down" onclick="closePod()">↓</button><div class="pod-top-info"><div class="pod-top-t" id="podTitle">팟캐스트</div><div class="pod-top-s">AI 생성</div></div><div style="width:36px"></div></div><div class="pod-len"><button class="on" onclick="pickLen('short',this)">5분</button><button onclick="pickLen('medium',this)">10분</button><button onclick="pickLen('long',this)">20분</button></div><div class="pod-tabs"><button class="pod-tab on" onclick="showPodPanel('sec',this)">섹션</button><button class="pod-tab" onclick="showPodPanel('scr',this)">스크립트</button></div><div class="pod-body"><div id="podSecList"><div class="empty"><div class="empty-ico">🎙</div><div class="empty-txt">팟캐스트 생성 대기</div></div></div><div id="scriptPanel" style="display:none"><div id="scriptText"></div></div></div><div class="pod-player"><div class="pp-prog"><span class="pp-time" id="curT">0:00</span><div class="pp-bar" id="progTrack" onclick="pseek(event)"><div class="pp-fill" id="progFill"></div></div><span class="pp-time" id="totT">--:--</span></div><div class="pp-ctrls"><button class="pp-spd" id="pbSpdBtn" onclick="pbCycleSpd(this)">1×</button><button class="pp-skip" onclick="pskip(-15)"><svg viewBox="0 0 44 44"><path d="M22 6a16 16 0 110 32 16 16 0 010-32" fill="none" stroke="var(--t1)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="90 10.5"/><path d="M22 2v8l-6-4z" fill="var(--t1)"/><text x="22" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--t1)" font-family="var(--sans)">15</text></svg></button><button class="pp-play" id="ctrlPlay" onclick="ptoggle()"><svg id="playIco" viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></button><button class="pp-skip" onclick="pskip(30)"><svg viewBox="0 0 44 44"><path d="M22 6a16 16 0 100 32 16 16 0 000-32" fill="none" stroke="var(--t1)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="90 10.5"/><path d="M22 2v8l6-4z" fill="var(--t1)"/><text x="22" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--t1)" font-family="var(--sans)">30</text></svg></button><select style="font-size:12px;background:var(--s2);color:var(--t3);border:1px solid var(--sep);border-radius:8px;padding:4px" id="voiceSel" onchange="pickVoice()"></select></div></div></div>
 </body>
 </html>
