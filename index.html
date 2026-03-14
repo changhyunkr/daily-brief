@@ -316,6 +316,30 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
 .sri-title{font-size:15px;color:var(--t1);line-height:1.4;margin-bottom:3px;font-weight:500}
 .sri-prev{font-size:13px;color:var(--t2);line-height:1.4}
 
+/* ── API KEY ROWS ── */
+.api-row{display:flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s4);
+  border-bottom:.5px solid var(--sep);min-height:52px}
+.api-row:last-of-type{border-bottom:none}
+.api-ico{width:28px;height:28px;border-radius:var(--r1);display:flex;align-items:center;
+  justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.api-info{display:flex;flex-direction:column;min-width:60px;flex-shrink:0}
+.api-name{font-size:13px;font-weight:500;color:var(--t1);display:flex;align-items:center;gap:4px}
+.api-status{font-size:11px;margin-top:1px}
+.api-status.ok{color:var(--green)}
+.api-status.err{color:var(--red)}
+.api-status.none{color:var(--t4)}
+.api-del{width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,59,48,.12);
+  color:var(--red);font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+
+/* ── THEME SWATCHES ── */
+.theme-swatch{width:48px;height:48px;border-radius:var(--r2);border:2px solid transparent;
+  cursor:pointer;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden;transition:border-color .15s}
+.theme-swatch.on{border-color:var(--accent)}
+.theme-swatch:active{opacity:.7}
+.theme-top{flex:1}
+.theme-bot{height:16px;display:flex}
+.theme-bot span{flex:1}
+
 /* ── SETTINGS PANE ── */
 .set-wrap{padding:var(--s3) var(--s4) calc(var(--sab)+var(--s8))}
 .set-grp{background:var(--e1);border-radius:var(--r3);overflow:hidden;margin-bottom:var(--s4)}
@@ -835,35 +859,36 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
       <!-- SETTINGS -->
       <div class="pane" id="pane-settings">
         <div class="set-wrap">
-          <div class="set-lbl">GitHub 서버</div>
-          <div class="set-grp">
-            <div class="set-inp-row"><input class="set-inp" id="set-github" placeholder="https://raw.githubusercontent.com/USER/REPO/main"></div>
-            <button class="set-btn" onclick="saveGithub()">저장</button>
-          </div>
+
           <div class="set-lbl">API 키</div>
           <div class="set-grp">
-            <div class="set-inp-row"><input class="set-inp" id="set-gemini" type="password" placeholder="Gemini: AIza..."></div>
-            <div class="set-inp-row"><input class="set-inp" id="set-claude" type="password" placeholder="Claude: sk-ant-..."></div>
-            <div class="set-inp-row"><input class="set-inp" id="set-openai" type="password" placeholder="OpenAI: sk-proj-..."></div>
-            <button class="set-btn" onclick="saveKeys()">키 저장</button>
+            <div class="api-row">
+              <div class="api-ico ico-g">G</div>
+              <div class="api-info"><span class="api-name">Gemini<span class="badge-free">무료</span></span><span class="api-status" id="st-gemini">미설정</span></div>
+              <input class="set-inp" id="set-gemini" type="password" placeholder="AIza..." style="flex:1">
+              <button class="api-del" id="del-gemini" onclick="delKey('gemini')" style="display:none">×</button>
+            </div>
+            <div class="api-row">
+              <div class="api-ico ico-a">A</div>
+              <div class="api-info"><span class="api-name">Claude</span><span class="api-status" id="st-claude">미설정</span></div>
+              <input class="set-inp" id="set-claude" type="password" placeholder="sk-ant-api03-..." style="flex:1">
+              <button class="api-del" id="del-claude" onclick="delKey('claude')" style="display:none">×</button>
+            </div>
+            <div class="api-row">
+              <div class="api-ico ico-o">O</div>
+              <div class="api-info"><span class="api-name">OpenAI<span class="badge-opt">선택</span></span><span class="api-status" id="st-openai">미설정</span></div>
+              <input class="set-inp" id="set-openai" type="password" placeholder="sk-proj-..." style="flex:1">
+              <button class="api-del" id="del-openai" onclick="delKey('openai')" style="display:none">×</button>
+            </div>
+            <button class="set-btn" style="color:var(--accent)" onclick="saveAndValidateKeys()">키 저장 + 검증</button>
+            <div id="keyValidResult" style="display:none;padding:var(--s2) var(--s4) var(--s3);font-size:13px;line-height:1.6"></div>
           </div>
-          <div class="set-lbl">스케줄</div>
+
+          <div class="set-lbl">테마</div>
           <div class="set-grp">
-            <div class="set-inp-row"><input type="time" id="schedTime" value="06:00" style="width:100%;background:transparent;border:none;outline:none;font-size:17px;font-weight:500;color:var(--t1);min-height:var(--tap)"></div>
-            <button class="set-btn" onclick="saveSched()">스케줄 저장</button>
-            <button class="set-btn" onclick="preGenTom()">내일 브리핑 미리 생성 →</button>
-            <div style="padding:var(--s2) var(--s4) var(--s3);font-size:13px;color:var(--accent)" id="schedLabel"></div>
+            <div style="display:flex;gap:var(--s2);padding:var(--s3) var(--s4);overflow-x:auto;scrollbar-width:none" id="themeList"></div>
           </div>
-          <div class="set-lbl">탭 설정</div>
-          <div class="set-grp">
-            <div class="set-row" onclick="togSetting('autoGen')"><span class="set-row-lbl">앱 시작 시 자동 생성</span><button class="ios-tog on" id="tog-autoGen"></button></div>
-            <div class="set-row" onclick="togSetting('japanMode')"><span class="set-row-lbl">🇯🇵 일본 탭</span><button class="ios-tog on" id="tog-japanMode"></button></div>
-            <div class="set-row" onclick="togSetting('koreaMode')"><span class="set-row-lbl">🇰🇷 한국 탭</span><button class="ios-tog" id="tog-koreaMode"></button></div>
-            <div class="set-row" onclick="togSetting('usMode')"><span class="set-row-lbl">🇺🇸 미국 탭</span><button class="ios-tog on" id="tog-usMode"></button></div>
-            <div class="set-row" onclick="togSetting('dealMode')"><span class="set-row-lbl">💼 딜 탭</span><button class="ios-tog on" id="tog-dealMode"></button></div>
-            <div class="set-row" onclick="togSetting('trendMode')"><span class="set-row-lbl">🔥 화제 탭</span><button class="ios-tog on" id="tog-trendMode"></button></div>
-            <div class="set-row" onclick="togSetting('podAutoGen')"><span class="set-row-lbl">브리핑 후 팟캐스트 자동생성</span><button class="ios-tog" id="tog-podAutoGen"></button></div>
-          </div>
+
           <div class="set-lbl">브리핑 포커스</div>
           <div class="set-grp">
             <div style="padding:var(--s2) var(--s4);font-size:12px;color:var(--t3)">국가 × 섹터 조합으로 뉴스 우선순위를 설정합니다</div>
@@ -876,6 +901,32 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
               <div id="focusPreview" style="font-size:13px;color:var(--accent);font-weight:500">전체</div>
             </div>
           </div>
+
+          <div class="set-lbl">표시 설정</div>
+          <div class="set-grp">
+            <div class="set-row" onclick="togSetting('autoGen')"><span class="set-row-lbl">앱 시작 시 자동 생성</span><button class="ios-tog on" id="tog-autoGen"></button></div>
+            <div class="set-row" onclick="togSetting('japanMode')"><span class="set-row-lbl">🇯🇵 일본 탭</span><button class="ios-tog on" id="tog-japanMode"></button></div>
+            <div class="set-row" onclick="togSetting('koreaMode')"><span class="set-row-lbl">🇰🇷 한국 탭</span><button class="ios-tog" id="tog-koreaMode"></button></div>
+            <div class="set-row" onclick="togSetting('usMode')"><span class="set-row-lbl">🇺🇸 미국 탭</span><button class="ios-tog on" id="tog-usMode"></button></div>
+            <div class="set-row" onclick="togSetting('dealMode')"><span class="set-row-lbl">💼 딜 탭</span><button class="ios-tog on" id="tog-dealMode"></button></div>
+            <div class="set-row" onclick="togSetting('trendMode')"><span class="set-row-lbl">🔥 화제 탭</span><button class="ios-tog on" id="tog-trendMode"></button></div>
+            <div class="set-row" onclick="togSetting('podAutoGen')"><span class="set-row-lbl">브리핑 후 팟캐스트 자동생성</span><button class="ios-tog" id="tog-podAutoGen"></button></div>
+          </div>
+
+          <div class="set-lbl">스케줄</div>
+          <div class="set-grp">
+            <div class="set-inp-row"><input type="time" id="schedTime" value="06:00" style="width:100%;background:transparent;border:none;outline:none;font-size:17px;font-weight:500;color:var(--t1);min-height:var(--tap)"></div>
+            <button class="set-btn" onclick="saveSched()">스케줄 저장</button>
+            <button class="set-btn" onclick="preGenTom()">내일 브리핑 미리 생성</button>
+            <div style="padding:var(--s2) var(--s4) var(--s3);font-size:13px;color:var(--accent)" id="schedLabel"></div>
+          </div>
+
+          <div class="set-lbl">GitHub 서버</div>
+          <div class="set-grp">
+            <div class="set-inp-row"><input class="set-inp" id="set-github" placeholder="https://raw.githubusercontent.com/USER/REPO/main"></div>
+            <button class="set-btn" onclick="saveGithub()">저장</button>
+          </div>
+
           <div class="set-lbl">뉴스 소스 (<span id="srcCount">0</span>개)</div>
           <div id="srcCatList"></div>
           <div class="set-grp">
@@ -888,20 +939,21 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
               <button class="set-btn" style="flex:1;margin:0;color:var(--red)" onclick="clearAllSources()">전체 삭제</button>
             </div>
           </div>
-          <div class="set-lbl">닛케이 로그인 (서버 스크래핑)</div>
+
+          <div class="set-lbl">닛케이 로그인</div>
           <div class="set-grp">
             <div class="set-inp-row"><input class="set-inp" id="set-nikkei-id" type="text" placeholder="닛케이 ID (이메일)"></div>
             <div class="set-inp-row"><input class="set-inp" id="set-nikkei-pw" type="password" placeholder="닛케이 비밀번호"></div>
-            <div style="padding:var(--s2) var(--s4);font-size:12px;color:var(--t3);line-height:1.5">닛케이전자판·닛케이부동산마켓정보 계정. GitHub Secrets에 저장하면 매일 자동 스크래핑됩니다.</div>
-            <button class="set-btn" onclick="saveNikkei()">닛케이 설정 저장</button>
+            <button class="set-btn" onclick="saveNikkei()">저장</button>
           </div>
-          <div class="set-lbl">현황</div>
+
+          <div class="set-lbl">데이터</div>
           <div class="set-grp">
             <div class="set-row"><span class="set-row-lbl">저장된 브리핑</span><span class="set-row-val" id="storedCnt">0일</span></div>
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v22<br>Built 2026-03-14 v22</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v23</div>
         </div>
       </div>
 
@@ -990,6 +1042,7 @@ function saveSetup(){
 
 /* ── INIT ────────────────────────────────────────────────── */
 function init(){
+  try{loadTheme();}catch(e){}
   if(!sg('db_claude')&&!sg('db_openai'))return;
   document.getElementById('setupScreen').style.display='none';
   startApp();
@@ -998,7 +1051,7 @@ function init(){
 function startApp(){
   var ma=document.getElementById('mainArea');if(ma){ma.style.display='flex';ma.style.flexDirection='column';}
   var tb=document.getElementById('tabbar');if(tb)tb.style.display='flex';
-  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();
+  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();loadTheme();updateKeyUI();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
   updateDateUI();updateCounts();loadSchedUI();checkSched();
   var cached=sgj('db_brief_'+curDate);
@@ -1062,9 +1115,10 @@ function autoGen(date){
     if(ld)ld.style.display='none';
     console.error('autoGen:',err);
     ss('db_lastfail',String(Date.now()));
-    var is429=err.message&&err.message.indexOf('429')>=0;
-    var msg=is429?'Gemini rate limit — 2분 후 다시 시도해주세요':'생성 실패: '+err.message;
-    renderEmpty('X',msg,'다시 시도',function(){sr('db_lastfail');autoGen(date);});
+    var r=errResolve(err);
+    var html='<div class="empty"><div class="empty-ico">X</div><div style="font-size:17px;font-weight:600;color:var(--t1);margin-bottom:var(--s2)">'+esc(r.title)+'</div><div class="empty-txt" style="margin-bottom:var(--s2)">'+esc(r.detail)+'</div><div style="font-size:14px;color:var(--accent);margin-bottom:var(--s5);padding:0 var(--s4)">'+esc(r.action)+'</div><button class="empty-btn" id="_eb">다시 시도</button></div>';
+    document.getElementById('cardsList').innerHTML=html;
+    var btn=document.getElementById('_eb');if(btn)btn.addEventListener('click',function(){sr('db_lastfail');autoGen(date);});
   });
 }
 
@@ -1523,7 +1577,106 @@ function analyzePaste(){
 
 /* ── SETTINGS ────────────────────────────────────────────── */
 function saveGithub(){var v=document.getElementById('set-github').value.trim().replace(/\/$/,'');if(v){ss('db_github',v);showToast('GitHub URL 저장됨');}}
-function saveKeys(){var g=document.getElementById('set-gemini').value.trim(),cl=document.getElementById('set-claude').value.trim(),o=document.getElementById('set-openai').value.trim();if(g)ss('db_gemini',g);if(cl)ss('db_claude',cl);if(o)ss('db_openai',o);showToast('저장됐습니다');loadVoices();}
+
+/* ── API KEY MANAGEMENT ─────────────────────────────────── */
+function saveAndValidateKeys(){
+  var g=document.getElementById('set-gemini').value.trim();
+  var cl=document.getElementById('set-claude').value.trim();
+  var o=document.getElementById('set-openai').value.trim();
+  if(g)ss('db_gemini',g);if(cl)ss('db_claude',cl);if(o)ss('db_openai',o);
+  showToast('키 저장 중...');loadVoices();
+  var res=document.getElementById('keyValidResult');
+  res.style.display='block';res.innerHTML='<span style="color:var(--t3)">검증 중...</span>';
+  var results=[];var done=0;var total=0;
+  function finish(){
+    done++;if(done<total)return;
+    var html='';results.forEach(function(r){
+      html+='<div style="margin-bottom:4px"><span style="color:'+(r.ok?'var(--green)':'var(--red)')+'">'+r.name+': '+(r.ok?'OK':'실패')+'</span>'+(r.msg?' — '+r.msg:'')+'</div>';
+    });
+    res.innerHTML=html;updateKeyUI();
+  }
+  if(g){total++;validateGemini(g,function(ok,msg){results.push({name:'Gemini',ok:ok,msg:msg});finish();});}
+  if(cl){total++;validateClaude(cl,function(ok,msg){results.push({name:'Claude',ok:ok,msg:msg});finish();});}
+  if(o){total++;validateOpenAI(o,function(ok,msg){results.push({name:'OpenAI',ok:ok,msg:msg});finish();});}
+  if(!total){res.innerHTML='<span style="color:var(--t3)">키를 입력해주세요</span>';updateKeyUI();}
+}
+function validateGemini(key,cb){
+  fetch('https://generativelanguage.googleapis.com/v1beta/models?key='+key)
+    .then(function(r){if(r.ok)cb(true,'');else if(r.status===400||r.status===403)cb(false,'키가 유효하지 않습니다. aistudio.google.com에서 재발급하세요');else cb(false,'HTTP '+r.status);})
+    .catch(function(e){cb(false,'네트워크 오류');});
+}
+function validateClaude(key,cb){
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1,messages:[{role:'user',content:'hi'}]})})
+    .then(function(r){if(r.ok||r.status===200)cb(true,'');else if(r.status===401)cb(false,'인증 실패. console.anthropic.com에서 키를 확인하세요');else if(r.status===403)cb(false,'권한 부족. API 플랜을 확인하세요');else if(r.status===429)cb(true,'유효 (rate limit 확인됨)');else cb(false,'HTTP '+r.status);})
+    .catch(function(e){cb(false,'네트워크 오류');});
+}
+function validateOpenAI(key,cb){
+  fetch('https://api.openai.com/v1/models',{headers:{'Authorization':'Bearer '+key}})
+    .then(function(r){if(r.ok)cb(true,'');else if(r.status===401)cb(false,'인증 실패. platform.openai.com에서 키를 재발급하세요');else if(r.status===429)cb(true,'유효 (rate limit 확인됨)');else cb(false,'HTTP '+r.status);})
+    .catch(function(e){cb(false,'네트워크 오류');});
+}
+function delKey(provider){
+  if(!confirm(provider+' API 키를 삭제할까요?'))return;
+  sr('db_'+provider);
+  var inp=document.getElementById('set-'+provider);if(inp)inp.value='';
+  updateKeyUI();showToast(provider+' 키 삭제됨');
+}
+function updateKeyUI(){
+  var providers=['gemini','claude','openai'];
+  providers.forEach(function(p){
+    var key=sg('db_'+p);var st=document.getElementById('st-'+p);var del=document.getElementById('del-'+p);
+    if(st){
+      if(key){st.textContent='설정됨';st.className='api-status ok';}
+      else{st.textContent='미설정';st.className='api-status none';}
+    }
+    if(del)del.style.display=key?'':'none';
+  });
+}
+
+/* ── ERROR RESOLUTION ───────────────────────────────────── */
+function errResolve(err){
+  var msg=err.message||String(err);
+  if(msg.indexOf('429')>=0) return {title:'API Rate Limit',detail:'Gemini 무료 요금제 제한에 도달했습니다.',action:'2분 후에 다시 시도하거나, 앱 설정에서 GitHub 서버 URL을 설정하면 서버에서 미리 생성된 브리핑을 가져옵니다.',retry:120};
+  if(msg.indexOf('401')>=0) return {title:'API 인증 실패',detail:'API 키가 만료되었거나 잘못되었습니다.',action:'설정 → API 키에서 해당 키를 확인/재입력하세요. "키 저장 + 검증" 버튼으로 테스트할 수 있습니다.',retry:0};
+  if(msg.indexOf('403')>=0) return {title:'API 권한 부족',detail:'API 키에 필요한 권한이 없습니다.',action:'해당 API 서비스 콘솔에서 키 권한을 확인하세요.',retry:0};
+  if(msg.indexOf('500')>=0||msg.indexOf('502')>=0||msg.indexOf('503')>=0) return {title:'서버 오류',detail:'API 서버가 일시적으로 응답하지 않습니다.',action:'잠시 후 다시 시도하세요.',retry:30};
+  if(msg.indexOf('Failed to fetch')>=0||msg.indexOf('NetworkError')>=0) return {title:'네트워크 오류',detail:'인터넷 연결을 확인하세요.',action:'Wi-Fi 또는 셀룰러 데이터 연결 후 다시 시도하세요.',retry:5};
+  if(msg.indexOf('JSON')>=0) return {title:'응답 파싱 실패',detail:'AI가 유효하지 않은 형식으로 응답했습니다.',action:'다시 시도하면 대부분 해결됩니다.',retry:5};
+  return {title:'생성 실패',detail:msg,action:'다시 시도하거나, 설정에서 API 키를 확인하세요.',retry:10};
+}
+
+/* ── THEME SYSTEM ───────────────────────────────────────── */
+var themes=[
+  {id:'gold',name:'Gold',accent:'#D4A843',accentBg:'rgba(212,168,67,.12)',accentBdr:'rgba(212,168,67,.35)',lightAccent:'#A07820'},
+  {id:'blue',name:'Ocean',accent:'#3B82F6',accentBg:'rgba(59,130,246,.12)',accentBdr:'rgba(59,130,246,.35)',lightAccent:'#2563EB'},
+  {id:'emerald',name:'Emerald',accent:'#10B981',accentBg:'rgba(16,185,129,.12)',accentBdr:'rgba(16,185,129,.35)',lightAccent:'#059669'},
+  {id:'rose',name:'Rose',accent:'#F43F5E',accentBg:'rgba(244,63,94,.12)',accentBdr:'rgba(244,63,94,.35)',lightAccent:'#E11D48'},
+  {id:'violet',name:'Violet',accent:'#8B5CF6',accentBg:'rgba(139,92,246,.12)',accentBdr:'rgba(139,92,246,.35)',lightAccent:'#7C3AED'},
+  {id:'slate',name:'Slate',accent:'#94A3B8',accentBg:'rgba(148,163,184,.12)',accentBdr:'rgba(148,163,184,.35)',lightAccent:'#64748B'}
+];
+function loadTheme(){
+  var tid=sg('db_theme')||'gold';applyTheme(tid);renderThemes(tid);
+}
+function renderThemes(active){
+  var el=document.getElementById('themeList');if(!el)return;
+  var html='';
+  themes.forEach(function(t){
+    html+='<div class="theme-swatch'+(t.id===active?' on':'')+'" onclick="pickTheme(\''+t.id+'\')" title="'+t.name+'"><div class="theme-top" style="background:'+t.accent+'"></div><div class="theme-bot"><span style="background:#1C1C1E"></span><span style="background:'+t.accentBg+'"></span></div></div>';
+  });
+  el.innerHTML=html;
+}
+function pickTheme(tid){
+  ss('db_theme',tid);applyTheme(tid);renderThemes(tid);showToast(themes.find(function(t){return t.id===tid;}).name+' 테마 적용');
+}
+function applyTheme(tid){
+  var t=themes.find(function(x){return x.id===tid;})||themes[0];
+  var r=document.documentElement;
+  r.style.setProperty('--accent',t.accent);
+  r.style.setProperty('--accent-bg',t.accentBg);
+  r.style.setProperty('--accent-bdr',t.accentBdr);
+  var isLight=window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches;
+  if(isLight)r.style.setProperty('--accent',t.lightAccent);
+}
 function saveNikkei(){
   var id=document.getElementById('set-nikkei-id').value.trim();
   var pw=document.getElementById('set-nikkei-pw').value.trim();
