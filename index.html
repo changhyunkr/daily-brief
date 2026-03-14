@@ -902,6 +902,15 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             </div>
           </div>
 
+          <div class="set-lbl">마켓 모드</div>
+          <div class="set-grp">
+            <div style="display:flex;gap:var(--s2);padding:var(--s3) var(--s4)">
+              <button class="chip" id="mm-jp" onclick="setMarketMode('jp')">🇯🇵 일본 중심</button>
+              <button class="chip" id="mm-kr" onclick="setMarketMode('kr')">🇰🇷 한국 중심</button>
+              <button class="chip" id="mm-both" onclick="setMarketMode('both')">🌏 양쪽</button>
+            </div>
+          </div>
+
           <div class="set-lbl">표시 설정</div>
           <div class="set-grp">
             <div class="set-row" onclick="togSetting('autoGen')"><span class="set-row-lbl">앱 시작 시 자동 생성</span><button class="ios-tog on" id="tog-autoGen"></button></div>
@@ -953,7 +962,7 @@ html,body{height:100%;background:var(--bg);color:var(--t1);
             <div class="set-row"><span class="set-row-lbl">월 예상 비용</span><span class="set-row-val" id="estCost">~$0</span></div>
           </div>
           <button class="set-btn danger" onclick="clearOld()">30일 이전 데이터 삭제</button>
-          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v23</div>
+          <div style="padding:var(--s4) var(--s4) var(--s2);font-size:12px;color:var(--t3);text-align:center">Daily Brief v24</div>
         </div>
       </div>
 
@@ -1014,7 +1023,7 @@ function skeys(){try{if(_ls){var a=[];for(var i=0;i<localStorage.length;i++)a.pu
 
 /* ── STATE ───────────────────────────────────────────────── */
 var curDate=todayStr(),curBrief=null,curCat='all',curLen='short';
-var cfg={autoGen:true,japanMode:true,koreaMode:false,usMode:true,dealMode:true,trendMode:true,podAutoGen:false};
+var cfg={autoGen:true,japanMode:true,koreaMode:false,usMode:true,dealMode:true,trendMode:true,podAutoGen:false,marketMode:'jp'};
 var psecs=[],pidx=0,spd=1.0,elapsed=0,totalSec=0;
 var playing=false,paused=false,timerRef=null;
 var voices=[],selVoice=null,useOai=false,oaiVoice='nova',audioEl=null;
@@ -1127,42 +1136,37 @@ function fetchGemini(date){
   var key=sg('db_gemini');if(!key)return Promise.resolve(null);
   var active=getActiveSources();
   var srcNames=active.slice(0,30).map(function(s){return s.name;}).join(', ');
-  var prompt='Today is '+date+' (JST, around 4:30 AM). You MUST use Google Search to find REAL news from the last 24 hours.'
-    +'\n\nIMPORTANT RULES:'
-    +'\n- ONLY report news you actually found via search. NEVER fabricate or guess.'
-    +'\n- Each item MUST have a real source URL from the actual article.'
-    +'\n- If you cannot find enough news, return fewer items. 5 real items > 20 fake items.'
-    +'\n- Market data MUST be real closing prices from yesterday. If unknown, write "N/A".'
-    +'\n\nPRIORITY SOURCES (search these first): '+srcNames
-    +'\n\nSEARCH THESE TOPICS (in order of priority):'
-    +'\n1. [Japanese] 日経新聞 朝刊 トップ (today Nikkei morning headlines)'
-    +'\n2. [Japanese] 日本 不動産 取引 REIT (Japan real estate deals, J-REIT news)'
-    +'\n3. [Japanese] M&A 買収 TOB カーブアウト 日本 (Japan M&A, TOB, carve-out)'
-    +'\n4. [English] "S&P 500" OR "Nasdaq" closing price yesterday'
-    +'\n5. [English] Fed rate decision OR FOMC latest'
-    +'\n6. [English] USD/JPY exchange rate today'
-    +'\n7. [English] Japan PE deal OR "Blackstone Japan" OR "KKR Japan"'
-    +'\n8. [English] Asia M&A deal announced this week'
-    +'\n9. [Korean] 한국 경제 주요 뉴스 (Korea economy headlines)'
-    +'\n10. [English] WTI crude oil price today'
-    +'\n\nFor EACH real news item found, provide:'
-    +'\n- Headline (Korean, max 55 chars, specific with names/numbers)'
-    +'\n- Category: 글로벌|일본|미국|아시아|매크로|딜|화제|한국'
-    +'\n- Published time (e.g. "3/14 06:30 JST" or "3/13 22:15 EST"). MUST be from last 24-36 hours only.'
-    +'\n- 2-sentence Korean summary with SPECIFIC facts from the article'
-    +'\n- Source name (Nikkei, Bloomberg, Reuters, etc.)'
-    +'\n- ACTUAL article URL (not a google redirect)'
-    +'\n\nMARKET DATA (search for exact closing prices):'
-    +'\n- JGB 10Y yield, USD/JPY, Nikkei 225, S&P 500, WTI crude, USD/KRW'
-    +'\n- Include exact numbers and daily change. Write N/A if not found.'
-    +'\n\nReturn 10-20 items. Quality over quantity. NO fabrication.'
+  var isKR=cfg.marketMode==='kr';
+  var prompt='Today is '+date+'. You are a senior investment analyst. Use Google Search to find REAL news published in the last 24 hours.\n'
+    +'\nRULES: Only report news actually found. Each must have source+URL. NEVER fabricate.\n'
+    +'\nSEARCH ALL of these (run EACH search separately for maximum coverage):\n'
+    +'\n[Search 1] site:nikkei.com OR site:bloomberg.com today news\n'
+    +'\n[Search 2] 日経 朝刊 '+date.replace(/-/g,'/')+'\n'
+    +'\n[Search 3] Japan M&A TOB buyout '+date.slice(0,7)+'\n'
+    +'\n[Search 4] S&P 500 closing price yesterday\n'
+    +'\n[Search 5] Federal Reserve latest news\n'
+    +'\n[Search 6] USD JPY exchange rate today\n'
+    +'\n[Search 7] Japan real estate REIT deal\n'
+    +'\n[Search 8] 한국 경제 뉴스 오늘\n'
+    +'\n[Search 9] 한국 부동산 거래 M&A\n'
+    +'\n[Search 10] Asia private equity deal announced\n'
+    +'\n[Search 11] activist investor Japan Korea\n'
+    +'\n[Search 12] BOJ interest rate decision\n'
+    +'\n[Search 13] oil price WTI today\n'
+    +'\n[Search 14] AI technology regulation news today\n'
+    +'\n[Search 15] China PBOC economy property\n'
+    +(isKR?'\n[Search 16] 코스피 코스닥 마감\n[Search 17] 한국은행 금리\n[Search 18] 한국 PE 사모펀드\n':'')
+    +'\nPRIORITY SOURCES: '+srcNames
+    +'\n\nFor EACH news item: Korean headline (max 55 chars with specific names/numbers), category (글로벌|일본|미국|아시아|매크로|딜|화제|한국), published time, 2-sentence Korean summary, source, URL.'
+    +'\nMarket data: JGB 10Y, USD/JPY, Nikkei, S&P500, WTI, USD/KRW — exact numbers.'
+    +'\n\nTARGET: 15-25 items. Search EVERY query above. Each query should yield 1-3 items.'
     +getFocusPrompt();
   return geminiCall(key,prompt,0);
 }
 function geminiCall(key,prompt,attempt){
   return fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+key,{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.1,maxOutputTokens:10000}})
+    body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],tools:[{google_search:{}}],generationConfig:{temperature:0.3,maxOutputTokens:12000}})
   }).then(function(r){
     if(r.status===429&&attempt<2){
       var wait=(attempt+1)*15000;
@@ -1181,7 +1185,8 @@ function geminiCall(key,prompt,attempt){
 /* ── STRUCTURE AI ────────────────────────────────────────── */
 function structureAI(raw,date){
   var ckey=sg('db_claude'),okey=sg('db_openai');
-  var jp=cfg.japanMode!==false;
+  var isKR=cfg.marketMode==='kr';
+  var mktLabel=isKR?'한국 PE/부동산':'일본 PE/부동산';
 
   var antiHalluc='CRITICAL ANTI-HALLUCINATION RULES:\n'
     +'1. ONLY use information from the raw news data provided below. NEVER invent news.\n'
@@ -1364,12 +1369,26 @@ function genPod(date,len){
   var brief=sgj('db_brief_'+date);
   if(!brief){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">📅</div><div class="empty-txt">먼저 브리핑을 생성해주세요</div></div>';return;}
   document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">스크립트 생성 중...</div></div>';
-  var lens={short:'3분 약450자',medium:'10분 약1500자',long:'20분 약3000자'};
-  var snames={short:['오프닝','마켓 체크','Top 이슈','Key Watch'],medium:['오프닝','마켓 체크','주요 이슈','PE/RE 임플리케이션','투자 아이디어','Key Watch'],long:['오프닝','마켓 딥다이브','글로벌 이슈','일본 포커스','PE/RE 분석','딜 하이라이트','투자 아이디어','Key Watch']};
-  var bdata=JSON.stringify({headlines:(brief.headlines||[]).slice(0,10),market:brief.market,deals:(brief.deals||[]).slice(0,4),watch:brief.watch}).slice(0,5000);
+  var lens={short:'3분 약500자',medium:'10분 약1500자',long:'20분 약3000자'};
+  var isKR=cfg.marketMode==='kr';
+  var mktCtx=isKR?'한국 PE/부동산/M&A':'일본 PE/부동산/M&A';
+  var snames={short:['마켓 스냅샷','오늘의 핵심 3가지','액션 포인트'],medium:['마켓 스냅샷','글로벌 매크로','주요 이슈 분석','딜 & M&A','투자 전략 포인트'],long:['마켓 딥다이브','글로벌 매크로','이슈 분석 1','이슈 분석 2','딜 & M&A','PE/RE 전략','화제의 토픽','액션 포인트']};
+  var bdata=JSON.stringify({headlines:(brief.headlines||[]).slice(0,12),market:brief.market,deals:(brief.deals||[]).slice(0,5),watch:brief.watch}).slice(0,6000);
   var secM=snames[len].map(function(s){return '=='+s+'==';}).join(' ');
-  var prompt='일본 PE/부동산 팟캐스트 스크립트 (한국어).\n브리핑:\n'+bdata+'\n길이:'+lens[len]+'\n숫자 한국어 음독. 섹션:'+secM+'\n스크립트만 반환.';
-  var ckey=sg('db_claude'),okey=sg('db_openai'),maxT=len==='long'?3000:len==='medium'?2000:700;
+  var prompt=mktCtx+' 전문 팟캐스트 스크립트 (한국어).\n\n'
+    +'브리핑 데이터:\n'+bdata+'\n\n'
+    +'길이: '+lens[len]+'\n\n'
+    +'스타일 가이드 (필수):\n'
+    +'- 인사, 소개, "오늘 알아볼 내용은", "들어주셔서 감사합니다", "다음에 돌아오겠습니다" 등 일체 금지\n'
+    +'- 첫 문장부터 핵심 뉴스로 바로 시작: "어젯밤 S&P가 오천칠백이십에 마감했고..."\n'
+    +'- 모든 시간을 콘텐츠에 투자. 3분이면 3분 전부 인사이트.\n'
+    +'- 숫자 구체적으로. "상승했다" 금지 → "삼점오퍼센트 상승"\n'
+    +'- 남들이 안 짚는 2차 효과, 연쇄 반응, 역사적 패턴 비교 포함\n'
+    +'- "왜 이게 중요하냐면" 패턴 적극 활용\n'
+    +'- 마지막 섹션은 "오늘 기억할 것 한 줄"로 끝내기\n'
+    +'- 숫자는 한국어 음독\n\n'
+    +'섹션: '+secM+'\n스크립트만 반환.';
+  var ckey=sg('db_claude'),okey=sg('db_openai'),maxT=len==='long'?3500:len==='medium'?2200:800;
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxT,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
   else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:maxT,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
@@ -1475,13 +1494,30 @@ function askAbout(topic){goTab('chat');document.getElementById('chatInp').value=
 
 /* ── TOPIC PODCAST ───────────────────────────────────────── */
 function topicPodcast(topic){
-  goTab('pod');document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">'+esc(topic)+'<br>팟캐스트 생성 중...</div></div>';
+  goTab('pod');document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">'+esc(topic)+'<br>딥다이브 팟캐스트 생성 중...</div></div>';
   var ckey=sg('db_claude'),okey=sg('db_openai');
-  var bctx=curBrief?JSON.stringify({headlines:(curBrief.headlines||[]).slice(0,6),deals:(curBrief.deals||[]).slice(0,3)}).slice(0,2000):'';
-  var prompt='토픽:'+topic+'\n참고:\n'+bctx+'\n5분 한국어 팟캐스트. 숫자 한국어 음독.\n섹션:==배경====핵심 분석====투자 임플리케이션====결론==\n스크립트만 반환.';
+  var isKR=cfg.marketMode==='kr';
+  var mktCtx=isKR?'한국 PE/부동산 투자':'일본 PE/부동산 투자';
+  var prompt='당신은 '+mktCtx+' 전문 팟캐스트 호스트입니다.\n\n'
+    +'토픽: "'+topic+'"\n\n'
+    +'이 토픽에 대해 5분 분량의 딥다이브 팟캐스트 스크립트를 작성하세요.\n\n'
+    +'스타일 가이드:\n'
+    +'- 인사/소개/마무리 인사 없이 바로 핵심부터 시작\n'
+    +'- "이 토픽이 왜 지금 중요한가"로 시작해서 청취자의 주의를 즉시 끌 것\n'
+    +'- 일반론 금지. 구체적 수치, 기업명, 딜 사이즈, 밸류에이션 멀티플 포함\n'
+    +'- "주목할 만하다" 같은 빈 표현 금지. 대신 "왜 주목해야 하는지"를 3문장으로 설명\n'
+    +'- 투자자가 내일 아침 IC에서 바로 쓸 수 있는 인사이트 포함\n'
+    +'- 마지막에 "들어주셔서 감사합니다" 같은 클로징 금지. 핵심 action item으로 끝낼 것\n'
+    +'- 숫자는 한국어 음독 (예: 53,746 → 오만 삼천칠백사십육)\n\n'
+    +'섹션 구조:\n'
+    +'==왜 지금 중요한가== (30초: 이 뉴스의 시장 임팩트)\n'
+    +'==핵심 팩트 & 수치== (1분: 구체적 데이터, 딜 구조, 밸류에이션)\n'
+    +'==숨겨진 의미== (1.5분: 표면에 안 보이는 2차 효과, 연쇄 반응, 역사적 맥락)\n'
+    +'==투자 액션== (1분: 포트폴리오 영향, 구체적 대응 전략)\n\n'
+    +'스크립트만 반환.';
   var p;
-  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1500,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   p.then(function(s){if(s){parsePod(s);document.getElementById('podH').textContent=topic;showToast('팟캐스트 준비됨');}}).catch(function(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
@@ -2195,10 +2231,19 @@ function loadCfg(){
   var nid=sg('db_nikkei_id'),npw=sg('db_nikkei_pw');
   var eni=document.getElementById('set-nikkei-id');if(eni&&nid)eni.value=nid;
   var enp=document.getElementById('set-nikkei-pw');if(enp&&npw)enp.value='••••••••';
-  updateCatTabs();
+  updateCatTabs();updateMarketModeUI();
 }
 function togSetting(key){cfg[key]=!cfg[key];var el=document.getElementById('tog-'+key);if(el)el.classList.toggle('on',cfg[key]);ssj('db_cfg',cfg);updateCatTabs();}
 function updateCatTabs(){var map={'japanMode':'cb-일본','koreaMode':'cb-한국','usMode':'cb-미국','dealMode':'cb-딜','trendMode':'cb-화제'};for(var key in map){var el=document.getElementById(map[key]);if(!el)continue;el.style.display=(cfg[key]!==false)?'':'none';}}
+function setMarketMode(mode){
+  cfg.marketMode=mode;ssj('db_cfg',cfg);
+  var modes=['jp','kr','both'];modes.forEach(function(m){var el=document.getElementById('mm-'+m);if(el)el.classList.toggle('on',m===mode);});
+  showToast(mode==='kr'?'한국 중심 모드':mode==='jp'?'일본 중심 모드':'양쪽 모드');
+}
+function updateMarketModeUI(){
+  var mode=cfg.marketMode||'jp';
+  var modes=['jp','kr','both'];modes.forEach(function(m){var el=document.getElementById('mm-'+m);if(el)el.classList.toggle('on',m===mode);});
+}
 function updateCounts(){var n=skeys().filter(function(k){return k.startsWith('db_brief_');}).length;var sc=document.getElementById('storedCnt');if(sc)sc.textContent=n+'일';var ec=document.getElementById('estCost');if(ec)ec.textContent='~$'+(n*0.04).toFixed(2)+'/월';}
 function clearOld(){if(!confirm('30일 이전 데이터를 삭제할까요?'))return;var cut=new Date();cut.setDate(cut.getDate()-30);var n=0;skeys().filter(function(k){return k.startsWith('db_');}).forEach(function(k){var m=k.match(/(\d{4}-\d{2}-\d{2})/);if(m&&new Date(m[1])<cut){sr(k);n++;}});updateCounts();showToast(n+'개 삭제됐습니다');}
 
