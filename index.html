@@ -951,7 +951,7 @@ function structureAI(raw,date){
   if(okey){
     return fetch('https://api.openai.com/v1/chat/completions',{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},
-      body:JSON.stringify({model:'gpt-4o',max_tokens:6000,messages:[
+      body:JSON.stringify({model:'gpt-5-mini',max_tokens:6000,messages:[
         {role:'system',content:antiHalluc+'Return valid JSON only.'},
         {role:'user',content:promptText}
       ]})
@@ -1220,7 +1220,7 @@ function genPodLocal(date,len){
   var ckey=sg('db_claude'),okey=sg('db_openai'),maxT=len==='long'?3500:len==='medium'?2200:800;
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxT,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:maxT,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:maxT,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   p.then(function(s){if(s){ss('db_pod_'+date+'_'+len,s);parsePod(s);}}).catch(function(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
@@ -1321,7 +1321,7 @@ function sendChat(){
   var sys=ctx+'일본 PE/부동산 투자 전문 애널리스트. 간결하고 구체적으로 한국어로 답변.';
   var msgs=chatHist.slice(-8);var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,tools:[{type:'web_search_20250305',name:'web_search'}],messages:msgs})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:800,messages:[{role:'system',content:sys}].concat(msgs)})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:800,messages:[{role:'system',content:sys}].concat(msgs)})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   p.then(function(text){thinkEl.remove();addMsg('ai',text||'응답 없음');chatHist.push({role:'assistant',content:text||''});var el=document.getElementById('chatMsgs');el.scrollTop=el.scrollHeight;}).catch(function(e){thinkEl.remove();addMsg('ai','오류: '+e.message);});
 }
 function addMsg(role,text,cls){var el=document.getElementById('chatMsgs');var d=document.createElement('div');d.className='chat-msg '+role+(cls?' '+cls:'');d.innerHTML='<div class="chat-bubble">'+esc(text).replace(/\n/g,'<br>')+'</div>';el.appendChild(d);el.scrollTop=el.scrollHeight;return d;}
@@ -1372,7 +1372,7 @@ function topicPodcast(idOrTitle){
     +'스크립트만 반환.';
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1500,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:1500,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   p.then(function(s){if(s){parsePod(s);var _pt=document.getElementById('podTitle');if(_pt)_pt.textContent=topic;showToast('팟캐스트 준비됨');}}).catch(function(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
@@ -1404,7 +1404,7 @@ function genRichAnalysis(q){
 
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   p.then(function(raw){
     try{var data=parseJ(raw);renderRichAnalysis(res,q,data);}
     catch(e){res.innerHTML='<div class="rich-wrap"><div class="sec-hdr">'+esc(q)+'</div><div style="padding:var(--s4);background:var(--e1);border-radius:var(--r3);font-size:15px;color:var(--t2);line-height:1.8">'+esc(raw).replace(/\n/g,'<br>')+'</div></div><div style="padding:var(--s3) var(--s4)"><button class="empty-btn" onclick="topicPodcast(\''+esc(q)+'\')">팟캐스트로 듣기</button></div>';}
@@ -1462,7 +1462,7 @@ function analyzePaste(){
   var prompt='다음 기사를 분석해서 JSON만 반환:\n기사:\n'+txt.slice(0,5000)+'\n{"title":"55자이내","cat":"글로벌|일본|미국|아시아|매크로|딜|화제|한국","summary":"2문장","detail":"3-4문장","implications":"PE/RE관점","source":"출처"}';
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   p.then(function(raw){var item=parseJ(raw);item.id='paste_'+Date.now();item.url='';if(curBrief){curBrief.headlines.unshift(item);ssj('db_brief_'+curDate,curBrief);renderCards(curBrief.headlines,curCat);}var cls=catCls[item.cat]||'c-글로벌';res.innerHTML='<div class="card-group" style="margin:0 var(--s4)"><div class="news-row"><div class="news-body"><span class="ncat '+cls+'">'+esc(item.cat)+'</span><div class="n-title">'+esc(item.title)+'</div><div class="n-sum">'+esc(item.summary)+'</div></div></div></div>';document.getElementById('pasteArea').value='';showToast('브리핑에 추가됐습니다');}).catch(function(e){res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
@@ -1615,7 +1615,7 @@ function genDeepDive(hid){
 
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:4000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:4000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   p.then(function(raw){
     el.innerHTML='';
     try{
@@ -1872,7 +1872,7 @@ function addSource(){
   var prompt='"'+v+'"의 공식 웹사이트 URL을 찾아줘. JSON만 반환: {"name":"공식 이름","url":"https://...","desc":"한줄 설명"}\n예: "toyokeizai" → {"name":"東洋経済オンライン","url":"https://toyokeizai.net/","desc":"일본 비즈니스 주간지"}\n"kedglobal" → {"name":"KED Global","url":"https://www.kedglobal.com/","desc":"한국경제 영문 뉴스"}\nJSON만 반환.';
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:200,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   else{inp.disabled=false;showToast('API 키 필요');return;}
   showToast(v+' 검색 중...');
   p.then(function(raw){
@@ -1936,7 +1936,7 @@ function genComp(){
     +'5-8개 동종기업 포함. 수치는 최신 available data 기준. JSON만 반환.';
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   else{res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">API 키 필요</div></div>';return;}
   p.then(function(raw){
     try{
@@ -2002,7 +2002,7 @@ function refreshSingleDeal(idx){
   var prompt='"'+d.name+'" 딜의 최신 상태를 알려줘. JSON으로:\n{"status":"announced|progress|closed|failed","meta":"현재 상태 2-3문장 요약. 가격, 구조, 타임라인, 규제 승인 등"}\nJSON만 반환.';
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:500,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:500,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   else return;
   p.then(function(raw){
     try{var u=parseJ(raw);deals[idx].status=u.status||deals[idx].status;deals[idx].meta=u.meta||deals[idx].meta;deals[idx].updated=todayStr();ssj('db_watchdeals',deals);renderDeals(deals);showToast(d.name+' 업데이트됨');}
@@ -2047,7 +2047,7 @@ function genWeeklyMemo(){
     +']}\nJSON만 반환.';
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
-  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
+  else if(okey){p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_tokens:3000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
   else{res.innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">API 키 필요</div></div>';return;}
   p.then(function(raw){
     try{

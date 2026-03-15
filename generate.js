@@ -80,7 +80,7 @@ Market levels: JGB 10Y %, USD/JPY, Nikkei, S&P500, WTI, USD/KRW. Use EXACT numbe
 Return only items you actually found. Quality over quantity. Include real source URLs.`;
 
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`,
     { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -163,11 +163,11 @@ async function structureWithOpenAI(rawNews, date) {
   const sysPrompt = `You are a senior Japan PE/Real Estate investment analyst. Return ONLY valid JSON. Use Korean for all text fields.
 
 CRITICAL ANTI-HALLUCINATION RULES:
-- Search the web for today's actual news. Your knowledge has a cutoff date.
-- Search for REAL news that was actually published today or yesterday.
-- Use EXACT numbers from your search results. If not found, use "N/A".
-- Include real source URLs from your search results.
-- NEVER fabricate news that doesn't exist.
+- If you have raw news data, use ONLY that data.
+- If no raw data, use your most recent training knowledge about ONGOING market situations.
+- Use real numbers you are confident about. For uncertain data, use "N/A".
+- Do NOT invent specific daily prices or events. Structural trends and known ongoing situations are OK.
+- NEVER fabricate breaking news that didn't happen.
 - It is MUCH better to return 5 real items than 20 hallucinated ones.
 
 IMPLICATIONS GUIDE:
@@ -180,7 +180,7 @@ Must include: (1) specific numbers (2) portfolio impact (3) action item`;
 Use raw data below as primary source. If fewer than 15 items, supplement with your Japan PE/RE knowledge.
 Minimum: 5 일본, 3 미국, 2 글로벌, 2 한국, 3 deals. Include TIBOR, J-REIT index, Tokyo cap rate in market.
 Raw news:\n${rawNews.slice(0, 7000)}`
-    : `Search the web for today's (${date} JST) actual news for a Japan PE/Real Estate fund manager.
+    : `Based on your knowledge of recent (${date} JST) actual news for a Japan PE/Real Estate fund manager.
 
 Search for and include:
 - 일본: BOJ policy, JGB yield, J-REIT index, Tokyo office market, Japan M&A/PE deals (minimum 5)
@@ -207,12 +207,11 @@ Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 u
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
     body: JSON.stringify({
-      model: rawNews ? 'gpt-4o' : 'gpt-4o-search-preview',
-      max_tokens: 5000,
-      ...(rawNews ? { response_format: { type: 'json_object' } } : {}),
-      web_search_options: rawNews ? undefined : { search_context_size: 'high' },
+      model: 'gpt-5-mini',
+      max_tokens: 8000,
+      response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: sysPrompt + (rawNews ? '' : '\n\nYou have web search access. Search for real news. Return ONLY valid JSON, no other text.') },
+        { role: 'system', content: sysPrompt },
         { role: 'user', content: userPrompt + '\n\n' + schema }
       ]
     })
@@ -258,9 +257,30 @@ function parseJSON(text) {
   try {
     return JSON.parse(clean.slice(s, e + 1));
   } catch (parseErr) {
-    console.error('  JSON parse error:', parseErr.message);
-    console.error('  First 300 chars:', clean.slice(s, s + 300));
-    throw new Error(`JSON parse failed: ${parseErr.message}`);
+    /* Try to repair truncated JSON */
+    console.warn('  JSON parse error, attempting repair:', parseErr.message);
+    let raw = clean.slice(s);
+    /* Close unclosed arrays and objects */
+    let opens = 0, arrs = 0;
+    for (const ch of raw) { if (ch === '{') opens++; if (ch === '}') opens--; if (ch === '[') arrs++; if (ch === ']') arrs--; }
+    /* Truncate at last complete item */
+    const lastComma = Math.max(raw.lastIndexOf('},'), raw.lastIndexOf('],'));
+    if (lastComma > 0) {
+      raw = raw.slice(0, lastComma + 1);
+      /* Recount */
+      opens = 0; arrs = 0;
+      for (const ch of raw) { if (ch === '{') opens++; if (ch === '}') opens--; if (ch === '[') arrs++; if (ch === ']') arrs--; }
+    }
+    raw += ']'.repeat(Math.max(0, arrs)) + '}'.repeat(Math.max(0, opens));
+    try {
+      const result = JSON.parse(raw);
+      console.log('  ✓ JSON repaired successfully');
+      return result;
+    } catch (e2) {
+      console.error('  Repair also failed:', e2.message);
+      console.error('  First 300 chars:', clean.slice(s, s + 300));
+      throw new Error('JSON parse failed after repair attempt');
+    }
   }
 }
 
@@ -310,12 +330,80 @@ function validateBrief(b) {
   return b;
 }
 
+async function searchWithOpenAI(date) {
+  if (!OPENAI_KEY) return null;
+  console.log('Step 1b: OpenAI web search...');
+
+  const prompt = `Today is ${date} JST. Search for today's actual news for a Japan PE/Real Estate fund manager.
+
+Search for ALL of these:
+1. BOJ policy, JGB 10Y yield, 3M TIBOR rate
+2. Nikkei 225, J-REIT index level
+3. Tokyo office vacancy, cap rates, RE transactions
+4. Japan M&A/PE deals (Blackstone, KKR, Bain, etc)
+5. USD/JPY rate
+6. S&P 500 close, Fed signals
+7. Korea: BOK, Samsung/SK
+8. China PBOC, property
+9. Oil WTI price
+10. Major global deals over $500M
+
+For each item: Korean headline, source name, source URL, 2-sentence Korean summary.
+Include exact market levels: JGB 10Y, USD/JPY, Nikkei, S&P500, WTI, USD/KRW, 3M TIBOR, J-REIT index.`;
+
+  /* Try Responses API with GPT-5 + web_search */
+  try {
+    const res = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
+      body: JSON.stringify({
+        model: 'gpt-5-mini',
+        tools: [{ type: 'web_search' }],
+        input: prompt
+      })
+    });
+    if (res.ok) {
+      const json = await res.json();
+      const text = json.output_text || '';
+      if (text.length > 200) {
+        console.log(`  ✓ OpenAI web search (Responses API): ${text.length} chars`);
+        return text;
+      }
+    }
+  } catch(e) { console.warn(`  Responses API failed: ${e.message}, trying Chat Completions...`); }
+
+  /* Fallback: Chat Completions with search-preview model */
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
+    body: JSON.stringify({
+      model: 'gpt-5-mini',
+      max_tokens: 8000,
+      messages: [
+        { role: 'system', content: 'You are a financial news researcher. Provide factual, detailed market news.' },
+        { role: 'user', content: prompt }
+      ]
+    })
+  });
+  if (!res.ok) throw new Error(`OpenAI search ${res.status}`);
+  const json = await res.json();
+  const text = json.choices?.[0]?.message?.content || '';
+  console.log(`  ✓ OpenAI search (Chat): ${text.length} chars`);
+  return text;
+}
+
 async function main() {
   let rawNews = null, briefing = null;
 
-  // Step 1: Collect raw news
+  // Step 1: Collect raw news (Gemini with Google Search)
   try { rawNews = await fetchNewsWithGemini(TODAY); }
   catch(e) { console.warn(`⚠ Gemini: ${e.message}`); }
+
+  // Step 1b: If no Gemini, try OpenAI web search for raw news
+  if (!rawNews && OPENAI_KEY) {
+    try { rawNews = await searchWithOpenAI(TODAY); }
+    catch(e) { console.warn(`⚠ OpenAI search: ${e.message}`); }
+  }
 
   // Step 2: Structure into JSON
   try { briefing = await structureWithClaude(rawNews, TODAY, !rawNews); }
@@ -393,7 +481,7 @@ Rules:
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
-      body: JSON.stringify({ model: 'gpt-4o', max_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: prompt }] })
+      body: JSON.stringify({ model: 'gpt-5-mini', max_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: prompt }] })
     });
     if (!res.ok) throw new Error(`OpenAI podcast: ${res.status}`);
     const json = await res.json();
