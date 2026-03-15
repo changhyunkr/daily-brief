@@ -14,6 +14,7 @@
 :root{--bg:#FAF7F2;--card:#FFF;--s2:#F0EBE3;--s3:#E4DDD3;--t1:#1A1A1A;--t2:#5C5650;--t3:#8A8480;--accent:#A38232;--accent-bg:rgba(163,130,50,.07);--cat1:#7A1D2A;--cat2:#2C5282;--cat3:#6A3296;--green:#1B7A4E;--red:#7A1D2A;--sep:rgba(0,0,0,.08);--r:12px;--serif:'Fraunces',Georgia,serif;--sans:'Plus Jakarta Sans',sans-serif;--sat:env(safe-area-inset-top,44px);--sab:env(safe-area-inset-bottom,20px)}
 @media(prefers-color-scheme:dark){:root{--bg:#000;--card:#111;--s2:#1A1A1A;--s3:#242424;--t1:#E8E6E0;--t2:#A09A90;--t3:#7A756E;--accent:#C9A84C;--accent-bg:rgba(201,168,76,.08);--cat1:#C45A6A;--cat2:#5B8EC0;--cat3:#9070C0;--green:#2D8B6A;--red:#C45A5A;--sep:rgba(255,255,255,.06)}}
 html:root.dark,html.dark{--bg:#000;--card:#111;--s2:#1A1A1A;--s3:#242424;--t1:#E8E6E0;--t2:#A09A90;--t3:#7A756E;--accent:#C9A84C;--accent-bg:rgba(201,168,76,.08);--cat1:#C45A6A;--cat2:#5B8EC0;--cat3:#9070C0;--green:#2D8B6A;--red:#C45A5A;--sep:rgba(255,255,255,.06)}
+html.light,html.light body{--bg:#FAF7F2;--card:#FFF;--s2:#F0EBE3;--s3:#E4DDD3;--t1:#1A1A1A;--t2:#5C5650;--t3:#8A8480;--accent:#A38232;--accent-bg:rgba(163,130,50,.07);--cat1:#7A1D2A;--cat2:#2C5282;--cat3:#6A3296;--green:#1B7A4E;--red:#7A1D2A;--sep:rgba(0,0,0,.08)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
 .app{display:flex;flex-direction:column;height:100%}
@@ -71,7 +72,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 .sec-handle{color:var(--t3);font-size:12px}
 .sec-t{font-size:14px;font-weight:700;color:var(--t3);letter-spacing:.04em;text-transform:uppercase}
 .sec-c{font-size:12px;color:var(--t3)}.sec-sp{flex:1}
-.sec-more{font-size:13px;font-weight:600;color:var(--accent)}
+
 
 /* CARDS — source top-right, buttons pinned bottom */
 .story-scroll{display:flex;gap:8px;overflow-x:auto;padding:0 10px 8px;scrollbar-width:none;scroll-snap-type:x mandatory}
@@ -213,7 +214,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 .ld-dot.done{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ld-txt{font-size:14px;color:var(--t2)}
-.pane{display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px}
+.pane{display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:120px}
 .pane::-webkit-scrollbar{display:none}
 .pane.on{display:block}
 .chat-wrap{display:flex;flex-direction:column;height:100%}
@@ -295,6 +296,20 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 .len-btn{flex:1;padding:10px;border:1px solid var(--sep);border-radius:12px;background:var(--card);text-align:center;cursor:pointer}
 .len-btn.on{background:var(--accent-bg);border-color:var(--accent)}
 .len-main{font-size:14px;font-weight:600;display:block;color:var(--t1)}.len-sub{font-size:12px;color:var(--t3);display:block}
+
+.src-cat{background:var(--card);border:1px solid var(--sep);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.src-cat-hdr{display:flex;align-items:center;gap:8px;padding:10px 16px;cursor:pointer}
+.src-cat-ico{font-size:16px}
+.src-cat-name{font-size:14px;font-weight:600;flex:1}
+.src-cat-cnt{font-size:12px;color:var(--t3)}
+.src-cat-chev{font-size:14px;color:var(--t3);transition:transform .2s}
+.src-cat-hdr.open .src-cat-chev{transform:rotate(90deg)}
+.src-cat-body{display:none;border-top:1px solid var(--sep)}
+.src-cat-body.open{display:block}
+.src-item{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid var(--sep)}
+.src-item:last-child{border-bottom:none}
+.src-name{font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.src-del{width:24px;height:24px;border-radius:50%;border:1px solid var(--sep);background:var(--s2);color:var(--red);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -324,7 +339,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
   <div id="mainArea">
   <div class="nav">
     <div class="nav-brand">Brief</div>
-    <div class="date-nav"><button onclick="navDay(-1)">‹</button><b id="navDateLbl">—</b><button id="navNext" onclick="navDay(1)">›</button></div>
+    <div class="date-nav"><button onclick="navDate(-1)">‹</button><b id="navDateLbl">—</b><button id="navNext" onclick="navDate(1)">›</button></div>
     <div class="nb">
       <button onclick="toggleDarkMode()">◐</button>
       <button onclick="rerunToday()">↻</button>
@@ -357,7 +372,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
       <div class="rate-top"><span class="rate-l">JGB 10Y</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,13 9,11 16,9 23,7 30,4 37,2" stroke="var(--green)" opacity=".5"/></svg></div>
       <div class="rate-bot"><span class="rate-v">1.525%</span><span class="rate-d pos">+3bp</span></div>
     </div>
-    <button class="rate-edit">✎</button>
+    
   </div>
 
   <div class="rs" id="rs">
@@ -749,7 +764,7 @@ function startApp(){
     var _pal=sg('db_palette');if(_pal)applyPalette(_pal);
   });}catch(e){}
 
-  if(sg('db_darkMode')==='1'){document.documentElement.classList.add('dark');document.body.classList.add('dark');}
+  var _dm=sg('db_darkMode');if(_dm==='1')document.documentElement.classList.add('dark');else if(_dm==='0')document.documentElement.classList.add('light');
 
   var ma=document.getElementById('mainArea');if(ma){ma.classList.add('show');}
   var tb=document.getElementById('tabbar');if(tb)tb.style.display='block';
@@ -1022,7 +1037,7 @@ function renderMkt(m){
       +'<div class="rate-bot"><span class="rate-v">'+esc(String(f.v))+'</span>'
       +'<span class="rate-d '+cls+'">'+esc(String(f.d))+'</span></div></div>';
   }
-  html+='<button class="rate-edit" onclick="alert(\'커스터마이즈: 항목 추가/삭제/순서 변경\')">✎</button>';
+  /* rate edit: future feature */
   bar.innerHTML=html;
 }
 function renderCards(hl,filter){
@@ -1036,9 +1051,9 @@ function renderCards(hl,filter){
   var shown={},catOff=sgj('db_catOff')||[];
   for(var oi=0;oi<cfgCats.length;oi++){
     var cat=cfgCats[oi];if(!groups[cat]||!groups[cat].length||catOff.indexOf(cat)>=0)continue;shown[cat]=1;
-    var isPrimary=(groups[cat].length>=2)||primaryCats.indexOf(cat)>=0;
+    var isPrimary=true;/* Show all categories as cards when few items */
     html+='<div class="sec"><span class="sec-handle">\u2807</span><span class="sec-t">'+esc(cat)+'</span><span class="sec-c">'+groups[cat].length+'</span><span class="sec-sp"></span>';
-    if(isPrimary)html+='<span class="sec-more">\u5168\u4f53 \u2192</span>';
+    
     html+='</div>';
     if(isPrimary){html+='<div class="story-scroll">';for(var j=0;j<groups[cat].length;j++)html+=buildCard(groups[cat][j]);html+='</div>';}
     else{for(var j=0;j<groups[cat].length;j++)html+=buildCompact(groups[cat][j]);}
@@ -1164,6 +1179,9 @@ function genPod(date,len){
       return;
     }
   }if(cached){parsePod(cached);return;}
+  genPodLocal(date,len);
+}
+function genPodLocal(date,len){
   var brief=sgj('db_brief_'+date);
   if(!brief){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">📅</div><div class="empty-txt">먼저 브리핑을 생성해주세요</div></div>';return;}
   document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">스크립트 생성 중...</div></div>';
@@ -1244,7 +1262,7 @@ function setSpd(s,btn){spd=s;var bs=document.querySelectorAll('.spd-btn');for(va
 function pbCycleSpd(btn){var steps=[1,1.5,2];spd=steps[(steps.indexOf(spd)+1)%steps.length];btn.textContent=spd+'x';if(audioEl)audioEl.playbackRate=spd;var bs=document.querySelectorAll('.spd-btn');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',parseFloat(bs[i].textContent)===spd);if(playing&&!audioEl){var idx=pidx;stopAll();speakFrom(idx);}}
 
 function ptoggle(){
-  if(!psecs.length){goTab('pod');return;}
+  if(!psecs.length){openPod();return;}
   if(audioEl){if(playing){if(paused){audioEl.play();paused=false;setIco(false);}else{audioEl.pause();paused=true;setIco(true);}}else{audioEl.currentTime=elapsed||0;audioEl.play();playing=true;paused=false;setIco(false);}return;}
   if(playing){if(paused){speechSynthesis.resume();paused=false;setIco(false);}else{speechSynthesis.pause();paused=true;setIco(true);}}else speakFrom(pidx);
 }
@@ -1293,11 +1311,20 @@ function sendChat(){
   p.then(function(text){thinkEl.remove();addMsg('ai',text||'응답 없음');chatHist.push({role:'assistant',content:text||''});var el=document.getElementById('chatMsgs');el.scrollTop=el.scrollHeight;}).catch(function(e){thinkEl.remove();addMsg('ai','오류: '+e.message);});
 }
 function addMsg(role,text,cls){var el=document.getElementById('chatMsgs');var d=document.createElement('div');d.className='chat-msg '+role+(cls?' '+cls:'');d.innerHTML='<div class="chat-bubble">'+esc(text).replace(/\n/g,'<br>')+'</div>';el.appendChild(d);el.scrollTop=el.scrollHeight;return d;}
-function askAbout(topic){goTab('chat');document.getElementById('chatInp').value=topic+'에 대해 더 자세히 알려줘';sendChat();}
+function askAbout(idOrTitle){
+  var title=idOrTitle;
+  if(curBrief){var item=findById(curBrief.headlines,idOrTitle)||findById(curBrief.deals,idOrTitle);if(item)title=item.title;}
+  goTab('research');
+  document.getElementById('chatInp').value=title+'에 대해 더 자세히 알려줘';
+  sendChat();
+}
 
 /* ── TOPIC PODCAST ───────────────────────────────────────── */
-function topicPodcast(topic){
-  goTab('pod');document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">'+esc(topic)+'<br>딥다이브 팟캐스트 생성 중...</div></div>';
+function topicPodcast(idOrTitle){
+  var topic=idOrTitle;
+  if(curBrief){var item=findById(curBrief.headlines,idOrTitle)||findById(curBrief.deals,idOrTitle);if(item)topic=item.title;}
+  /* Open pod overlay directly, don't trigger daily gen */
+  var ov=document.getElementById('podOverlay');if(ov)ov.classList.add('show');document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">'+esc(topic)+'<br>딥다이브 팟캐스트 생성 중...</div></div>';
   var ckey=sg('db_claude'),okey=sg('db_openai');
   var isKR=cfg.marketMode==='kr';
   var mktCtx=isKR?'한국 PE/부동산 투자':'일본 PE/부동산 투자';
@@ -1321,7 +1348,7 @@ function topicPodcast(topic){
   var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
   else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-4o',max_tokens:1500,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
-  p.then(function(s){if(s){parsePod(s);document.getElementById('podH').textContent=topic;showToast('팟캐스트 준비됨');}}).catch(function(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
+  p.then(function(s){if(s){parsePod(s);var _pt=document.getElementById('podTitle');if(_pt)_pt.textContent=topic;showToast('팟캐스트 준비됨');}}).catch(function(e){document.getElementById('podSecList').innerHTML='<div class="empty"><div class="empty-ico">X</div><div class="empty-txt">'+esc(e.message)+'</div></div>';});
 }
 
 /* ── SEARCH ──────────────────────────────────────────────── */
@@ -1545,7 +1572,7 @@ function saveNikkei(){
 function genDeepDive(hid){
   if(!curBrief)return;
   var item=findById(curBrief.headlines,hid)||findById(curBrief.deals,hid);if(!item)return;
-  goTab('chat');
+  goTab('research');
   var ckey=sg('db_claude'),okey=sg('db_openai');
   var el=document.getElementById('chatMsgs');
   el.innerHTML='';addMsg('ai','「'+item.title+'」딥다이브 분석 중...');
@@ -2100,6 +2127,12 @@ function goTab(id){
   var pane=document.getElementById('pane-'+id);if(!pane)pane=document.getElementById('pane-'+tabId);
   if(pane)pane.classList.add('on');
   var tbb=document.getElementById('tbb-'+tabId);if(tbb)tbb.classList.add('on');
+  /* Hide nav+rates for non-feed tabs */
+  var isFeed=(tabId==='feed');
+  var nav=document.querySelector('.nav');if(nav)nav.style.display=isFeed?'':'none';
+  var rates=document.getElementById('ratesBar');if(rates)rates.style.display=isFeed?'':'none';
+  var rs=document.getElementById('rs');if(rs)rs.classList.remove('show');
+  var content=document.querySelector('.content');if(content)content.style.display=isFeed?'':'none';
   if(id==='pod')openPod();
 }
 
@@ -2149,34 +2182,64 @@ function showPodPanel(id,btn){
 function copyScript(){var t='';for(var i=0;i<psecs.length;i++)t+=psecs[i].text+'\n\n';if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){showToast('복사됨');});else showToast('복사 실패');}
 function toggleRS(id){
   var s=document.getElementById('rs');if(s.classList.contains('show')&&s.dataset.id===id){s.classList.remove('show');return;}
-  s.dataset.id=id;var v=['—','—','—','pos',''];var m=curBrief&&curBrief.market;
-  if(m&&m[id]){var f=m[id];v=[id,String(f.v),String(f.d),f.t===1?'pos':'neg',''];}
-  document.getElementById('rsN').textContent=v[0];document.getElementById('rsV').textContent=v[1];
-  var c=document.getElementById('rsC');c.textContent=v[2];c.className='rs-chg '+v[3];
-  document.getElementById('rsW').innerHTML='<b>변동:</b> '+v[4];s.classList.add('show');
+  s.dataset.id=id;
+  /* Default insights for each rate item */
+  var info={
+    usdjpy:{name:'USD/JPY',insight:'엔화 약세 시 해외 LP의 JPY 헤지비용 상승. 150엔 돌파 시 BOJ 개입 경계. 일본 부동산 외국인 매입 환산수익률 직접 영향.'},
+    tibor:{name:'3M TIBOR',insight:'변동금리 대출 기준. BOJ 인상 시 TIBOR 연동 상승 → LTV 60%+ 리파이 비용 증가. 현재 수준은 역사적 저점 대비 상승 추세.'},
+    nikkei:{name:'Nikkei 225',insight:'일본 주식시장 심리 지표. J-REIT NAV와 상관관계. 급락 시 부동산 투자심리 위축, 오피스 테넌트 업종별 영향 점검 필요.'},
+    jreit:{name:'J-REIT Index',insight:'도쿄증권거래소 REIT 지수. 금리 인상기 할인율 상승 → NAV 하락 압력. 물류/호텔 섹터 vs 오피스 디커플링 관찰.'},
+    caprate:{name:'Cap Rate',insight:'도쿄 A급 오피스 기준. JGB 10Y와 스프레드 200-250bp가 투자 판단 기준. 캡레이트 상승 = 자산가치 하락.'},
+    jgb10y:{name:'JGB 10Y',insight:'일본 장기금리 벤치마크. 부동산 DCF 할인율의 앵커. 1.5% 돌파 시 캡레이트 3.5→3.8% 조정 압력. BOJ YCC 상한 주시.'}
+  };
+  var d=info[id]||{name:id,insight:'데이터 준비 중'};
+  var m=curBrief&&curBrief.market;
+  var val='N/A',chg='—',cls='pos';
+  if(m&&m[id]){val=String(m[id].v);chg=String(m[id].d);cls=m[id].t===1?'pos':'neg';}
+  document.getElementById('rsN').textContent=d.name;
+  document.getElementById('rsV').textContent=val;
+  var c=document.getElementById('rsC');c.textContent=chg;c.className='rs-chg '+cls;
+  document.getElementById('rsW').innerHTML=d.insight;
+  s.classList.add('show');
 }
 
 
 
 function toggleDarkMode(){
-  var isDark=document.documentElement.classList.toggle('dark');
-  document.body.classList.toggle('dark');
-  ss('db_darkMode',isDark?'1':'0');var _pal=sg('db_palette');if(_pal)applyPalette(_pal);
+  var html=document.documentElement;
+  /* Simple state machine: track mode explicitly */
+  var cur=sg('db_darkMode');/* '0'=light, '1'=dark, null=auto */
+  var goLight;
+  if(cur==='1'){goLight=true;}
+  else if(cur==='0'){goLight=false;}
+  else{/* auto(null) - OS decides. toggle opposite */goLight=window.matchMedia('(prefers-color-scheme:dark)').matches;}
+  html.classList.remove('dark','light');
+  if(goLight){html.classList.add('light');ss('db_darkMode','0');}
+  else{html.classList.add('dark');ss('db_darkMode','1');}
+  var _pal=sg('db_palette');if(_pal)applyPalette(_pal);
 }
 function renderCatOrder(){
   var cats=sgj('db_catOrder')||['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
   var el=document.getElementById('catOrderList');if(!el)return;
   var html='';
   for(var i=0;i<cats.length;i++){
-    var c=cats[i],enabled=sgj('db_catOff')||[];
-    var isOn=enabled.indexOf(c)<0;
-    html+='<div class="set-row" style="min-height:40px;gap:8px">'
-      +'<span style="font-size:14px;cursor:grab;color:var(--t3)">☰</span>'
-      +'<span class="set-row-lbl" style="font-size:14px">'+c+'</span>'
+    var c=cats[i],off=sgj('db_catOff')||[];
+    var isOn=off.indexOf(c)<0;
+    html+='<div class="set-row" style="min-height:44px;gap:6px">'
+      +'<button style="width:28px;height:28px;border:1px solid var(--sep);border-radius:6px;background:var(--s2);color:var(--t3);font-size:11px;cursor:pointer" onclick="moveCat('+i+',-1)">▲</button>'
+      +'<button style="width:28px;height:28px;border:1px solid var(--sep);border-radius:6px;background:var(--s2);color:var(--t3);font-size:11px;cursor:pointer" onclick="moveCat('+i+',1)">▼</button>'
+      +'<span class="set-row-lbl" style="font-size:14px;flex:1">'+c+'</span>'
       +'<button class="ios-tog'+(isOn?' on':'')+'" onclick="togCat(this,\''+c+'\')"></button>'
       +'</div>';
   }
   el.innerHTML=html;
+}
+function moveCat(idx,dir){
+  var cats=sgj('db_catOrder')||['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
+  var newIdx=idx+dir;if(newIdx<0||newIdx>=cats.length)return;
+  var tmp=cats[idx];cats[idx]=cats[newIdx];cats[newIdx]=tmp;
+  ssj('db_catOrder',cats);renderCatOrder();
+  if(curBrief)renderCards(curBrief.headlines,curCat);
 }
 function togCat(btn,cat){
   btn.classList.toggle('on');
