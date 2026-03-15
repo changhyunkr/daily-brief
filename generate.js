@@ -281,38 +281,69 @@ function addSpecialTopic(date, briefing) {
 
 function parseJSON(text) {
   if (!text || typeof text !== 'string') throw new Error('Empty text to parse');
-  const clean = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  let clean = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
   const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
   if (s === -1 || e === -1 || e <= s) {
     console.error('  Raw output (first 500):', clean.slice(0, 500));
     throw new Error('No JSON found in response');
   }
-  try {
-    return JSON.parse(clean.slice(s, e + 1));
-  } catch (parseErr) {
-    /* Try to repair truncated JSON */
-    console.warn('  JSON parse error, attempting repair:', parseErr.message);
-    let raw = clean.slice(s);
-    /* Close unclosed arrays and objects */
-    let opens = 0, arrs = 0;
-    for (const ch of raw) { if (ch === '{') opens++; if (ch === '}') opens--; if (ch === '[') arrs++; if (ch === ']') arrs--; }
-    /* Truncate at last complete item */
-    const lastComma = Math.max(raw.lastIndexOf('},'), raw.lastIndexOf('],'));
-    if (lastComma > 0) {
-      raw = raw.slice(0, lastComma + 1);
-      /* Recount */
-      opens = 0; arrs = 0;
-      for (const ch of raw) { if (ch === '{') opens++; if (ch === '}') opens--; if (ch === '[') arrs++; if (ch === ']') arrs--; }
+  let raw = clean.slice(s, e + 1);
+
+  /* Step 1: Fix control chars inside JSON string values */
+  let fixed = '', inStr = false, esc = false;
+  for (let i = 0; i < raw.length; i++) {
+    const ch = raw[i], code = raw.charCodeAt(i);
+    if (esc) { fixed += ch; esc = false; continue; }
+    if (ch === '\\') { fixed += ch; esc = true; continue; }
+    if (ch === '"') { fixed += ch; inStr = !inStr; continue; }
+    if (inStr && code < 32) {
+      /* Control char inside string — escape it */
+      if (ch === '\n') fixed += '\\n';
+      else if (ch === '\r') fixed += '\\r';
+      else if (ch === '\t') fixed += '\\t';
+      /* else skip */
+      continue;
     }
-    raw += ']'.repeat(Math.max(0, arrs)) + '}'.repeat(Math.max(0, opens));
+    fixed += ch;
+  }
+  raw = fixed;
+
+  try {
+    return JSON.parse(raw);
+  } catch (err1) {
+    console.warn('  JSON parse error, attempting line-by-line repair:', err1.message);
+
+    /* Step 2: Line-by-line repair */
+    const lines = raw.split('\n');
+    const repaired = [];
+    for (let line of lines) {
+      /* Remove trailing commas before ] or } */
+      line = line.replace(/,(\s*[}\]])/g, '$1');
+      repaired.push(line);
+    }
+    let raw2 = repaired.join('\n');
+
+    /* Step 3: Truncate at last complete item and close brackets */
     try {
-      const result = JSON.parse(raw);
-      console.log('  ✓ JSON repaired successfully');
-      return result;
-    } catch (e2) {
-      console.error('  Repair also failed:', e2.message);
-      console.error('  First 300 chars:', clean.slice(s, s + 300));
-      throw new Error('JSON parse failed after repair attempt');
+      return JSON.parse(raw2);
+    } catch (err2) {
+      const lastGood = Math.max(raw2.lastIndexOf('},'), raw2.lastIndexOf('}]'));
+      if (lastGood > 0) {
+        raw2 = raw2.slice(0, lastGood + 1);
+        if (raw2.endsWith('},')) raw2 = raw2.slice(0, -1);
+      }
+      let opens = 0, arrs = 0;
+      for (const ch of raw2) { if (ch === '{') opens++; if (ch === '}') opens--; if (ch === '[') arrs++; if (ch === ']') arrs--; }
+      raw2 += ']'.repeat(Math.max(0, arrs)) + '}'.repeat(Math.max(0, opens));
+      try {
+        const result = JSON.parse(raw2);
+        console.log('  ✓ JSON repaired (truncated at last complete item)');
+        return result;
+      } catch (err3) {
+        console.error('  Repair failed:', err3.message);
+        console.error('  Around error pos:', raw.slice(800, 900));
+        throw new Error('JSON parse failed after repair');
+      }
     }
   }
 }
