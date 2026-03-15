@@ -329,10 +329,10 @@ async function main() {
     const podScript = await generatePodcast(briefing, 'medium');
     if (podScript) {
       const podDir = path.join(process.cwd(), 'data');
-      fs.writeFileSync(path.join(podDir, \`podcast-\${TODAY}-medium.json\`), JSON.stringify(podScript, null, 2));
-      console.log(\`  ✓ Podcast script saved (\${podScript.sections?.length || 0} sections)\`);
+      fs.writeFileSync(path.join(podDir, `podcast-${TODAY}-medium.json`), JSON.stringify(podScript, null, 2));
+      console.log(`  ✓ Podcast script saved (${podScript.sections?.length || 0} sections)`);
     }
-  } catch(e) { console.warn(\`⚠ Podcast: \${e.message}\`); }
+  } catch(e) { console.warn(`⚠ Podcast: ${e.message}`); }
   const cats = [...new Set(briefing.headlines?.map(h=>h.cat)||[])];
   console.log(`\n✓ Done! ${briefing.headlines?.length||0} headlines, ${briefing.deals?.length||0} deals`);
   console.log(`  Categories: ${cats.join(', ')}`);
