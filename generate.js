@@ -28,15 +28,19 @@ CRITICAL: Only report news you ACTUALLY find via Google Search. NEVER fabricate.
 
 Search ALL these areas exhaustively:
 
-JAPAN (highest priority):
+JAPAN (highest priority — aim for 8+ items):
 - BOJ rate signals, JGB yield moves, any board member speeches
 - Nikkei/Sankei/Yomiuri top morning headlines (search in Japanese too: 日経 不動産 PE 買収)
 - Nikkei Real Estate Market (日経不動産マーケット情報): any transactions, cap rates, vacancy
-- J-REIT: unit prices, acquisitions, equity raises, distribution changes
-- Tokyo office/logistics/residential: CBRE, JLL, Savills Japan reports
+- J-REIT: index level, unit prices, acquisitions, equity raises, distribution changes
+- Tokyo office/logistics/residential: CBRE, JLL, Savills Japan reports, vacancy data
 - Corporate Japan: TOB, MBO, carve-out, activist investor (物言う株主), earnings
 - PE deals in Japan: Blackstone, KKR, Carlyle, Bain, PAG, Warburg Pincus, MBK Partners
 - Japan economic data released today
+- 3M TIBOR rate, Tokyo A-grade office cap rate
+- Japan RE market research reports (CBRE Japan, JLL Research, Mizuho RE, Nomura RE)
+- Infrastructure/data center deals in Japan
+- Japan hotel/hospitality inbound tourism data
 
 US OVERNIGHT:
 - S&P 500, Nasdaq exact closing numbers and main driver
@@ -167,11 +171,12 @@ Must include: (1) specific numbers (2) portfolio impact (3) action item`;
     : `Create a daily investment brief JSON for ${date} JST based on your knowledge of current events.\nFocus on: BOJ policy, Japan PE/RE deals, US markets overnight, global macro.\nUse your training data for the most recent known information. Mark uncertain items clearly.`;
 
   const schema = `
-JSON schema (return this exact structure):
+IMPORTANT: Return 15-20 headlines minimum. Each headline MUST have specific numbers and company names.
+JSON schema:
 {"date":"${date}","generatedAt":${Date.now()},"generatedBy":"github-actions","model":"gpt4o",
 "headlines":[{"id":"h1","cat":"일본","title":"헤드라인 (구체적 기업명/수치 포함, 55자 이내)","time":"${date.slice(5)} 06:30","summary":"팩트 기반 2문장","detail":"3-4문장 심층 분석","implications":"구체적 수치+포트폴리오 영향+action item","source":"출처명","url":""}],
-"market":{"jgb10y":{"v":"수치 or N/A","d":"변동 or —","t":0},"usdjpy":{"v":"","d":"","t":0},"nikkei":{"v":"","d":"","t":0},"sp500":{"v":"","d":"","t":0},"wti":{"v":"","d":"","t":0},"usdkrw":{"v":"","d":"","t":0}},
-"deals":[{"id":"d1","title":"딜명","time":"${date.slice(5)}","value":"금액","type":"유형","summary":"요약","detail":"딜 배경 및 구조","source":"출처","url":""}],
+"market":{"jgb10y":{"v":"수치 or N/A","d":"변동 or —","t":0},"usdjpy":{"v":"","d":"","t":0},"nikkei":{"v":"","d":"","t":0},"sp500":{"v":"","d":"","t":0},"wti":{"v":"","d":"","t":0},"usdkrw":{"v":"","d":"","t":0},"tibor":{"v":"3M TIBOR rate","d":"변동","t":0},"jreit":{"v":"J-REIT index","d":"변동","t":0},"caprate":{"v":"Tokyo A-grade cap rate","d":"변동","t":0}},
+"deals":[{"id":"d1","title":"딜명 (기업명+금액 포함)","time":"${date.slice(5)}","value":"금액","type":"유형","summary":"요약","detail":"딜 배경 및 구조","source":"출처","url":""}],
 "watch":[{"n":1,"text":"관전포인트1"},{"n":2,"text":"관전포인트2"},{"n":3,"text":"관전포인트3"}]}
 Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 up, -1 down, 0 flat.`;
 

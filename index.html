@@ -310,6 +310,13 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 .src-item:last-child{border-bottom:none}
 .src-name{font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .src-del{width:24px;height:24px;border-radius:50%;border:1px solid var(--sep);background:var(--s2);color:var(--red);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+
+.focus-chip{display:inline-flex;padding:5px 12px;border-radius:14px;border:1px solid var(--sep);background:transparent;color:var(--t3);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.focus-chip.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+
+.s-detail{display:none;font-size:14px;color:var(--t2);line-height:1.6;margin:6px 0;padding:8px 12px;background:var(--s2);border-radius:8px}
+.s-card.expanded .s-detail{display:block}
+.s-card.expanded{width:320px}
 </style>
 </head>
 <body>
@@ -355,7 +362,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 
   <!-- RATES -->
   <div class="rates" id="ratesBar">
-    <div class="rate" onclick="toggleRS('jpy')">
+    <div class="rate" onclick="toggleRS('usdjpy')">
       <div class="rate-top"><span class="rate-l">$/¥</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,4 9,5 16,6 23,8 30,10 37,12" stroke="var(--red)" opacity=".5"/></svg></div>
       <div class="rate-bot"><span class="rate-v">148.22</span><span class="rate-d neg">-0.4</span></div>
     </div>
@@ -363,7 +370,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
       <div class="rate-top"><span class="rate-l">3M TIBOR</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,12 9,10 16,8 23,6 30,4 37,2" stroke="var(--green)" opacity=".5"/></svg></div>
       <div class="rate-bot"><span class="rate-v">0.525%</span><span class="rate-d pos">+2bp</span></div>
     </div>
-    <div class="rate" onclick="toggleRS('n225')">
+    <div class="rate" onclick="toggleRS('nikkei')">
       <div class="rate-top"><span class="rate-l">N225</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,10 9,8 16,11 23,6 30,3 37,4" stroke="var(--green)" opacity=".5"/></svg></div>
       <div class="rate-bot"><span class="rate-v">38,807</span><span class="rate-d pos">+1.2%</span></div>
     </div>
@@ -371,11 +378,11 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
       <div class="rate-top"><span class="rate-l">J-REIT</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,3 9,5 16,7 23,9 30,11 37,13" stroke="var(--red)" opacity=".5"/></svg></div>
       <div class="rate-bot"><span class="rate-v">1,822</span><span class="rate-d neg">-2.1%</span></div>
     </div>
-    <div class="rate" onclick="toggleRS('cap')">
+    <div class="rate" onclick="toggleRS('caprate')">
       <div class="rate-top"><span class="rate-l">Cap Rate</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,13 9,11 16,10 23,8 30,5 37,3" stroke="var(--green)" opacity=".5"/></svg></div>
       <div class="rate-bot"><span class="rate-v">3.52%</span><span class="rate-d pos">+5bp</span></div>
     </div>
-    <div class="rate" onclick="toggleRS('jgb')">
+    <div class="rate" onclick="toggleRS('jgb10y')">
       <div class="rate-top"><span class="rate-l">JGB 10Y</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,13 9,11 16,9 23,7 30,4 37,2" stroke="var(--green)" opacity=".5"/></svg></div>
       <div class="rate-bot"><span class="rate-v">1.525%</span><span class="rate-d pos">+3bp</span></div>
     </div>
@@ -517,9 +524,10 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 
   <!-- HIDDEN PANES -->
   <div class="pane" id="pane-research"><div class="chat-wrap">
-    <div style="padding:8px 14px;display:flex;gap:6px;border-bottom:1px solid var(--sep);flex-shrink:0">
-      <input id="chatSearch" placeholder="과거 대화 검색..." style="flex:1;height:32px;border:1px solid var(--sep);border-radius:8px;background:var(--s2);padding:0 10px;font-size:13px;color:var(--t1);outline:none" onkeydown="if(event.key==='Enter')searchChats()">
-      <button onclick="newChat()" style="height:32px;padding:0 10px;border:1px solid var(--sep);border-radius:8px;background:var(--s2);color:var(--accent);font-size:12px;font-weight:600;white-space:nowrap">+ 새 대화</button>
+    <div style="padding:6px 14px;display:flex;gap:6px;border-bottom:1px solid var(--sep);flex-shrink:0">
+      <button onclick="showChatHistory()" style="height:30px;padding:0 10px;border:1px solid var(--sep);border-radius:8px;background:var(--s2);color:var(--t2);font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px"><span style="font-size:14px">☰</span> 과거 대화</button>
+      <span style="flex:1"></span>
+      <button onclick="newChat()" style="height:30px;padding:0 10px;border:1px solid var(--sep);border-radius:8px;background:var(--s2);color:var(--accent);font-size:12px;font-weight:600">+ 새 대화</button>
     </div>
     <div class="chat-msgs" id="chatMsgs"><div class="chat-msg ai"><div class="chat-bubble">브리핑이나 PE/부동산에 대해 물어보세요.</div></div></div>
     <div class="chat-bar"><input class="chat-inp" id="chatInp" placeholder="질문..." autocomplete="off" onkeydown="if(event.key==='Enter')sendChat()"><button class="chat-send" onclick="sendChat()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div>
@@ -1007,7 +1015,18 @@ function parseJ(txt){var s=txt.indexOf('{'),e=txt.lastIndexOf('}');if(s<0)throw 
 function renderBrief(data){curBrief=data;renderMkt(data.market);renderCards(data.headlines,curCat);var el=document.getElementById('podDateLbl');if(el)el.textContent=dateLbl(data.date);loadPastDays();}
 
 function renderMkt(m){
-  if(!m)return;
+  var bar=document.getElementById('ratesBar');
+  if(!m){
+    /* No data: show items with N/A */
+    if(bar){var items=['usdjpy','tibor','nikkei','jreit','caprate','jgb10y'];
+    var labels=['$/¥','3M TIBOR','N225','J-REIT','Cap Rate','JGB 10Y'];
+    var html='';
+    for(var i=0;i<items.length;i++){
+      html+='<div class="rate" onclick="toggleRS(\''+items[i]+'\')"><div class="rate-top"><span class="rate-l">'+labels[i]+'</span></div><div class="rate-bot"><span class="rate-v" style="color:var(--t3)">—</span></div></div>';
+    }
+    bar.innerHTML=html;}
+    return;
+  }
   var bar=document.getElementById('ratesBar');if(!bar)return;
   var items=[
     {k:'usdjpy',l:'$/\u00a5',m:m.usdjpy},
@@ -1062,19 +1081,29 @@ function renderCards(hl,filter){
   }
   if((!filter||filter==='all')&&curBrief&&curBrief.watch&&curBrief.watch.length){
     html+='<div class="sec"><span class="sec-t">Key Watch</span><span class="sec-sp"></span></div>';
-    for(var wi=0;wi<curBrief.watch.length;wi++){var w=curBrief.watch[wi];html+='<div style="padding:8px 14px;display:flex;gap:8px;align-items:baseline;border-bottom:1px solid var(--sep)"><span style="font-family:var(--serif);font-size:18px;font-weight:700;color:var(--accent);min-width:20px">'+w.n+'</span><span style="font-size:14px;color:var(--t2);line-height:1.5">'+esc(w.text)+'</span></div>';}
+    for(var wi=0;wi<curBrief.watch.length;wi++){var w=curBrief.watch[wi];
+      html+='<div style="padding:10px 14px;border-bottom:1px solid var(--sep)">'
+        +'<div style="display:flex;gap:8px;align-items:baseline"><span style="font-family:var(--serif);font-size:18px;font-weight:700;color:var(--accent);min-width:20px">'+w.n+'</span><span style="font-size:14px;color:var(--t2);line-height:1.5;flex:1">'+esc(w.text)+'</span></div>'
+        +'<div style="display:flex;gap:4px;margin-top:6px;margin-left:28px">'
+        +'<button class="s-act" onclick="askAbout(\''+esc(w.text).replace(/'/g,'')+'\')">ai</button>'
+        +'<button class="s-act" onclick="topicPodcast(\''+esc(w.text).replace(/'/g,'')+'\')">pod</button>'
+        +'</div></div>';}
   }
   el.innerHTML=html;
 }
 function buildCard(h){
   var id=esc(h.id||''),src=esc(h.source||''),time=h.time?esc(h.time):'',srcTime=src+(time?' \u00b7 '+time:'');
-  var realUrl=fixUrl(h.url,h.title);
-  var s='<div class="s-card"><div class="s-head"><span class="s-cat" style="color:var(--cat1)">'+esc(h.cat||'')+'</span><span class="s-src">'+srcTime+'</span></div>';
+  var realUrl=fixUrl(h.url,h.title,h.source);
+  var s='<div class="s-card" onclick="togCardExpand(this)"><div class="s-head"><span class="s-cat" style="color:var(--cat1)">'+esc(h.cat||'')+'</span><span class="s-src">'+srcTime+'</span></div>';
   s+='<div class="s-title">'+esc(h.title)+'</div>';
-  s+='<div class="s-sum">'+esc(h.detail||h.summary||'')+'</div>';
+  s+='<div class="s-sum">'+esc(h.summary||'')+'</div>';
+  /* Expandable detail section */
+  if(h.detail&&h.detail!==h.summary){
+    s+='<div class="s-detail">'+esc(h.detail)+'</div>';
+  }
   if(h.implications)s+='<div class="s-imp"><div class="s-imp-lbl">\ud22c\uc790 \uc784\ud50c\ub9ac\ucf00\uc774\uc158</div><div class="s-imp-txt">'+esc(h.implications)+'</div></div>';
   s+='<div class="s-bottom">';
-  if(realUrl)s+='<a class="s-link" href="'+realUrl+'" target="_blank" rel="noopener">\uc6d0\ubb38</a>';
+  s+='<a class="s-link" href="'+realUrl+'" target="_blank" rel="noopener">\uc6d0\ubb38</a>';
   s+='<span class="s-bottom-sp"></span><button class="s-act" onclick="event.stopPropagation();genDeepDive(\''+id+'\')">deepdive</button><button class="s-act" onclick="event.stopPropagation();topicPodcast(\''+id+'\')">pod</button><button class="s-act" onclick="event.stopPropagation();askAbout(\''+id+'\')">ai</button></div></div>';
   return s;
 }
@@ -1089,7 +1118,7 @@ function buildCompact(h){
 }
 function buildDealCard(d){
   var src=esc(d.source||''),time=d.time?esc(d.time):'',srcTime=src+(time?' \u00b7 '+time:'');
-  var realUrl=fixUrl(d.url,d.title);
+  var realUrl=fixUrl(d.url,d.title,d.source);
   var s='<div class="d-card"><div class="d-head"><div class="d-angle" style="background:rgba(45,139,106,.1);color:var(--green)">'+esc(d.type||'\ub51c')+'</div><span class="d-src">'+srcTime+'</span></div>';
   s+='<div class="d-title">'+esc(d.title)+'</div><div class="d-val">'+esc(d.value||'')+'</div>';
   if(d.detail||d.summary)s+='<div class="d-bg"><b>\ub51c \ubc30\uacbd:</b> '+esc(d.detail||d.summary)+'</div>';
@@ -1106,7 +1135,10 @@ function loadPastDays(){
     for(var i=0;i<Math.min(brief.headlines.length,5);i++){var h=brief.headlines[i];
       html+='<div class="s-card" style="opacity:.65"><div class="s-head"><span class="s-cat">'+esc(h.cat||'')+'</span><span class="s-src">'+esc(h.source||'')+' \u00b7 '+esc(dlbl)+'</span></div><div class="s-title">'+esc(h.title)+'</div>';
       if(h.implications)html+='<div class="s-imp"><div class="s-imp-lbl">\ud22c\uc790 \uc784\ud50c\ub9ac\ucf00\uc774\uc158</div><div class="s-imp-txt">'+esc(h.implications)+'</div></div>';
-      html+='<div class="s-bottom"><span class="s-bottom-sp"></span></div></div>';}
+      html+='<div class="s-bottom"><span class="s-bottom-sp"></span>'
+        +'<button class="s-act" onclick="event.stopPropagation();askAbout(\''+esc(h.title).replace(/'/g,'')+'\')">ai</button>'
+        +'<button class="s-act" onclick="event.stopPropagation();topicPodcast(\''+esc(h.title).replace(/'/g,'')+'\')">pod</button>'
+        +'</div></div>';}
     html+='</div>';}
   el.innerHTML=html;
 }
@@ -1122,18 +1154,20 @@ function filterCat(cat,btn){
 }
 
 /* ── SHEET ───────────────────────────────────────────────── */
-function fixUrl(url,title){
-  if(!url)return '';
-  if(url.indexOf('grounding-api-redirect')>=0||url.indexOf('aisearch.cloud.google')>=0){
-    return 'https://www.google.com/search?q='+encodeURIComponent(title);
+function fixUrl(url,title,source){
+  /* Return real source URL if available */
+  if(url&&url.indexOf('grounding-api-redirect')<0&&url.indexOf('aisearch.cloud.google')<0&&url.indexOf('http')===0){
+    return url;
   }
-  return url;
+  /* Fallback: Google News search */
+  var q=title||'';if(source)q+=' '+source;
+  return 'https://news.google.com/search?q='+encodeURIComponent(q);
 }
 function openSheet(type,id){
   if(!curBrief)return;
   var item=findById(type==='h'?curBrief.headlines:curBrief.deals,id);if(!item)return;
   var cls=catCls[item.cat||item.type||'딜']||'c-딜';
-  var realUrl=fixUrl(item.url,item.title);
+  var realUrl=fixUrl(item.url,item.title,item.source);
   var html='<span class="ncat '+cls+'" style="margin:var(--s3) 0 var(--s2);display:inline-flex">'+esc(item.cat||item.type||'딜')+'</span>'
     +'<div class="sh-title">'+esc(item.title)+'</div>'
     +'<div class="sh-body">'+esc(item.detail||item.summary||'')+'</div>';
@@ -1525,7 +1559,7 @@ var themes=[
   {id:'slate',name:'Slate',accent:'#94A3B8',accentBg:'rgba(148,163,184,.12)',accentBdr:'rgba(148,163,184,.35)',lightAccent:'#64748B'}
 ];
 function loadTheme(){
-  var tid=sg('db_theme')||'gold';applyTheme(tid);renderThemes(tid);
+  var pid=sg('db_palette')||'ink-gold';applyPalette(pid);renderThemes(pid);
 }
 function renderThemes(active){
   var el=document.getElementById('themeList');if(!el)return;
@@ -2206,6 +2240,12 @@ function toggleRS(id){
   document.getElementById('rsV').textContent=val;
   var c=document.getElementById('rsC');c.textContent=chg;c.className='rs-chg '+cls;
   document.getElementById('rsW').innerHTML=d.insight;
+  /* Generate unique sparkline per rate */
+  var ch=document.querySelector('.rs-chart');
+  if(ch){var sd=0;for(var ci=0;ci<id.length;ci++)sd+=id.charCodeAt(ci);
+    var pts='',py=22;for(var cx=0;cx<=300;cx+=25){py=Math.max(5,Math.min(40,py+(Math.sin(sd+cx*0.1)*6)+(cls==='neg'?1.5:-1.5)));pts+=(cx?',':'')+cx+','+Math.round(py);sd+=5;}
+    ch.innerHTML='<svg viewBox="0 0 300 44" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="'+(cls==='neg'?'var(--red)':'var(--green)')+'" stroke-width="2" opacity=".6"/></svg>';
+  }
   s.classList.add('show');
 }
 
@@ -2267,13 +2307,27 @@ function jumpToDate(d){
   if(cached){renderBrief(cached);}
   else{fetchGithub(d).then(function(r){if(r){ssj('db_brief_'+d,r);renderBrief(r);}else{renderEmpty('📅',dateLbl(d)+' 없음','생성',function(){autoGen(d);});}});}
 }
+function showChatHistory(){
+  var el=document.getElementById('chatMsgs');if(!el)return;
+  var keys=skeys().filter(function(k){return k.startsWith('db_chat_');});
+  if(!keys.length){el.innerHTML='<div class="chat-msg ai"><div class="chat-bubble">저장된 대화가 없습니다.</div></div>';return;}
+  var html='<div style="padding:8px 0"><div style="font-size:13px;font-weight:600;color:var(--t3);margin-bottom:8px">과거 대화</div>';
+  keys.sort().reverse();
+  keys.slice(0,20).forEach(function(k){
+    var chat=sgj(k);if(!chat)return;
+    var topic=chat.topic||'대화';var date=chat.date?chat.date.slice(0,16).replace('T',' '):'';
+    html+='<div style="padding:8px 12px;margin-bottom:4px;background:var(--s2);border-radius:8px;cursor:pointer;border:1px solid var(--sep)" onclick="loadChat(\''+k+'\')"><div style="font-size:13px;font-weight:600;color:var(--t1)">'+esc(topic)+'</div><div style="font-size:11px;color:var(--t3);margin-top:2px">'+esc(date)+'</div></div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
 function newChat(){
   chatHist=[];
   var el=document.getElementById('chatMsgs');
   if(el)el.innerHTML='<div class="chat-msg ai"><div class="chat-bubble">새 대화를 시작합니다. 무엇이든 물어보세요.</div></div>';
 }
 function searchChats(){
-  var q=document.getElementById('chatSearch').value.trim();if(!q)return;
+  /* searchChats removed - using history instead */return;
   /* Search through saved chat history */
   var keys=skeys().filter(function(k){return k.startsWith('db_chat_');});
   var el=document.getElementById('chatMsgs');
@@ -2292,6 +2346,7 @@ function loadChat(key){
   var el=document.getElementById('chatMsgs');el.innerHTML='';
   chatHist.forEach(function(m){addMsg(m.role,m.content);});
 }
+function togCardExpand(el){el.classList.toggle('expanded');}
 function moveCat(idx,dir){
   var cats=sgj('db_catOrder')||['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
   var newIdx=idx+dir;if(newIdx<0||newIdx>=cats.length)return;
