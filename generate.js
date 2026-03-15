@@ -103,18 +103,18 @@ async function structureWithClaude(rawNews, date, useSearch = false) {
   const sys = `Senior Japan PE/Real Estate investment analyst preparing daily morning brief.
 
 CRITICAL ANTI-HALLUCINATION RULES:
-- ONLY use information from the provided raw news data. NEVER invent or fabricate news.
-- If a specific number, price, or fact is not in the raw data, write "정보 없음" or "N/A".
-- Market data: use EXACT numbers from the raw data. If not found, use "N/A" for value and "—" for change.
-- URLs: use the EXACT URL from the source. If no URL available, use "".
-- If fewer than 10 real stories exist in the raw data, return fewer items. Quality > quantity.
-- Every headline MUST reference a SPECIFIC company name, person, number, or event from the data.
-- FORBIDDEN: Generic headlines like "일본 부동산 펀드, 빌딩 인수" without specific names.
+- ONLY use information from the provided raw news data or web search results. NEVER invent.
+- If a number/price/fact is not in the data, write "N/A".
+- Market data: EXACT numbers from data only. If not found: {"v":"N/A","d":"—","t":0}.
+- URLs: exact URL from source. If none, use "".
+- Fewer than 10 real stories? Return fewer. 5 real >> 20 fake.
+- Every headline MUST reference SPECIFIC company/person/number FROM the data.
+- FORBIDDEN: Generic headlines without data backing.
 
 HEADLINE RULES:
 - Korean, max 55 chars, specific (include numbers/company names)
 - Categories: 글로벌 | 일본 | 미국 | 아시아 | 매크로 | 딜 | 화제 | 한국
-- implications = specific actionable PE/RE angle (not "주목할 만하다" — say WHY and WHAT to do/watch)
+- implications = specific actionable PE/RE angle (not vague — say WHY and WHAT to do)
 - No Japanese punctuation in Korean text`;
 
   const body_content = useSearch
@@ -160,7 +160,16 @@ async function structureWithOpenAI(rawNews, date) {
   if (!OPENAI_KEY) return null;
   console.log('Step 2 (OpenAI fallback)...');
 
-  const sysPrompt = `You are a senior Japan PE/Real Estate investment analyst. Return ONLY valid JSON, no markdown fences, no commentary. Use Korean for all text fields.
+  const sysPrompt = `You are a senior Japan PE/Real Estate investment analyst. Return ONLY valid JSON. Use Korean for all text fields.
+
+CRITICAL ANTI-HALLUCINATION RULES:
+- You do NOT have access to today's news. Your knowledge has a cutoff date.
+- NEVER invent specific stock prices, index levels, or market data. Use "N/A" for any number you're not certain about.
+- NEVER fabricate company names, deal sizes, or transaction details.
+- For market data: set ALL values to "N/A" and changes to "—" unless you have the raw news data below.
+- For headlines: ONLY report events you are CERTAIN happened. If unsure, DO NOT include.
+- Every headline MUST have "confirmed": true if from raw news data, or "confirmed": false if from your knowledge.
+- It is MUCH better to return 5 real items than 20 hallucinated ones.
 
 IMPLICATIONS GUIDE:
 BAD: "주목할 만하다" or vague statements
@@ -172,17 +181,23 @@ Must include: (1) specific numbers (2) portfolio impact (3) action item`;
 Use raw data below as primary source. If fewer than 15 items, supplement with your Japan PE/RE knowledge.
 Minimum: 5 일본, 3 미국, 2 글로벌, 2 한국, 3 deals. Include TIBOR, J-REIT index, Tokyo cap rate in market.
 Raw news:\n${rawNews.slice(0, 7000)}`
-    : `Create a comprehensive daily investment brief JSON for ${date} JST. This is for a Japan-focused PE/Real Estate fund manager.
+    : `You do NOT have access to real-time news for ${date}. Create a brief based ONLY on what you are CERTAIN about.
 
-MINIMUM REQUIREMENTS:
-- 일본 category: minimum 5 items (BOJ policy, J-REIT, Tokyo office/logistics, Japan corporate M&A, economic data)
-- 미국 category: minimum 3 items (Fed/rates, S&P/Nasdaq, major corporate)
-- 글로벌/매크로: minimum 2 items
-- 한국: minimum 2 items (BOK, Samsung/SK, Korean RE/PE)
-- 딜 section: minimum 3 deals (Japan RE, PE buyout, cross-border M&A)
+RULES:
+- Set ALL market values (jgb10y, usdjpy, nikkei, sp500, wti, usdkrw, tibor, jreit, caprate) to {"v":"N/A","d":"—","t":0}
+- Only include headlines about ONGOING situations you are confident about (e.g. "BOJ policy stance", "J-REIT market trends")
+- Mark every headline with "confirmed": false
+- Do NOT invent specific prices, dates, percentages, or deal sizes
+- Prefix each title with "⚠ " to indicate these are AI-generated, not confirmed news
+- Include maximum 8-10 items focused on structural/ongoing themes, not specific daily events
+- For deals: only include well-known ongoing deals, not invented ones
 
-MUST INCLUDE: Tokyo office vacancy trends, J-REIT index level, 3M TIBOR rate, USD/JPY foreign investor impact, at least 1 CBRE/JLL/Savills report reference, PE deal pipeline in Japan.
-If weekend/holiday use most recent trading day data. Be SPECIFIC with numbers and company names.`;
+Themes to cover (only if you're confident they are real):
+- BOJ monetary policy direction and latest known stance
+- Japan office/logistics real estate market structural trends
+- J-REIT market overview
+- US Fed policy direction
+- Major ongoing M&A/PE situations in Japan`;
 
   const schema = `
 IMPORTANT: Return 15-20 headlines minimum. Each headline MUST have specific numbers and company names.
@@ -279,16 +294,23 @@ function validateBrief(b) {
     if (removed > 0) console.log(`  ⚠ Validation: removed ${removed} suspicious headlines`);
   }
   if (b.market) {
-    for (const k of ['jgb10y','usdjpy','nikkei','sp500','wti','usdkrw']) {
+    for (const k of ['jgb10y','usdjpy','nikkei','sp500','wti','usdkrw','tibor','jreit','caprate']) {
       const m = b.market[k];
       if (!m) { b.market[k] = {v:'N/A',d:'—',t:0}; continue; }
-      if (m.v === '0' || m.v === '0%' || m.v === '$0' || m.d === '0' || m.d === '0%' || m.d === '0bp') {
+      /* Reset suspicious round numbers that are likely hallucinated */
+      const v = String(m.v || '');
+      if (v === '0' || v === '0%' || v === '$0' || v === 'N/A' || !v) {
         b.market[k] = {v:'N/A',d:'—',t:0};
       }
     }
   }
   if (b.deals) {
     b.deals = b.deals.filter(d => d.title && d.title.length >= 8 && !(genericPattern.test(d.title) && !d.url));
+  }
+  /* Mark unverified briefs */
+  if (b.model === 'gpt4o' && !b.headlines?.some(h => h.url)) {
+    b.unverified = true;
+    console.log('  ⚠ Brief marked as unverified (no source URLs)');
   }
   return b;
 }

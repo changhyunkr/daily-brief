@@ -362,31 +362,12 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
 
   <!-- RATES -->
   <div class="rates" id="ratesBar">
-    <div class="rate" onclick="toggleRS('usdjpy')">
-      <div class="rate-top"><span class="rate-l">$/¥</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,4 9,5 16,6 23,8 30,10 37,12" stroke="var(--red)" opacity=".5"/></svg></div>
-      <div class="rate-bot"><span class="rate-v">148.22</span><span class="rate-d neg">-0.4</span></div>
-    </div>
-    <div class="rate" onclick="toggleRS('tibor')">
-      <div class="rate-top"><span class="rate-l">3M TIBOR</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,12 9,10 16,8 23,6 30,4 37,2" stroke="var(--green)" opacity=".5"/></svg></div>
-      <div class="rate-bot"><span class="rate-v">0.525%</span><span class="rate-d pos">+2bp</span></div>
-    </div>
-    <div class="rate" onclick="toggleRS('nikkei')">
-      <div class="rate-top"><span class="rate-l">N225</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,10 9,8 16,11 23,6 30,3 37,4" stroke="var(--green)" opacity=".5"/></svg></div>
-      <div class="rate-bot"><span class="rate-v">38,807</span><span class="rate-d pos">+1.2%</span></div>
-    </div>
-    <div class="rate" onclick="toggleRS('jreit')">
-      <div class="rate-top"><span class="rate-l">J-REIT</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,3 9,5 16,7 23,9 30,11 37,13" stroke="var(--red)" opacity=".5"/></svg></div>
-      <div class="rate-bot"><span class="rate-v">1,822</span><span class="rate-d neg">-2.1%</span></div>
-    </div>
-    <div class="rate" onclick="toggleRS('caprate')">
-      <div class="rate-top"><span class="rate-l">Cap Rate</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,13 9,11 16,10 23,8 30,5 37,3" stroke="var(--green)" opacity=".5"/></svg></div>
-      <div class="rate-bot"><span class="rate-v">3.52%</span><span class="rate-d pos">+5bp</span></div>
-    </div>
-    <div class="rate" onclick="toggleRS('jgb10y')">
-      <div class="rate-top"><span class="rate-l">JGB 10Y</span><svg class="spark" viewBox="0 0 40 14"><polyline points="2,13 9,11 16,9 23,7 30,4 37,2" stroke="var(--green)" opacity=".5"/></svg></div>
-      <div class="rate-bot"><span class="rate-v">1.525%</span><span class="rate-d pos">+3bp</span></div>
-    </div>
-    
+    <div class="rate" onclick="toggleRS('usdjpy')"><div class="rate-top"><span class="rate-l">$/¥</span></div><div class="rate-bot"><span class="rate-v" style="color:var(--t3)">—</span></div></div>
+    <div class="rate" onclick="toggleRS('tibor')"><div class="rate-top"><span class="rate-l">3M TIBOR</span></div><div class="rate-bot"><span class="rate-v" style="color:var(--t3)">—</span></div></div>
+    <div class="rate" onclick="toggleRS('nikkei')"><div class="rate-top"><span class="rate-l">N225</span></div><div class="rate-bot"><span class="rate-v" style="color:var(--t3)">—</span></div></div>
+    <div class="rate" onclick="toggleRS('jreit')"><div class="rate-top"><span class="rate-l">J-REIT</span></div><div class="rate-bot"><span class="rate-v" style="color:var(--t3)">—</span></div></div>
+    <div class="rate" onclick="toggleRS('caprate')"><div class="rate-top"><span class="rate-l">Cap Rate</span></div><div class="rate-bot"><span class="rate-v" style="color:var(--t3)">—</span></div></div>
+    <div class="rate" onclick="toggleRS('jgb10y')"><div class="rate-top"><span class="rate-l">JGB 10Y</span></div><div class="rate-bot"><span class="rate-v" style="color:var(--t3)">—</span></div></div>
   </div>
 
   <div class="rs" id="rs">
@@ -1159,9 +1140,15 @@ function fixUrl(url,title,source){
   if(url&&url.indexOf('grounding-api-redirect')<0&&url.indexOf('aisearch.cloud.google')<0&&url.indexOf('http')===0){
     return url;
   }
-  /* Fallback: Google News search */
-  var q=title||'';if(source)q+=' '+source;
-  return 'https://news.google.com/search?q='+encodeURIComponent(q);
+  /* Fallback: Google search with key terms */
+  var q=(title||'').replace(/[—·]/g,' ').slice(0,40);
+  if(source){
+    /* Use English source name for better results */
+    var srcMap={'닛케이':'Nikkei','블룸버그':'Bloomberg','로이터':'Reuters','한경':'Hankyung','조선':'Chosun','일경':'Nikkei','FT':'Financial Times'};
+    var eng=srcMap[source]||source;
+    q=eng+' '+q;
+  }
+  return 'https://www.google.com/search?q='+encodeURIComponent(q);
 }
 function openSheet(type,id){
   if(!curBrief)return;
