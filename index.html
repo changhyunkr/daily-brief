@@ -13,7 +13,7 @@
 <style>
 :root{--bg:#FAF7F2;--card:#FFF;--s2:#F0EBE3;--s3:#E4DDD3;--t1:#1A1A1A;--t2:#5C5650;--t3:#8A8480;--accent:#A38232;--accent-bg:rgba(163,130,50,.07);--cat1:#7A1D2A;--cat2:#2C5282;--cat3:#6A3296;--green:#1B7A4E;--red:#7A1D2A;--sep:rgba(0,0,0,.08);--r:12px;--serif:'Fraunces',Georgia,serif;--sans:'Plus Jakarta Sans',sans-serif;--sat:env(safe-area-inset-top,44px);--sab:env(safe-area-inset-bottom,20px)}
 @media(prefers-color-scheme:dark){:root{--bg:#000;--card:#111;--s2:#1A1A1A;--s3:#242424;--t1:#E8E6E0;--t2:#A09A90;--t3:#7A756E;--accent:#C9A84C;--accent-bg:rgba(201,168,76,.08);--cat1:#C45A6A;--cat2:#5B8EC0;--cat3:#9070C0;--green:#2D8B6A;--red:#C45A5A;--sep:rgba(255,255,255,.06)}}
-.dark{--bg:#000;--card:#111;--s2:#1A1A1A;--s3:#242424;--t1:#E8E6E0;--t2:#A09A90;--t3:#7A756E;--accent:#C9A84C;--accent-bg:rgba(201,168,76,.08);--cat1:#C45A6A;--cat2:#5B8EC0;--cat3:#9070C0;--green:#2D8B6A;--red:#C45A5A;--sep:rgba(255,255,255,.06)}
+html.dark,html.dark body,.dark{--bg:#000;--card:#111;--s2:#1A1A1A;--s3:#242424;--t1:#E8E6E0;--t2:#A09A90;--t3:#7A756E;--accent:#C9A84C;--accent-bg:rgba(201,168,76,.08);--cat1:#C45A6A;--cat2:#5B8EC0;--cat3:#9070C0;--green:#2D8B6A;--red:#C45A5A;--sep:rgba(255,255,255,.06)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
 .app{display:flex;flex-direction:column;height:100%}
@@ -325,7 +325,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
     <div class="nav-brand">Brief</div>
     <div class="date-nav"><button onclick="navDay(-1)">‹</button><b id="navDateLbl">—</b><button id="navNext" onclick="navDay(1)">›</button></div>
     <div class="nb">
-      <button onclick="document.body.classList.toggle('dark')">◐</button>
+      <button onclick="toggleDarkMode()">◐</button>
       <button onclick="rerunToday()">↻</button>
     </div>
   </div>
@@ -503,6 +503,12 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
   <div class="set-lbl" onclick="togSetSec('sec-theme',this)" style="cursor:pointer">테마 ▾</div>
   <div id="sec-theme" class="set-grp">
     <div style="display:flex;gap:8px;padding:12px 16px;overflow-x:auto;scrollbar-width:none" id="themeList"></div>
+  </div>
+
+  <div class="set-lbl" onclick="togSetSec('sec-cats',this)" style="cursor:pointer">카테고리 관리 ▾</div>
+  <div id="sec-cats" class="set-grp">
+    <div style="padding:8px 16px;font-size:12px;color:var(--t3)">표시할 카테고리와 순서를 설정합니다</div>
+    <div id="catOrderList" style="padding:8px 16px"></div>
   </div>
 
   <div class="set-lbl" onclick="togSetSec('sec-focus',this)" style="cursor:pointer">브리핑 포커스 ▾</div>
@@ -731,16 +737,18 @@ function saveSetup(){
 
 /* ── INIT ────────────────────────────────────────────────── */
 function init(){
-  try{loadTheme();}catch(e){}
+  try{loadTheme();renderCatOrder();}catch(e){}
   if(!sg('db_claude')&&!sg('db_openai'))return;
   document.getElementById('setupScreen').style.display='none';
   startApp();
 }
 
 function startApp(){
+  if(sg('db_darkMode')==='1'){document.documentElement.classList.add('dark');document.body.classList.add('dark');}
+
   var ma=document.getElementById('mainArea');if(ma){ma.classList.add('show');}
   var tb=document.getElementById('tabbar');if(tb)tb.style.display='block';
-  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();loadTheme();updateKeyUI();
+  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();loadTheme();renderCatOrder();updateKeyUI();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
   updateDateUI();updateCounts();loadSchedUI();checkSched();
   var cached=sgj('db_brief_'+curDate);
@@ -993,18 +1001,25 @@ function renderCards(hl,filter){
   var el=document.getElementById('cardsList');
   var items=(filter&&filter!=='all')?(hl||[]).filter(function(h){return h.cat===filter;}):(hl||[]);
   if(!items.length){el.innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--t3)">해당 카테고리 없음</div>';return;}
-  var groups={},order=['일본','미국','한국','글로벌','매크로','아시아','화제'];
+  var groups={},order=['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];var cfgCats=sgj('db_catOrder')||order;
   for(var i=0;i<items.length;i++){var cat=items[i].cat||'글로벌';if(!groups[cat])groups[cat]=[];groups[cat].push(items[i]);}
   var html='',primaryCats=['일본'];
-  for(var oi=0;oi<order.length;oi++){
-    var cat=order[oi];if(!groups[cat]||!groups[cat].length)continue;
-    var isPrimary=primaryCats.indexOf(cat)>=0;
+  /* Show categories in configured order, then any remaining */
+  var shown={},catOff=sgj('db_catOff')||[];
+  for(var oi=0;oi<cfgCats.length;oi++){
+    var cat=cfgCats[oi];if(!groups[cat]||!groups[cat].length||catOff.indexOf(cat)>=0)continue;shown[cat]=1;
+    var isPrimary=(groups[cat].length>=2)||primaryCats.indexOf(cat)>=0;
     html+='<div class="sec"><span class="sec-handle">\u2807</span><span class="sec-t">'+esc(cat)+'</span><span class="sec-c">'+groups[cat].length+'</span><span class="sec-sp"></span>';
     if(isPrimary)html+='<span class="sec-more">\u5168\u4f53 \u2192</span>';
     html+='</div>';
     if(isPrimary){html+='<div class="story-scroll">';for(var j=0;j<groups[cat].length;j++)html+=buildCard(groups[cat][j]);html+='</div>';}
     else{for(var j=0;j<groups[cat].length;j++)html+=buildCompact(groups[cat][j]);}
   }
+  /* Show any categories not in configured order */
+  for(var cat in groups){if(!shown[cat]&&groups[cat].length){
+    html+='<div class="sec"><span class="sec-handle">\u2807</span><span class="sec-t">'+esc(cat)+'</span><span class="sec-c">'+groups[cat].length+'</span><span class="sec-sp"></span></div>';
+    for(var j=0;j<groups[cat].length;j++)html+=buildCompact(groups[cat][j]);
+  }}
   if((!filter||filter==='all'||filter==='\ub51c')&&curBrief&&curBrief.deals&&curBrief.deals.length){
     html+='<div class="sec"><span class="sec-handle">\u2807</span><span class="sec-t">Deal flow</span><span class="sec-c">'+curBrief.deals.length+'</span><span class="sec-sp"></span></div><div class="story-scroll">';
     for(var di=0;di<curBrief.deals.length;di++)html+=buildDealCard(curBrief.deals[di]);
@@ -2076,6 +2091,34 @@ function toggleRS(id){
 
 
 
+function toggleDarkMode(){
+  var isDark=document.documentElement.classList.toggle('dark');
+  document.body.classList.toggle('dark');
+  ss('db_darkMode',isDark?'1':'0');
+}
+function renderCatOrder(){
+  var cats=sgj('db_catOrder')||['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
+  var el=document.getElementById('catOrderList');if(!el)return;
+  var html='';
+  for(var i=0;i<cats.length;i++){
+    var c=cats[i],enabled=sgj('db_catOff')||[];
+    var isOn=enabled.indexOf(c)<0;
+    html+='<div class="set-row" style="min-height:40px;gap:8px">'
+      +'<span style="font-size:14px;cursor:grab;color:var(--t3)">☰</span>'
+      +'<span class="set-row-lbl" style="font-size:14px">'+c+'</span>'
+      +'<button class="ios-tog'+(isOn?' on':'')+'" onclick="togCat(this,\''+c+'\')"></button>'
+      +'</div>';
+  }
+  el.innerHTML=html;
+}
+function togCat(btn,cat){
+  btn.classList.toggle('on');
+  var off=sgj('db_catOff')||[];
+  var idx=off.indexOf(cat);
+  if(idx>=0)off.splice(idx,1);else off.push(cat);
+  ssj('db_catOff',off);
+  if(curBrief)renderCards(curBrief.headlines,curCat);
+}
 function togSetSec(id,lbl){
   var el=document.getElementById(id);if(!el)return;
   var show=el.style.display==='none';

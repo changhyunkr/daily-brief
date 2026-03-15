@@ -1,4 +1,4 @@
-// generate.js — Daily Brief Generator v2
+// generate.js — Daily Brief Generator v3 (v25 deploy)
 // Runs on GitHub Actions at 4:30 AM JST
 import fetch from 'node-fetch';
 import fs from 'fs';
@@ -154,24 +154,49 @@ Include ONLY real items from the raw data. t=1 up, -1 down, 0 flat/unknown.`;
 async function structureWithOpenAI(rawNews, date) {
   if (!OPENAI_KEY) return null;
   console.log('Step 2 (OpenAI fallback)...');
-  const prompt = `Structure this news into a daily investment brief JSON for ${date} JST.
-CRITICAL: Only use information from the raw data below. NEVER fabricate. If fewer items exist, return fewer.
-${rawNews ? `News:\n${rawNews.slice(0, 6000)}` : 'Search for top news for Japan PE/RE investor.'}
-Return ONLY JSON: {"date":"${date}","generatedAt":${Date.now()},"generatedBy":"github-actions","model":"gemini+gpt4o","headlines":[{"id":"h1","cat":"일본","title":"구체적 헤드라인","time":"3/14 06:30","summary":"팩트 기반 2문장","detail":"3-4문장 분석","implications":"구체적 수치 시나리오 + 포트폴리오 영향 + action item","source":"실제 출처","url":"실제 URL 또는 빈문자열"}],"market":{"jgb10y":{"v":"실제수치 또는 N/A","d":"변동 또는 —","t":0},"usdjpy":{"v":"","d":"","t":0},"nikkei":{"v":"","d":"","t":0},"sp500":{"v":"","d":"","t":0},"wti":{"v":"","d":"","t":0},"usdkrw":{"v":"","d":"","t":0}},"deals":[{"id":"d1","title":"실제 딜명","time":"3/14","value":"금액","type":"유형","summary":"요약","source":"출처","url":"URL"}],"watch":[{"n":1,"text":"관전1"},{"n":2,"text":"관전2"},{"n":3,"text":"관전3"}]}
-Include ONLY real items. Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국`;
+
+  const sysPrompt = `You are a senior Japan PE/Real Estate investment analyst. Return ONLY valid JSON, no markdown fences, no commentary. Use Korean for all text fields.
+
+IMPLICATIONS GUIDE:
+BAD: "주목할 만하다" or vague statements
+GOOD: "JGB 10Y 1.5% 돌파 시 도쿄 오피스 캡레이트 3.5→4.0% 조정 압력. LTV 60%+ 건 리파이 점검"
+Must include: (1) specific numbers (2) portfolio impact (3) action item`;
+
+  const userPrompt = rawNews
+    ? `Structure this raw news into a daily investment brief JSON for ${date} JST.\nOnly use information from the data below. Never fabricate.\n\nRaw news:\n${rawNews.slice(0, 6000)}`
+    : `Create a daily investment brief JSON for ${date} JST based on your knowledge of current events.\nFocus on: BOJ policy, Japan PE/RE deals, US markets overnight, global macro.\nUse your training data for the most recent known information. Mark uncertain items clearly.`;
+
+  const schema = `
+JSON schema (return this exact structure):
+{"date":"${date}","generatedAt":${Date.now()},"generatedBy":"github-actions","model":"gpt4o",
+"headlines":[{"id":"h1","cat":"일본","title":"헤드라인 (구체적 기업명/수치 포함, 55자 이내)","time":"${date.slice(5)} 06:30","summary":"팩트 기반 2문장","detail":"3-4문장 심층 분석","implications":"구체적 수치+포트폴리오 영향+action item","source":"출처명","url":""}],
+"market":{"jgb10y":{"v":"수치 or N/A","d":"변동 or —","t":0},"usdjpy":{"v":"","d":"","t":0},"nikkei":{"v":"","d":"","t":0},"sp500":{"v":"","d":"","t":0},"wti":{"v":"","d":"","t":0},"usdkrw":{"v":"","d":"","t":0}},
+"deals":[{"id":"d1","title":"딜명","time":"${date.slice(5)}","value":"금액","type":"유형","summary":"요약","detail":"딜 배경 및 구조","source":"출처","url":""}],
+"watch":[{"n":1,"text":"관전포인트1"},{"n":2,"text":"관전포인트2"},{"n":3,"text":"관전포인트3"}]}
+Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 up, -1 down, 0 flat.`;
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
-    body: JSON.stringify({ model: 'gpt-4o', max_tokens: 5000, messages: [{ role: 'user', content: prompt }] })
+    body: JSON.stringify({
+      model: 'gpt-4o',
+      max_tokens: 5000,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: sysPrompt },
+        { role: 'user', content: userPrompt + '\n\n' + schema }
+      ]
+    })
   });
   if (!res.ok) {
     const errBody = await res.text().catch(() => '');
-    throw new Error(`OpenAI ${res.status}: ${errBody.slice(0, 200)}`);
+    throw new Error(`OpenAI ${res.status}: ${errBody.slice(0, 300)}`);
   }
   const json = await res.json();
-  console.log('  ✓ OpenAI done');
-  return parseJSON(json.choices[0].message.content);
+  const content = json.choices?.[0]?.message?.content || '';
+  console.log(`  ✓ OpenAI: ${content.length} chars`);
+  if (!content) throw new Error('OpenAI empty response');
+  return parseJSON(content);
 }
 
 function addSpecialTopic(date, briefing) {
@@ -194,10 +219,20 @@ function addSpecialTopic(date, briefing) {
 }
 
 function parseJSON(text) {
+  if (!text || typeof text !== 'string') throw new Error('Empty text to parse');
   const clean = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
   const s = clean.indexOf('{'), e = clean.lastIndexOf('}');
-  if (s === -1) throw new Error('No JSON found');
-  return JSON.parse(clean.slice(s, e + 1));
+  if (s === -1 || e === -1 || e <= s) {
+    console.error('  Raw output (first 500):', clean.slice(0, 500));
+    throw new Error('No JSON found in response');
+  }
+  try {
+    return JSON.parse(clean.slice(s, e + 1));
+  } catch (parseErr) {
+    console.error('  JSON parse error:', parseErr.message);
+    console.error('  First 300 chars:', clean.slice(s, s + 300));
+    throw new Error(`JSON parse failed: ${parseErr.message}`);
+  }
 }
 
 function save(date, data) {
@@ -241,10 +276,29 @@ function validateBrief(b) {
 
 async function main() {
   let rawNews = null, briefing = null;
-  try { rawNews = await fetchNewsWithGemini(TODAY); } catch(e) { console.warn(`⚠ Gemini: ${e.message}`); }
-  try { briefing = await structureWithClaude(rawNews, TODAY, !rawNews); } catch(e) { console.warn(`⚠ Claude: ${e.message}`); }
-  if (!briefing) { try { briefing = await structureWithOpenAI(rawNews, TODAY); } catch(e) { console.error(`✗ OpenAI: ${e.message}`); } }
-  if (!briefing) { console.error('✗ All failed'); process.exit(1); }
+
+  // Step 1: Collect raw news
+  try { rawNews = await fetchNewsWithGemini(TODAY); }
+  catch(e) { console.warn(`⚠ Gemini: ${e.message}`); }
+
+  // Step 2: Structure into JSON
+  try { briefing = await structureWithClaude(rawNews, TODAY, !rawNews); }
+  catch(e) { console.warn(`⚠ Claude: ${e.message}`); }
+
+  // Step 3: Fallback to OpenAI
+  if (!briefing) {
+    try { briefing = await structureWithOpenAI(rawNews, TODAY); }
+    catch(e) { console.error(`✗ OpenAI: ${e.message}`); }
+  }
+
+  if (!briefing) {
+    console.error('✗ All methods failed.');
+    if (!GEMINI_KEY) console.error('  → GEMINI_API_KEY not set in GitHub Secrets');
+    if (!CLAUDE_KEY) console.error('  → CLAUDE_API_KEY not set in GitHub Secrets');
+    if (!OPENAI_KEY) console.error('  → OPENAI_API_KEY not set in GitHub Secrets');
+    process.exit(1);
+  }
+
   briefing.date = TODAY;
   briefing.generatedAt = briefing.generatedAt || Date.now();
   briefing.serverGenerated = true;
