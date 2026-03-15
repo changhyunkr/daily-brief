@@ -305,9 +305,64 @@ async function main() {
   briefing = validateBrief(briefing);
   addSpecialTopic(TODAY, briefing);
   save(TODAY, briefing);
+  /* Generate 10min podcast script */
+  try {
+    const podScript = await generatePodcast(briefing, 'medium');
+    if (podScript) {
+      const podDir = path.join(process.cwd(), 'data');
+      fs.writeFileSync(path.join(podDir, \`podcast-\${TODAY}-medium.json\`), JSON.stringify(podScript, null, 2));
+      console.log(\`  ✓ Podcast script saved (\${podScript.sections?.length || 0} sections)\`);
+    }
+  } catch(e) { console.warn(\`⚠ Podcast: \${e.message}\`); }
   const cats = [...new Set(briefing.headlines?.map(h=>h.cat)||[])];
   console.log(`\n✓ Done! ${briefing.headlines?.length||0} headlines, ${briefing.deals?.length||0} deals`);
   console.log(`  Categories: ${cats.join(', ')}`);
+}
+
+async function generatePodcast(briefing, length) {
+  const key = CLAUDE_KEY || OPENAI_KEY;
+  if (!key) return null;
+
+  const lenMap = { short: '3분, 4-5 sections', medium: '10분, 8-10 sections', long: '20분, 12-15 sections' };
+  const headlines = (briefing.headlines || []).map(h => `[${h.cat}] ${h.title}: ${h.summary || ''} | implications: ${h.implications || ''}`).join('\n');
+  const deals = (briefing.deals || []).map(d => `[딜] ${d.title}: ${d.summary || ''}`).join('\n');
+
+  const prompt = `You are creating a Korean podcast script for a Japan PE/Real Estate morning briefing.
+Target: ${lenMap[length] || lenMap.medium}
+
+Today's briefing:
+${headlines}
+${deals}
+
+Return ONLY JSON:
+{"sections":[{"name":"섹션 제목","summary":"• 핵심 포인트 1\\n• 핵심 포인트 2\\n• 핵심 포인트 3","text":"자연스러운 한국어 대화체 스크립트. 구어체로, 인사/소개/마무리 금지. 바로 핵심으로."}]}
+
+Rules:
+- 인사, 소개, 마무리 인사 절대 금지. 바로 핵심부터.
+- summary는 각 섹션의 핵심을 bullet points로 요약
+- text는 팟캐스트 스크립트 (구어체, 숫자는 한글로)
+- 구체적 수치, 기업명, 시나리오 포함`;
+
+  if (CLAUDE_KEY) {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 4000, messages: [{ role: 'user', content: prompt }] })
+    });
+    if (!res.ok) throw new Error(`Claude podcast: ${res.status}`);
+    const json = await res.json();
+    const text = json.content.filter(b => b.type === 'text').map(b => b.text).join('');
+    return parseJSON(text);
+  } else {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
+      body: JSON.stringify({ model: 'gpt-4o', max_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: prompt }] })
+    });
+    if (!res.ok) throw new Error(`OpenAI podcast: ${res.status}`);
+    const json = await res.json();
+    return parseJSON(json.choices[0].message.content);
+  }
 }
 
 main().catch(e => { console.error('Fatal:', e); process.exit(1); });
