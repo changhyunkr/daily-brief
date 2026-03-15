@@ -349,8 +349,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
     <div class="date-nav">
       <button onclick="navDate(-7)" style="font-size:11px">-7</button>
       <button onclick="navDate(-1)">‹</button>
-      <b id="navDateLbl" onclick="openDatePicker()" style="cursor:pointer">—</b>
-      <input type="date" id="datePicker" style="position:absolute;opacity:0;width:0;height:0" onchange="jumpToDate(this.value)">
+      <b id="navDateLbl" style="position:relative;cursor:pointer"><span id="navDateText">—</span><input type="date" id="datePicker" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px" onchange="jumpToDate(this.value)"></b>
       <button id="navNext" onclick="navDate(1)">›</button>
       <button onclick="navDate(7)" style="font-size:11px">+7</button>
     </div>
@@ -2145,7 +2144,7 @@ function navDate(d){
     else{renderEmpty('📰',dateLbl(nd)+' 없음','지금 생성',function(){autoGen(nd);});}
   },50);
 }
-function updateDateUI(){var el=document.getElementById('navDateLbl');if(el)el.textContent=dateLbl(curDate);var nb=document.getElementById('navNext');if(nb)nb.disabled=curDate>=todayStr();var pd=document.getElementById('podDateLbl');if(pd)pd.textContent=dateLbl(curDate);}
+function updateDateUI(){var el=document.getElementById('navDateText');if(el)el.textContent=dateLbl(curDate);var dp=document.getElementById('datePicker');if(dp)dp.value=curDate;var nb=document.getElementById('navNext');if(nb)nb.disabled=curDate>=todayStr();var pd=document.getElementById('podDateLbl');if(pd)pd.textContent=dateLbl(curDate);}
 function goTab(id){
   var tabMap={'brief':'feed','pod':'feed','deepdive':'research','chat':'research','search':'research','tools':'tools','settings':'settings'};
   var tabId=tabMap[id]||id;
@@ -2354,14 +2353,14 @@ function pickPalette(id){
 }
 function applyPalette(id){
   var pals={
-    'ink-gold':{d:'#000,#111,#1A1A1A,#242424,#E8E6E0,#A09A90,#7A756E,#C9A84C,rgba(201,168,76,.08),#C45A6A,#2D8B6A,#8B2332,rgba(255,255,255,.06)',l:'#FAF7F2,#FFF,#F0EBE3,#E4DDD3,#1A1A1A,#5C5650,#8A8480,#A38232,rgba(163,130,50,.07),#7A1D2A,#1B7A4E,#7A1D2A,rgba(0,0,0,.08)'},
-    'carbon-terra':{d:'#0C0C0C,#161616,#202020,#2C2C2C,#D8D4CC,#A09890,#706860,#C2714F,rgba(194,113,79,.08),#C2714F,#4A8B7A,#C2714F,rgba(255,255,255,.06)',l:'#F8F5F0,#FFF,#EDE8E0,#DDD6CA,#2A2420,#6B6560,#8A8480,#A85A3C,rgba(168,90,60,.06),#A85A3C,#3A7A64,#A85A3C,rgba(0,0,0,.08)'},
-    'obsidian-ivory':{d:'#080808,#141414,#1E1E1E,#2A2A2A,#D0CCC4,#9C9890,#7A7770,#E8E4DA,rgba(232,228,218,.06),#9C2B2B,#5A8A6E,#9C2B2B,rgba(255,255,255,.06)',l:'#FAFAFA,#FFF,#F0F0F0,#E0E0E0,#1A1A1A,#6A6660,#8A8880,#6A6660,rgba(106,102,96,.05),#8C2222,#3D7A54,#8C2222,rgba(0,0,0,.08)'},
-    'graphite-copper':{d:'#0E0E0E,#181818,#222222,#2E2E2E,#D0CCC4,#A8A49C,#7A756E,#C08B5C,rgba(192,139,92,.08),#B54A4A,#6B8F71,#B54A4A,rgba(255,255,255,.06)',l:'#F7F5F0,#FFF,#ECE8E0,#DCD6CC,#2A2A2A,#6B6560,#8A8480,#A06E3C,rgba(160,110,60,.06),#A03838,#4D7A58,#A03838,rgba(0,0,0,.08)'},
-    'soot-jade':{d:'#090909,#131313,#1C1C1C,#282828,#C8C4BA,#B8B4AA,#7A756E,#5C9E80,rgba(92,158,128,.08),#C45555,#5C9E80,#C45555,rgba(255,255,255,.06)',l:'#F5F8F5,#FFF,#E8EDE8,#D0D8D0,#2A2A28,#6B6B64,#8A8A80,#3A7A5C,rgba(58,122,92,.06),#B04040,#3A7A5C,#B04040,rgba(0,0,0,.08)'},
-    'void-cream':{d:'#000,#0F0F0F,#1A1A1A,#262626,#C5C0B4,#A09890,#7A756E,#A68B6B,rgba(166,139,107,.08),#B03030,#7A7A7A,#B03030,rgba(255,255,255,.06)',l:'#FAF8F3,#FFF,#F0ECE2,#E0DAC8,#1A1A1A,#6B6560,#8A8480,#8A7050,rgba(138,112,80,.06),#9A2828,#666666,#9A2828,rgba(0,0,0,.08)'},
-    'charcoal-persimmon':{d:'#0A0A0A,#151515,#1F1F1F,#2B2B2B,#C8C5BC,#BCBAB2,#7A756E,#D4613C,rgba(212,97,60,.08),#D4613C,#4A7C60,#D4613C,rgba(255,255,255,.06)',l:'#F8F6F2,#FFF,#EDE8E0,#DCD5CA,#2A2824,#6B6560,#8A8480,#B84C2E,rgba(184,76,46,.06),#B84C2E,#3A6A4A,#B84C2E,rgba(0,0,0,.08)'},
-    'midnight-platinum':{d:'#050505,#121212,#1C1C1C,#272727,#A09C94,#8A8580,#6A6560,#D0CCC4,rgba(208,204,196,.06),#A03030,#8A8580,#A03030,rgba(255,255,255,.06)',l:'#F8F8F6,#FFF,#EDEDEA,#DDDDD8,#1A1A1A,#6A6560,#8A8880,#6A6560,rgba(106,101,96,.05),#882828,#1A1A1A,#882828,rgba(0,0,0,.08)'}
+    'ink-gold':{d:['#000','#111','#1A1A1A','#242424','#E8E6E0','#A09A90','#7A756E','#C9A84C','rgba(201,168,76,.08)','#C45A6A','#2D8B6A','#8B2332','rgba(255,255,255,.06)'],l:['#FAF7F2','#FFF','#F0EBE3','#E4DDD3','#1A1A1A','#5C5650','#8A8480','#A38232','rgba(163,130,50,.07)','#7A1D2A','#1B7A4E','#7A1D2A','rgba(0,0,0,.08)']},
+    'carbon-terra':{d:['#0C0C0C','#161616','#202020','#2C2C2C','#D8D4CC','#A09890','#706860','#C2714F','rgba(194,113,79,.08)','#C2714F','#4A8B7A','#C2714F','rgba(255,255,255,.06)'],l:['#F8F5F0','#FFF','#EDE8E0','#DDD6CA','#2A2420','#6B6560','#8A8480','#A85A3C','rgba(168,90,60,.06)','#A85A3C','#3A7A64','#A85A3C','rgba(0,0,0,.08)']},
+    'obsidian-ivory':{d:['#080808','#141414','#1E1E1E','#2A2A2A','#D0CCC4','#9C9890','#7A7770','#E8E4DA','rgba(232,228,218,.06)','#9C2B2B','#5A8A6E','#9C2B2B','rgba(255,255,255,.06)'],l:['#FAFAFA','#FFF','#F0F0F0','#E0E0E0','#1A1A1A','#6A6660','#8A8880','#6A6660','rgba(106,102,96,.05)','#8C2222','#3D7A54','#8C2222','rgba(0,0,0,.08)']},
+    'graphite-copper':{d:['#0E0E0E','#181818','#222222','#2E2E2E','#D0CCC4','#A8A49C','#7A756E','#C08B5C','rgba(192,139,92,.08)','#B54A4A','#6B8F71','#B54A4A','rgba(255,255,255,.06)'],l:['#F7F5F0','#FFF','#ECE8E0','#DCD6CC','#2A2A2A','#6B6560','#8A8480','#A06E3C','rgba(160,110,60,.06)','#A03838','#4D7A58','#A03838','rgba(0,0,0,.08)']},
+    'soot-jade':{d:['#090909','#131313','#1C1C1C','#282828','#C8C4BA','#B8B4AA','#7A756E','#5C9E80','rgba(92,158,128,.08)','#C45555','#5C9E80','#C45555','rgba(255,255,255,.06)'],l:['#F5F8F5','#FFF','#E8EDE8','#D0D8D0','#2A2A28','#6B6B64','#8A8A80','#3A7A5C','rgba(58,122,92,.06)','#B04040','#3A7A5C','#B04040','rgba(0,0,0,.08)']},
+    'void-cream':{d:['#000','#0F0F0F','#1A1A1A','#262626','#C5C0B4','#A09890','#7A756E','#A68B6B','rgba(166,139,107,.08)','#B03030','#7A7A7A','#B03030','rgba(255,255,255,.06)'],l:['#FAF8F3','#FFF','#F0ECE2','#E0DAC8','#1A1A1A','#6B6560','#8A8480','#8A7050','rgba(138,112,80,.06)','#9A2828','#666666','#9A2828','rgba(0,0,0,.08)']},
+    'charcoal-persimmon':{d:['#0A0A0A','#151515','#1F1F1F','#2B2B2B','#C8C5BC','#BCBAB2','#7A756E','#D4613C','rgba(212,97,60,.08)','#D4613C','#4A7C60','#D4613C','rgba(255,255,255,.06)'],l:['#F8F6F2','#FFF','#EDE8E0','#DCD5CA','#2A2824','#6B6560','#8A8480','#B84C2E','rgba(184,76,46,.06)','#B84C2E','#3A6A4A','#B84C2E','rgba(0,0,0,.08)']},
+    'midnight-platinum':{d:['#050505','#121212','#1C1C1C','#272727','#A09C94','#8A8580','#6A6560','#D0CCC4','rgba(208,204,196,.06)','#A03030','#8A8580','#A03030','rgba(255,255,255,.06)'],l:['#F8F8F6','#FFF','#EDEDEA','#DDDDD8','#1A1A1A','#6A6560','#8A8880','#6A6560','rgba(106,101,96,.05)','#882828','#1A1A1A','#882828','rgba(0,0,0,.08)']}
   };
   var p=pals[id];if(!p)return;
   var dm=sg('db_darkMode');
@@ -2369,15 +2368,13 @@ function applyPalette(id){
   if(dm==='1')isDark=true;
   else if(dm==='0')isDark=false;
   else isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
-  var vals=(isDark?p.d:p.l).split(',');
+  var vals=isDark?p.d:p.l;
   var keys=['--bg','--card','--s2','--s3','--t1','--t2','--t3','--accent','--accent-bg','--cat1','--green','--red','--sep'];
   var root=document.documentElement.style;
   for(var i=0;i<keys.length&&i<vals.length;i++){root.setProperty(keys[i],vals[i]);}
-  /* Force body background update */
   document.body.style.background='var(--bg)';
   document.body.style.color='var(--t1)';
 }
-
 function parsePodWithSummary(sections){
   psecs=[];
   for(var i=0;i<sections.length;i++){
