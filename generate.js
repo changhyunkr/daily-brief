@@ -118,8 +118,9 @@ HEADLINE RULES:
 - No Japanese punctuation in Korean text`;
 
   const body_content = useSearch
-    ? `Search for today's (${date} JST) complete news for Japan PE/RE investor. Cover: BOJ, Nikkei RE, J-REIT, US markets, Fed, deals, activist events, trending.`
-    : `Structure this raw news into briefing JSON:\n\n${rawNews.slice(0, 8000)}`;
+    ? `Search for today's (${date} JST) complete news for Japan PE/RE investor. Cover exhaustively: BOJ, JGB yields, J-REIT index, Tokyo office vacancy, Japan PE deals, Nikkei headlines, US markets, Fed, China, Korea, global macro.
+Minimum 15-20 items. Include TIBOR, J-REIT index level, Tokyo A-grade cap rate. At least 3 deals and 1 market research report.`
+    : `Structure this raw news into briefing JSON. If fewer than 15 items, supplement with Japan PE/RE news.\n\n${rawNews.slice(0, 8000)}`;
 
   const schema = `Return ONLY this JSON (no markdown fences, no text outside JSON):
 {"date":"${date}","generatedAt":${Date.now()},"generatedBy":"github-actions","model":"${useSearch?'claude-search':'gemini+claude'}",
@@ -167,8 +168,21 @@ GOOD: "JGB 10Y 1.5% 돌파 시 도쿄 오피스 캡레이트 3.5→4.0% 조정 �
 Must include: (1) specific numbers (2) portfolio impact (3) action item`;
 
   const userPrompt = rawNews
-    ? `Structure this raw news into a daily investment brief JSON for ${date} JST.\nOnly use information from the data below. Never fabricate.\n\nRaw news:\n${rawNews.slice(0, 6000)}`
-    : `Create a daily investment brief JSON for ${date} JST based on your knowledge of current events.\nFocus on: BOJ policy, Japan PE/RE deals, US markets overnight, global macro.\nUse your training data for the most recent known information. Mark uncertain items clearly.`;
+    ? `Structure this raw news into a daily investment brief JSON for ${date} JST.
+Use raw data below as primary source. If fewer than 15 items, supplement with your Japan PE/RE knowledge.
+Minimum: 5 일본, 3 미국, 2 글로벌, 2 한국, 3 deals. Include TIBOR, J-REIT index, Tokyo cap rate in market.
+Raw news:\n${rawNews.slice(0, 7000)}`
+    : `Create a comprehensive daily investment brief JSON for ${date} JST. This is for a Japan-focused PE/Real Estate fund manager.
+
+MINIMUM REQUIREMENTS:
+- 일본 category: minimum 5 items (BOJ policy, J-REIT, Tokyo office/logistics, Japan corporate M&A, economic data)
+- 미국 category: minimum 3 items (Fed/rates, S&P/Nasdaq, major corporate)
+- 글로벌/매크로: minimum 2 items
+- 한국: minimum 2 items (BOK, Samsung/SK, Korean RE/PE)
+- 딜 section: minimum 3 deals (Japan RE, PE buyout, cross-border M&A)
+
+MUST INCLUDE: Tokyo office vacancy trends, J-REIT index level, 3M TIBOR rate, USD/JPY foreign investor impact, at least 1 CBRE/JLL/Savills report reference, PE deal pipeline in Japan.
+If weekend/holiday use most recent trading day data. Be SPECIFIC with numbers and company names.`;
 
   const schema = `
 IMPORTANT: Return 15-20 headlines minimum. Each headline MUST have specific numbers and company names.
