@@ -209,9 +209,8 @@ Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 u
     body: JSON.stringify({
       model: 'gpt-5-mini',
       max_completion_tokens: 8000,
-      response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: sysPrompt },
+        { role: 'system', content: sysPrompt + '\n\nReturn ONLY valid JSON. No markdown fences. No text outside the JSON object.' },
         { role: 'user', content: userPrompt + '\n\n' + schema }
       ]
     })
@@ -221,9 +220,42 @@ Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 u
     throw new Error(`OpenAI ${res.status}: ${errBody.slice(0, 300)}`);
   }
   const json = await res.json();
-  const content = json.choices?.[0]?.message?.content || '';
-  console.log(`  ✓ OpenAI: ${content.length} chars`);
-  if (!content) throw new Error('OpenAI empty response');
+  /* GPT-5 mini may return content in different formats */
+  let content = '';
+  if (json.choices?.[0]?.message?.content) {
+    content = json.choices[0].message.content;
+  } else if (json.output_text) {
+    content = json.output_text;
+  } else if (json.output) {
+    /* Responses API format */
+    for (const item of (json.output || [])) {
+      if (item.content) for (const c of item.content) { if (c.text) content += c.text; }
+    }
+  }
+  console.log(`  ✓ OpenAI: ${content.length} chars (keys: ${Object.keys(json).join(',')})`);
+  if (!content) {
+    console.error('  Full response:', JSON.stringify(json).slice(0, 500));
+    /* Fallback: try Responses API */
+    console.log('  Trying Responses API fallback...');
+    const res2 = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
+      body: JSON.stringify({
+        model: 'gpt-5-mini',
+        input: [
+          { role: 'system', content: sysPrompt },
+          { role: 'user', content: userPrompt + '\n\n' + schema }
+        ],
+        text: { format: { type: 'json_object' } }
+      })
+    });
+    if (res2.ok) {
+      const json2 = await res2.json();
+      content = json2.output_text || '';
+      console.log(`  ✓ Responses API: ${content.length} chars`);
+    }
+    if (!content) throw new Error('OpenAI empty response (both APIs)');
+  }
   return parseJSON(content);
 }
 
@@ -481,7 +513,7 @@ Rules:
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
-      body: JSON.stringify({ model: 'gpt-5-mini', max_completion_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: prompt }] })
+      body: JSON.stringify({ model: 'gpt-5-mini', max_completion_tokens: 4000, messages: [{ role: 'system', content: 'Return ONLY valid JSON. No markdown fences.' }, { role: 'user', content: prompt }] })
     });
     if (!res.ok) throw new Error(`OpenAI podcast: ${res.status}`);
     const json = await res.json();
