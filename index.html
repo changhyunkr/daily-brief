@@ -751,29 +751,52 @@ function startApp(){
   loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();loadTheme();renderCatOrder();updateKeyUI();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
   updateDateUI();updateCounts();loadSchedUI();checkSched();
+  /* 1. Check localStorage cache first */
   var cached=sgj('db_brief_'+curDate);
   if(cached&&!isStale(cached)){renderBrief(cached);return;}
-  var lastFail=parseInt(sg('db_lastfail')||'0');
-  var cooldown=120000;
-  if(Date.now()-lastFail<cooldown){
-    var ago=Math.round((Date.now()-lastFail)/1000);
-    renderEmpty('⏳','마지막 생성 시도 실패 ('+ago+'초 전)\nAPI rate limit 대기 중','수동 생성',function(){sr('db_lastfail');autoGen(curDate);});
-    return;
-  }
+  /* 2. Try GitHub server (always try, even without explicit URL) */
   fetchGithub(curDate).then(function(r){
-    if(r){ssj('db_brief_'+curDate,r);renderBrief(r);}
-    else if(cfg.autoGen){autoGen(curDate);}
-    else{renderEmpty('📰','브리핑 없음','지금 생성',function(){autoGen(curDate);});}
+    if(r){ssj('db_brief_'+curDate,r);renderBrief(r);return;}
+    /* 3. Only auto-generate if explicitly enabled AND not recently failed */
+    var lastFail=parseInt(sg('db_lastfail')||'0');
+    if(Date.now()-lastFail<120000){
+      renderEmpty('⏳','잠시 후 다시 시도해주세요','수동 생성',function(){sr('db_lastfail');autoGen(curDate);});
+      return;
+    }
+    if(cfg.autoGen){autoGen(curDate);}
+    else{renderEmpty('📰','브리핑 없음.\n↻ 버튼으로 생성하거나\nGitHub Actions 실행을 기다려주세요.','지금 생성',function(){autoGen(curDate);});}
   });
 }
 
 /* ── GITHUB ──────────────────────────────────────────────── */
 function fetchGithub(date){
-  var base=sg('db_github');if(!base)return Promise.resolve(null);
-  var url=base.replace(/\/$/,'')+'/data/briefing-'+date+'.json?t='+Date.now();
-  return fetch(url).then(function(r){return r.ok?r.json():null;})
-    .then(function(d){return d&&d.headlines&&d.headlines.length?d:null;})
-    .catch(function(){return null;});
+  var base=sg('db_github');
+  /* Try configured URL first, then detect from current page */
+  if(!base){
+    try{
+      var loc=window.location.href;
+      if(loc.indexOf('github.io')>=0){
+        var parts=loc.split('/');
+        base='https://'+parts[2]+'/'+parts[3];
+      }
+    }catch(e){}
+  }
+  if(!base)return Promise.resolve(null);
+  base=base.replace(/\/$/,'');
+  var url=base+'/data/briefing-'+date+'.json?t='+Date.now();
+  return fetch(url).then(function(r){
+    if(!r.ok)return null;
+    return r.json();
+  }).then(function(d){
+    if(d&&d.headlines&&d.headlines.length){
+      console.log('GitHub fetch OK: '+d.headlines.length+' headlines');
+      return d;
+    }
+    return null;
+  }).catch(function(e){
+    console.warn('GitHub fetch failed:',e.message);
+    return null;
+  });
 }
 
 /* ── RERUN ──────────────────────────────────────────────── */
@@ -2048,7 +2071,15 @@ function goTab(id){
 function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());}
 function localDateStr(d){return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());}
 function dateLbl(d){return new Date(d+'T00:00:00').toLocaleDateString('ko-KR',{month:'short',day:'numeric',weekday:'short'});}
-function isStale(d){return !d.generatedAt||(Date.now()-d.generatedAt>12*3600*1000);}
+function isStale(d){
+  if(!d.generatedAt)return true;
+  /* Server-generated briefings for today are never stale */
+  if(d.serverGenerated&&d.date===todayStr())return false;
+  /* Same-day briefing: fresh until midnight */
+  if(d.date===todayStr())return false;
+  /* Older briefings: stale after 24 hours */
+  return (Date.now()-d.generatedAt>24*3600*1000);
+}
 function fmtT(s){return Math.floor(s/60)+':'+pad2(s%60);}
 function pad2(n){return n<10?'0'+n:String(n);}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
