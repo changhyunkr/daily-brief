@@ -211,7 +211,7 @@ Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 u
       max_completion_tokens: 16000,
       reasoning_effort: 'low',
       messages: [
-        { role: 'system', content: sysPrompt + '\n\nReturn ONLY valid JSON. No markdown fences. No text outside the JSON object.' },
+        { role: 'system', content: sysPrompt + '\n\nReturn ONLY valid JSON. No markdown fences. No text outside the JSON object.\n\nCRITICAL: NEVER create placeholder content like "딜A", "기업A", "금액 N/A", "검토단계", "공시 전". If you don\'t have real specific information about a deal or event, DO NOT include it. Every headline and deal MUST have a REAL company name and REAL numbers. Zero tolerance for fake placeholders.' },
         { role: 'user', content: userPrompt + '\n\n' + schema }
       ]
     })
@@ -361,36 +361,71 @@ function save(date, data) {
 
 function validateBrief(b) {
   if (!b) return b;
-  const genericPattern = /^(일본|미국|한국|중국|글로벌)\s*(부동산|기업|펀드|투자),?\s*(부동산|기업|펀드|투자|오피스|물류|빌딩)/;
+  const genericPattern = /^(일본|미국|한국|중국|글로벌)\s*(부동산|기업|펀드|투자|자산운용),?\s*(부동산|기업|펀드|투자|오피스|물류|빌딩|자산운용)/;
+  /* Patterns that indicate hallucinated/placeholder content */
+  const fakePatterns = [
+    /딜[A-Z]\b/,           /* 딜A, 딜B — placeholder names */
+    /기업[A-Z]\b/,         /* 기업A */
+    /펀드[A-Z]\b/,         /* 펀드A */
+    /자산운용사\s*['']?딜/, /* generic "자산운용사 딜" */
+    /금액\s*N\/A/,         /* 금액 N/A */
+    /검토\s*단계/,         /* 검토단계 — no real info */
+    /공시\s*전\s*단계/,    /* 공시 전 단계 */
+    /구체적\s*수치:\s*N\/A/,
+    /구체적\s*수치:\s*금액\s*N\/A/,
+    /^\s*\w+\s*[A-Z]:/,    /* "딜A:" pattern in title */
+  ];
+
+  function isFake(text) {
+    if (!text) return true;
+    return fakePatterns.some(p => p.test(text));
+  }
+
   if (b.headlines) {
     const before = b.headlines.length;
     b.headlines = b.headlines.filter(h => {
       if (!h.title || h.title.length < 10) return false;
       if (genericPattern.test(h.title) && !h.url) return false;
+      if (isFake(h.title)) return false;
+      if (isFake(h.summary) && isFake(h.detail)) return false;
+      /* Title must contain at least one specific noun (company, person, number) */
+      const hasSpecific = /[0-9%]|[A-Z]{2,}|블랙스톤|KKR|칼라일|베인|골드만|모건|CBRE|JLL|삼성|현대|소프트뱅크|도요타|소니|닛산|미쓰비시|미쓰이|스미토모|노무라|다이와|BOJ|BOK|Fed|FOMC|PBOC/.test(h.title);
+      const hasGenericOnly = /자산운용사|부동산\s*펀드|투자\s*검토|매입\s*검토/.test(h.title) && !hasSpecific;
+      if (hasGenericOnly) return false;
       return true;
     });
     const removed = before - b.headlines.length;
-    if (removed > 0) console.log(`  ⚠ Validation: removed ${removed} suspicious headlines`);
+    if (removed > 0) console.log(`  ⚠ Validation: removed ${removed} hallucinated/generic headlines`);
+  }
+  if (b.deals) {
+    const beforeD = b.deals.length;
+    b.deals = b.deals.filter(d => {
+      if (!d.title || d.title.length < 8) return false;
+      if (isFake(d.title)) return false;
+      if (genericPattern.test(d.title) && !d.url) return false;
+      /* Deals must have a real company name or specific amount */
+      const hasReal = /[0-9]|[A-Z]{2,}|블랙스톤|KKR|칼라일|베인|골드만|CBRE|JLL|삼성|현대|소프트뱅크|미쓰비시|미쓰이|스미토모|히타치|도시바|파나소닉/.test(d.title);
+      if (!hasReal) return false;
+      return true;
+    });
+    const removedD = beforeD - b.deals.length;
+    if (removedD > 0) console.log(`  ⚠ Validation: removed ${removedD} hallucinated deals`);
   }
   if (b.market) {
     for (const k of ['jgb10y','usdjpy','nikkei','sp500','wti','usdkrw','tibor','jreit','caprate']) {
       const m = b.market[k];
       if (!m) { b.market[k] = {v:'N/A',d:'—',t:0}; continue; }
-      /* Reset suspicious round numbers that are likely hallucinated */
       const v = String(m.v || '');
       if (v === '0' || v === '0%' || v === '$0' || v === 'N/A' || !v) {
         b.market[k] = {v:'N/A',d:'—',t:0};
       }
     }
   }
-  if (b.deals) {
-    b.deals = b.deals.filter(d => d.title && d.title.length >= 8 && !(genericPattern.test(d.title) && !d.url));
-  }
-  /* Mark unverified briefs */
   if (b.model === 'gpt4o' && !b.headlines?.some(h => h.url)) {
     b.unverified = true;
     console.log('  ⚠ Brief marked as unverified (no source URLs)');
   }
+  console.log(`  ✓ Validated: ${b.headlines?.length||0} headlines, ${b.deals?.length||0} deals`);
   return b;
 }
 
