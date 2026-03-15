@@ -208,7 +208,7 @@ Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 u
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
     body: JSON.stringify({
       model: 'gpt-5-mini',
-      max_tokens: 8000,
+      max_completion_tokens: 8000,
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: sysPrompt },
@@ -378,7 +378,7 @@ Include exact market levels: JGB 10Y, USD/JPY, Nikkei, S&P500, WTI, USD/KRW, 3M 
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
     body: JSON.stringify({
       model: 'gpt-5-mini',
-      max_tokens: 8000,
+      max_completion_tokens: 8000,
       messages: [
         { role: 'system', content: 'You are a financial news researcher. Provide factual, detailed market news.' },
         { role: 'user', content: prompt }
@@ -481,7 +481,7 @@ Rules:
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
-      body: JSON.stringify({ model: 'gpt-5-mini', max_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: prompt }] })
+      body: JSON.stringify({ model: 'gpt-5-mini', max_completion_tokens: 4000, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: prompt }] })
     });
     if (!res.ok) throw new Error(`OpenAI podcast: ${res.status}`);
     const json = await res.json();
