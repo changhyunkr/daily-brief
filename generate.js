@@ -80,7 +80,7 @@ Market levels: JGB 10Y %, USD/JPY, Nikkei, S&P500, WTI, USD/KRW. Use EXACT numbe
 Return only items you actually found. Quality over quantity. Include real source URLs.`;
 
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
     { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -163,12 +163,11 @@ async function structureWithOpenAI(rawNews, date) {
   const sysPrompt = `You are a senior Japan PE/Real Estate investment analyst. Return ONLY valid JSON. Use Korean for all text fields.
 
 CRITICAL ANTI-HALLUCINATION RULES:
-- You do NOT have access to today's news. Your knowledge has a cutoff date.
-- NEVER invent specific stock prices, index levels, or market data. Use "N/A" for any number you're not certain about.
-- NEVER fabricate company names, deal sizes, or transaction details.
-- For market data: set ALL values to "N/A" and changes to "—" unless you have the raw news data below.
-- For headlines: ONLY report events you are CERTAIN happened. If unsure, DO NOT include.
-- Every headline MUST have "confirmed": true if from raw news data, or "confirmed": false if from your knowledge.
+- Search the web for today's actual news. Your knowledge has a cutoff date.
+- Search for REAL news that was actually published today or yesterday.
+- Use EXACT numbers from your search results. If not found, use "N/A".
+- Include real source URLs from your search results.
+- NEVER fabricate news that doesn't exist.
 - It is MUCH better to return 5 real items than 20 hallucinated ones.
 
 IMPLICATIONS GUIDE:
@@ -181,23 +180,18 @@ Must include: (1) specific numbers (2) portfolio impact (3) action item`;
 Use raw data below as primary source. If fewer than 15 items, supplement with your Japan PE/RE knowledge.
 Minimum: 5 일본, 3 미국, 2 글로벌, 2 한국, 3 deals. Include TIBOR, J-REIT index, Tokyo cap rate in market.
 Raw news:\n${rawNews.slice(0, 7000)}`
-    : `You do NOT have access to real-time news for ${date}. Create a brief based ONLY on what you are CERTAIN about.
+    : `Search the web for today's (${date} JST) actual news for a Japan PE/Real Estate fund manager.
 
-RULES:
-- Set ALL market values (jgb10y, usdjpy, nikkei, sp500, wti, usdkrw, tibor, jreit, caprate) to {"v":"N/A","d":"—","t":0}
-- Only include headlines about ONGOING situations you are confident about (e.g. "BOJ policy stance", "J-REIT market trends")
-- Mark every headline with "confirmed": false
-- Do NOT invent specific prices, dates, percentages, or deal sizes
-- Prefix each title with "⚠ " to indicate these are AI-generated, not confirmed news
-- Include maximum 8-10 items focused on structural/ongoing themes, not specific daily events
-- For deals: only include well-known ongoing deals, not invented ones
+Search for and include:
+- 일본: BOJ policy, JGB yield, J-REIT index, Tokyo office market, Japan M&A/PE deals (minimum 5)
+- 미국: Fed, S&P 500/Nasdaq close, major corporate news (minimum 3)
+- 글로벌/매크로: China, USD/JPY, oil prices (minimum 2)  
+- 한국: BOK, Samsung/SK, Korean market (minimum 2)
+- 딜: Real estate transactions, PE buyouts, M&A (minimum 3)
 
-Themes to cover (only if you're confident they are real):
-- BOJ monetary policy direction and latest known stance
-- Japan office/logistics real estate market structural trends
-- J-REIT market overview
-- US Fed policy direction
-- Major ongoing M&A/PE situations in Japan`;
+For market data: use EXACT numbers from search. Include 3M TIBOR, J-REIT index, Tokyo cap rate.
+Include real source URLs from your search results.
+If weekend/holiday, use most recent trading day data.`;
 
   const schema = `
 IMPORTANT: Return 15-20 headlines minimum. Each headline MUST have specific numbers and company names.
@@ -213,11 +207,12 @@ Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 u
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
     body: JSON.stringify({
-      model: 'gpt-4o',
+      model: rawNews ? 'gpt-4o' : 'gpt-4o-search-preview',
       max_tokens: 5000,
-      response_format: { type: 'json_object' },
+      ...(rawNews ? { response_format: { type: 'json_object' } } : {}),
+      web_search_options: rawNews ? undefined : { search_context_size: 'high' },
       messages: [
-        { role: 'system', content: sysPrompt },
+        { role: 'system', content: sysPrompt + (rawNews ? '' : '\n\nYou have web search access. Search for real news. Return ONLY valid JSON, no other text.') },
         { role: 'user', content: userPrompt + '\n\n' + schema }
       ]
     })
