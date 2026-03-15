@@ -13,8 +13,8 @@
 <style>
 :root{--bg:#FAF7F2;--card:#FFF;--s2:#F0EBE3;--s3:#E4DDD3;--t1:#1A1A1A;--t2:#5C5650;--t3:#8A8480;--accent:#A38232;--accent-bg:rgba(163,130,50,.07);--cat1:#7A1D2A;--cat2:#2C5282;--cat3:#6A3296;--green:#1B7A4E;--red:#7A1D2A;--sep:rgba(0,0,0,.08);--r:12px;--serif:'Fraunces',Georgia,serif;--sans:'Plus Jakarta Sans',sans-serif;--sat:env(safe-area-inset-top,44px);--sab:env(safe-area-inset-bottom,20px)}
 @media(prefers-color-scheme:dark){:root{--bg:#000;--card:#111;--s2:#1A1A1A;--s3:#242424;--t1:#E8E6E0;--t2:#A09A90;--t3:#7A756E;--accent:#C9A84C;--accent-bg:rgba(201,168,76,.08);--cat1:#C45A6A;--cat2:#5B8EC0;--cat3:#9070C0;--green:#2D8B6A;--red:#C45A5A;--sep:rgba(255,255,255,.06)}}
-html:root.dark,html.dark{--bg:#000;--card:#111;--s2:#1A1A1A;--s3:#242424;--t1:#E8E6E0;--t2:#A09A90;--t3:#7A756E;--accent:#C9A84C;--accent-bg:rgba(201,168,76,.08);--cat1:#C45A6A;--cat2:#5B8EC0;--cat3:#9070C0;--green:#2D8B6A;--red:#C45A5A;--sep:rgba(255,255,255,.06)}
-html.light,html.light body{--bg:#FAF7F2;--card:#FFF;--s2:#F0EBE3;--s3:#E4DDD3;--t1:#1A1A1A;--t2:#5C5650;--t3:#8A8480;--accent:#A38232;--accent-bg:rgba(163,130,50,.07);--cat1:#7A1D2A;--cat2:#2C5282;--cat3:#6A3296;--green:#1B7A4E;--red:#7A1D2A;--sep:rgba(0,0,0,.08)}
+/* .dark colors set by applyPalette */
+/* .light colors set by applyPalette */
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
 .app{display:flex;flex-direction:column;height:100%}
@@ -731,7 +731,7 @@ function saveSetup(){
 
 /* ── INIT ────────────────────────────────────────────────── */
 function init(){
-  try{loadTheme();renderCatOrder();renderCustomFocus();var _sp=sg('db_palette');if(_sp)applyPalette(_sp);}catch(e){}
+  try{loadTheme();renderCatOrder();renderCustomFocus();applyPalette(sg('db_palette')||'ink-gold');}catch(e){}
   if(!sg('db_claude')&&!sg('db_openai'))return;
   document.getElementById('setupScreen').style.display='none';
   startApp();
@@ -739,14 +739,14 @@ function init(){
 
 function startApp(){
   try{window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',function(e){
-    var _pal=sg('db_palette');if(_pal)applyPalette(_pal);
+    var _pal=sg('db_palette')||'ink-gold';applyPalette(_pal);
   });}catch(e){}
 
   var _dm=sg('db_darkMode');if(_dm==='1')document.documentElement.classList.add('dark');else if(_dm==='0')document.documentElement.classList.add('light');
 
   var ma=document.getElementById('mainArea');if(ma){ma.classList.add('show');}
   var tb=document.getElementById('tabbar');if(tb)tb.style.display='block';
-  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();loadTheme();renderCatOrder();renderCustomFocus();var _sp=sg('db_palette');if(_sp)applyPalette(_sp);updateKeyUI();
+  loadCfg();loadVoices();loadSources();loadDeals();loadAlerts();loadFocus();loadTheme();renderCatOrder();renderCustomFocus();applyPalette(sg('db_palette')||'ink-gold');updateKeyUI();
   if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
   updateDateUI();updateCounts();loadSchedUI();checkSched();
   /* 1. Check localStorage cache first */
@@ -2248,7 +2248,7 @@ function toggleDarkMode(){
   html.classList.remove('dark','light');
   if(goLight){html.classList.add('light');ss('db_darkMode','0');}
   else{html.classList.add('dark');ss('db_darkMode','1');}
-  var _pal=sg('db_palette');if(_pal)applyPalette(_pal);
+  var _pal=sg('db_palette')||'ink-gold';applyPalette(_pal);
 }
 function renderCatOrder(){
   var cats=sgj('db_catOrder')||['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
@@ -2350,6 +2350,7 @@ function togCat(btn,cat){
 }
 function pickPalette(id){
   ss('db_palette',id);applyPalette(id);renderThemes(id);
+  showToast('팔레트 적용됨');
 }
 function applyPalette(id){
   var pals={
@@ -2370,10 +2371,13 @@ function applyPalette(id){
   else isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
   var vals=isDark?p.d:p.l;
   var keys=['--bg','--card','--s2','--s3','--t1','--t2','--t3','--accent','--accent-bg','--cat1','--green','--red','--sep'];
-  var root=document.documentElement.style;
-  for(var i=0;i<keys.length&&i<vals.length;i++){root.setProperty(keys[i],vals[i]);}
-  document.body.style.background='var(--bg)';
-  document.body.style.color='var(--t1)';
+  /* Use dynamic <style> to guarantee override */
+  var css=':root{';
+  for(var i=0;i<keys.length&&i<vals.length;i++){css+=keys[i]+':'+vals[i]+' !important;';}
+  css+='}';
+  var el=document.getElementById('palette-override');
+  if(!el){el=document.createElement('style');el.id='palette-override';document.head.appendChild(el);}
+  el.textContent=css;
 }
 function parsePodWithSummary(sections){
   psecs=[];
