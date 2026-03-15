@@ -209,7 +209,7 @@ Categories: 글로벌|일본|미국|아시아|매크로|딜|화제|한국. t=1 u
     body: JSON.stringify({
       model: 'gpt-5-mini',
       max_completion_tokens: 16000,
-      reasoning: { effort: 'low' },
+      reasoning_effort: 'low',
       messages: [
         { role: 'system', content: sysPrompt + '\n\nReturn ONLY valid JSON. No markdown fences. No text outside the JSON object.' },
         { role: 'user', content: userPrompt + '\n\n' + schema }
@@ -412,7 +412,7 @@ Include exact market levels: JGB 10Y, USD/JPY, Nikkei, S&P500, WTI, USD/KRW, 3M 
     body: JSON.stringify({
       model: 'gpt-5-mini',
       max_completion_tokens: 16000,
-      reasoning: { effort: 'low' },
+      reasoning_effort: 'low',
       messages: [
         { role: 'system', content: 'You are a financial news researcher. Provide factual, detailed market news.' },
         { role: 'user', content: prompt }
@@ -515,7 +515,7 @@ Rules:
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_KEY}` },
-      body: JSON.stringify({ model: 'gpt-5-mini', max_completion_tokens: 8000, reasoning: { effort: 'low' }, messages: [{ role: 'system', content: 'Return ONLY valid JSON. No markdown fences.' }, { role: 'user', content: prompt }] })
+      body: JSON.stringify({ model: 'gpt-5-mini', max_completion_tokens: 8000, reasoning_effort: 'low', messages: [{ role: 'system', content: 'Return ONLY valid JSON. No markdown fences.' }, { role: 'user', content: prompt }] })
     });
     if (!res.ok) throw new Error(`OpenAI podcast: ${res.status}`);
     const json = await res.json();
