@@ -352,6 +352,7 @@ body{background:var(--bg);color:var(--t1);font-family:var(--sans);height:100dvh;
       <b id="navDateLbl" style="position:relative;cursor:pointer"><span id="navDateText">—</span><input type="date" id="datePicker" style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px" onchange="jumpToDate(this.value)"></b>
       <button id="navNext" onclick="navDate(1)">›</button>
       <button onclick="navDate(7)" style="font-size:11px">+7</button>
+      <button onclick="goToday()" style="font-size:10px;font-weight:700;color:var(--accent);padding:0 8px">오늘</button>
     </div>
     <div class="nb">
       <button onclick="toggleDarkMode()">◐</button>
@@ -1035,7 +1036,11 @@ function renderCards(hl,filter){
   var el=document.getElementById('cardsList');
   var items=(filter&&filter!=='all')?(hl||[]).filter(function(h){return h.cat===filter;}):(hl||[]);
   if(!items.length){el.innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--t3)">해당 카테고리 없음</div>';return;}
-  var groups={},order=['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];var cfgCats=sgj('db_catOrder')||order;
+  var groups={},order=['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
+  /* Market mode: prioritize focus market */
+  var isKR=cfg&&cfg.marketMode==='kr';
+  var defaultOrder=isKR?['한국','일본','미국','글로벌','매크로','아시아','딜','화제']:['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
+  var cfgCats=sgj('db_catOrder')||defaultOrder;
   for(var i=0;i<items.length;i++){var cat=items[i].cat||'글로벌';if(!groups[cat])groups[cat]=[];groups[cat].push(items[i]);}
   var html='',primaryCats=['일본'];
   /* Show categories in configured order, then any remaining */
@@ -1317,7 +1322,7 @@ function sendChat(){
   var thinkEl=addMsg('ai','생각 중...','thinking');
   var ckey=sg('db_claude'),okey=sg('db_openai');
   var ctx=curBrief?'오늘 브리핑:\n'+(curBrief.headlines||[]).slice(0,5).map(function(h){return h.cat+': '+h.title;}).join('\n')+'\n\n':'';
-  var sys=ctx+'일본 PE/부동산 투자 전문 애널리스트. 간결하고 구체적으로 한국어로 답변.';
+  var sys=ctx+''+(cfg.marketMode==='kr'?'한국':'일본')+' PE/부동산 투자 전문 애널리스트. 간결하고 구체적으로 한국어로 답변.';
   var msgs=chatHist.slice(-8);var p;
   if(ckey){p=fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':ckey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,tools:[{type:'web_search_20250305',name:'web_search'}],messages:msgs})}).then(function(r){return r.json();}).then(function(j){return j.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});}
   else{p=fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+okey},body:JSON.stringify({model:'gpt-5-mini',max_completion_tokens:800,messages:[{role:'system',content:sys}].concat(msgs)})}).then(function(r){return r.json();}).then(function(j){return j.choices[0].message.content;});}
@@ -1602,7 +1607,7 @@ function genDeepDive(hid){
   var ckey=sg('db_claude'),okey=sg('db_openai');
   var el=document.getElementById('chatMsgs');
   el.innerHTML='';addMsg('ai','「'+item.title+'」딥다이브 분석 중...');
-  var prompt='당신은 일본 PE/부동산 투자 전문 시니어 애널리스트입니다.\n\n"'+item.title+'"에 대해 아래 형식의 딥다이브 분석 JSON을 반환하세요:\n'
+  var prompt='당신은 '+(cfg.marketMode==='kr'?'한국':'일본')+' PE/부동산 투자 전문 시니어 애널리스트입니다.\n\n"'+item.title+'"에 대해 아래 형식의 딥다이브 분석 JSON을 반환하세요:\n'
     +'{"sections":[\n'
     +'  {"title":"배경 및 경위","body":"사건의 맥락, 배경, 타임라인"},\n'
     +'  {"title":"핵심 수치 및 밸류에이션","body":"관련 재무데이터, 딜 사이즈, 밸류에이션 멀티플","table":{"headers":["지표","수치","비고"],"rows":[]},"kv":[{"label":"지표명","value":"수치"}]},\n'
@@ -2251,7 +2256,9 @@ function toggleDarkMode(){
   var _pal=sg('db_palette')||'ink-gold';applyPalette(_pal);
 }
 function renderCatOrder(){
-  var cats=sgj('db_catOrder')||['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
+  var isKR=cfg&&cfg.marketMode==='kr';
+  var defOrder=isKR?['한국','일본','미국','글로벌','매크로','아시아','딜','화제']:['일본','미국','한국','글로벌','매크로','아시아','딜','화제'];
+  var cats=sgj('db_catOrder')||defOrder;
   var el=document.getElementById('catOrderList');if(!el)return;
   var html='';
   for(var i=0;i<cats.length;i++){
@@ -2283,6 +2290,12 @@ function renderCustomFocus(){
 }
 function removeCustomFocus(idx){
   var list=sgj('db_customFocus')||[];list.splice(idx,1);ssj('db_customFocus',list);renderCustomFocus();
+}
+function goToday(){
+  curDate=todayStr();updateDateUI();
+  var cached=sgj('db_brief_'+curDate);
+  if(cached){renderBrief(cached);}else{loadBrief(curDate);}
+  goTab('feed');
 }
 function openDatePicker(){
   var dp=document.getElementById('datePicker');if(dp){dp.value=curDate;dp.showPicker?dp.showPicker():dp.click();}

@@ -53,7 +53,16 @@ GLOBAL MACRO:
 - USD/JPY overnight move and reason
 - Oil WTI exact price and driver
 - China: PBOC moves, property data, Xi policy
-- Korea: BOK, Samsung/SK Hynix news, major corporate
+- Korea: BOK rate decisions, Samsung/SK Hynix news, major corporate
+- Korea RE: office/logistics vacancy, cap rates, K-REIT, PE deals
+
+KOREA (aim for 4+ items):
+- BOK rate decisions, bond yields, KRW moves
+- Samsung Electronics, SK Hynix, LG, Hyundai corporate news
+- Korean PE/RE deals: office, logistics, data center transactions
+- Korean M&A: carve-outs, take-privates, activist investors
+- K-REIT market, Seoul office vacancy trends
+- Korea macro: CPI, employment, export data
 - Geopolitics: Ukraine ceasefire, Middle East, US-China
 
 DEALS AND ACTIVIST (be thorough):
