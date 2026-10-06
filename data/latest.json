@@ -1,205 +1,216 @@
 {
-  "date": "2026-10-05",
-  "generatedAt": 1791152910520,
+  "date": "2026-10-06",
+  "generatedAt": 1791248165647,
   "generatedBy": "github-actions",
   "model": "gpt4o",
   "headlines": [
     {
       "id": "h1",
       "cat": "일본",
-      "title": "도쿄 소비자물가 상승률, BOJ 정책금리 인상 명분 강화",
-      "time": "10-05 06:30",
-      "summary": "도쿄 물가 상승이 일본은행(BOJ)의 추가 금리인상 근거를 강화하고 있습니다. 그러나 미국 고용 부진으로 10월 인상 기대감은 다소 완화되었습니다.",
-      "detail": "FXEmpire 보도에 따르면 도쿄 인플레이션 상승이 BOJ의 통화정책 정상화 압력을 높이고 있습니다. 다만 10월 미국 고용지표가 약화되며 글로벌 금리 기대감 변동성이 확대됐습니다. BOJ 내부와 시장에서는 10월 연속 인상 가능성을 두고 의견이 엇갈리고 있습니다.",
-      "implications": "만약 BOJ가 10Y 국채금리를 추가로 끌어올리면(예: JGB 10Y가 10bp↑) 도쿄 A급 오피스 캡레이트는 현재 추정 3.8%에서 20~30bp 상향 압력. 일본 오피스·리테일 중심 포트폴리오의 이자비용은 LTV 60% 이상인 자산에서 즉시 재검토 필요. 액션: 단기 리파이낸싱 일정(6-12개월 내) 재검토 및 금리 상승 시 스트레스 시나리오(ebitda·DSCR 영향) 작성.",
-      "source": "FXEmpire",
-      "url": "https://fxempire.com/news/article/boj-interest-rate-forecast-tokyo-inflation-builds-case-for-next-hike-1175620"
+      "title": "도쿄 근원 인플레이션 2.7%로 9개월만에 2% 상회",
+      "time": "10-05 00:00",
+      "summary": "도쿄 근원 인플레이션이 2.7%로 가속화되어 BOJ 2% 목표를 상회했다. BOJ는 추가 금리 인상 가능성을 시사했으나 시기에는 불확실성을 남겼다.",
+      "detail": "도쿄 근원 CPI가 2.7%를 기록하며 9개월 만에 BOJ의 2% 목표를 상회했다. BOJ 9월 회의 요약은 추가 금리 인상 가능성을 열어둔 상태이나 10월·12월 어느 회의에서 조치가 나올지는 명시하지 않았다. 인플레이션 가속은 국채 금리와 엔/달러 환율 압력으로 연결되고 있어 부동산 금융비용에 직접적인 상승 요인이 되고 있다.",
+      "implications": "JGB 10년 3.10% 유지 시 도쿄 A급 오피스 인플레이스 밸류에스트리로 캡레이트가 25–50bp(예: 3.5%→3.75–4.0%) 상향 압력. 만기 1–3년짜리 레버리지 높은 포지션(LTV>60%)은 리파이낸싱 리스크 증가. 액션: 단기(6–12개월) 만기채 롤오버 일정 재점검, 고정금리 스왑으로 50–100bp 헤지 고려.",
+      "source": "RoboForex",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQErNyI_ICRqcLpk0bParPFVCw4-oe2FNYZm8hy84KWNHBHtj7s8qNpjepw8IrHbFFvjT5Cvj2ziXeuumoZu_xwc16VMbrg22s4VIMSmjLMrLl7Jw0W-NxJn3b2LwtzzwHEaKRVh4CBudj5FfJtatp72GPvF2I4xpki6XL3gMVOZMyghfLXyoZSS-QnV2pli8VMlNmBcoE2q0ZG4Zw=="
     },
     {
       "id": "h2",
       "cat": "일본",
-      "title": "전 BOJ 임원: 10월 기준금리 2회 연속 인상 확률 20~30% 제시",
-      "time": "10-05 06:45",
-      "summary": "전 BOJ 임원은 BOJ의 10월 연속 금리 인상 가능성을 20~30%로 본다고 밝혔습니다. 이는 시장 컨센서스보다 빠른 정상화 시나리오입니다.",
-      "detail": "Bloomberg 인터뷰(9/25 기준)를 인용한 보도에서 전 임원은 인플레이션 추세와 글로벌 금리 환경을 근거로 10월 추가 인상 가능성을 제시했습니다. 시장은 최근 미국 고용지표로 인해 단기 확률을 낮게 평가하나, 일본 내 물가·임금 데이터가 견조할 경우 정책 전환 속도는 빨라질 수 있습니다.",
-      "implications": "포트폴리오 영향: 일본 달러표시 차입 비중이 높은 개발 프로젝트의 이자비용 증가 리스크. 구체적 수치로서 LTV 60%·변동금리 차입 비중 50% 이상인 포트폴리오에서 연간 이자비용이 0.5%p 상승 시 NOI 대비 이자부담은 +15~25% 악화. 액션: 변동→고정 비율 확대(목표 변동비중 -10~15%p), 만기구조 분산 권고.",
-      "source": "The Business Times / The Japan Times / Vantage Markets",
-      "url": "https://www.japantimes.co.jp/news/2026/09/28/business/economy/boj-october-rate-hike-possibility/"
+      "title": "JGB 10년금리 3.10% 기록해 30년래 고수준 근접",
+      "time": "10-05 00:00",
+      "summary": "일본 10년물 국채 금리가 3.10%로 전일 대비 0.01%포인트 하락했으나 30년래 최고치 수준에 근접해 있다. 시장은 금리 상방 리스크를 지속 반영 중이다.",
+      "detail": "10월 5일 JGB 10년 금리는 3.10%를 기록, 직전 거래일 보다 1bp 하락했지만 여전히 높은 수준에 머물러 있다. 금리 부담은 부동산 자산가치 산정에 직접적 영향을 미치며, 특히 장기 할인율 적용이 필요한 개발형 자산과 레버리지 높은 포트폴리오에 부정적이다. 정부의 채권 발행 계획과 BOJ 정책 스탠스에 따라 변동성 확대 가능성이 크다.",
+      "implications": "포트폴리오 영향: JGB 10Y 3.10%는 장기 고정금리 대출의 시장 대체비용 상승. 기대수익률(요구수익률) 25–75bp 상승 시 도쿄 A급 오피스 가치 3–6% 하락 가능성. 액션: 대출 변동금리 노출 비중 축소(목표 <30%), 장기 고정금리 전환 또는 스왑 롤 보호 전략 권고.",
+      "source": "Trading Economics, Japan Ministry of Finance",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH3O_OjrRVSNqqOZIPU6_F-_06iFUIn161pyxOQaGhnTYObbECR3jCLxVjlfdkWNo6ls38BmiOIsHf04mI69NumbdY2o3bqi8Kadg-wAcqpqfV1nEP8n7ll273rp9SO4-jytMimKr-iWQ6oJ-arK8SNoz0p"
     },
     {
       "id": "h3",
       "cat": "일본",
-      "title": "엔화·달러 동반 강세, 높은 일본 금리로 자본유입 신호",
-      "time": "10-05 07:00",
-      "summary": "엔화가 글로벌 통화대비 강세를 보이며 자본 회수 가능성을 시사하고 있습니다. 이는 일본 내 자산 가치와 환차익·차손에 영향을 미칩니다.",
-      "detail": "Pluang 보도에 따르면 금리 인상 흐름으로 엔화와 달러가 여러 통화에 대해 강세를 보였습니다. 일본의 금리 우위는 외국인 자금의 일본 유입을 촉진할 수 있으나, 환율 변동성은 해외투자자·수출기업에 리스크를 부여합니다.",
-      "implications": "포트폴리오 영향: 해외 수익을 엔화로 환전할 때 환율 이익 발생 가능. 그러나 엔화강세가 지속되면 수익률(USD 기준) 축소. 구체적 수치: USD/JPY 157.86 기준으로 엔화가 5% 강세 시 달러표시 수익은 약 -5% 영향. 액션: 환헷지 정책 검토(부분헤지 확대·환노출 모니터링).",
-      "source": "Pluang",
-      "url": "https://www.pluang.com/en/news/yen-and-usd-strengthen-globally-amid-rising-rates-signaling-tighter-financial-conditions-ahead"
+      "title": "다카이치 총리, 재정운용에 따라 연간 국채 발행량 결정 예고",
+      "time": "10-05 00:00",
+      "summary": "다카이치 사나에 총리는 임시 국회 연설에서 '책임 있는 선제적 재정 정책'을 강조하고 금리 상황에 따라 연간 국채 발행량을 결정할 것이라고 밝혔다.",
+      "detail": "총리의 발언은 시장의 국채 수급과 금리 기대에 직접적 시그널을 준다. 금리 상승기에 국채 발행을 늘리거나 줄이는 결정은 은행·보험사의 포지셔닝과 J-REIT 자금조달 비용에 영향을 미친다. 특히 국채 발행량 증가 시 장기 금리 상승 압력으로 작용할 가능성이 있다.",
+      "implications": "구체적 수치: 정부가 예년 대비 국채 발행을 1–5% 증감할 경우(예: 수조엔 단위) JGB 장기 수익률에 10–25bp 영향 가능. 포트폴리오 영향: 보수적 자산(주택·인컴형) 비중 확대 권고. 액션: MMF·현금 비중 3–6% 상향 검토, 신규 장기차입 시 금리 시나리오별 스트레스 테스트 실행.",
+      "source": "MUFG Research",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF64O8iD9w77ZlcVRD21iIteNdEi_wZC9rcG8ilYtuQ4VaZ298PQQOgtNMuE5p_JixD3U7AR9mMz62UxYqij-gqlzkFH2QnnZAzVIAqrZ5Q4-6SHqr_4kChJcsF-3XXY7JNhEUak2s5-PpEg3nTeZtF6hC_1st-bkGttkcYd0RW4MzpaqBAybRBJHDOtoB7"
     },
     {
       "id": "h4",
       "cat": "일본",
-      "title": "USD/JPY 157.855 고정, 달러화 유동성 압박 관측",
-      "time": "10-05 07:15",
-      "summary": "USD/JPY가 157.855로 전일과 동일하게 고정되어 관망세가 이어지고 있습니다. 단기 환율 변동성은 글로벌 금리·데이터에 민감합니다.",
-      "detail": "시장 보고에 따르면 10:32 UTC 기록은 157.858 JPY로 일관된 범위에서 거래되었습니다. 투자자들은 미국 고용지표 등 매크로 이벤트를 주시하며 포지션을 조정하고 있습니다. 일본 내 금리 상승 가능성은 엔화의 추가 강세를 유도할 수 있습니다.",
-      "implications": "포트폴리오 영향: 엔화 강세 시 해외수익 환산 영향(예: 해외 NOI 100만 USD → 환율 5% 변동 시 약 5만 USD 증감). 액션: 환위험 측정 툴 업데이트 및 헤지 정책(선물·옵션) 재검토 권고.",
-      "source": "시장aggregated",
-      "url": ""
+      "title": "닛케이, AI 기술주 힘입어 69,946.86으로 2.4% 급등",
+      "time": "10-05 06:07 EDT",
+      "summary": "10월 5일 닛케이 225가 2.4% 상승해 69,946.86을 기록, AI 관련 기술주인 도쿄일렉트론(+5.5%)과 소프트뱅크그룹(+3%) 강세가 주도했다.",
+      "detail": "미국 고용 지표 약화로 연준 추가 인상 우려가 완화된 가운데, 닛케이는 AI 수혜주 중심으로 상승 마감했다. 도쿄일렉트론은 +5.5%로 대형주 강세를 주도했으며 소프트뱅크그룹도 +3% 상승했다. 주가 상승은 투자심리 개선을 반영하나 실물 부동산 수요와는 괴리가 존재한다.",
+      "implications": "포트폴리오 영향: 주식 기반 밸류업 전략(POD/OPERATIONAL VALUE-ADD) 재검토 필요. 특정 연관 부동산(데이터센터·인프라) 투자 검토 시 기대수익률 150–300bp 하향 조정 가능성. 액션: 데이터센터·AI 인프라 물색, 전력·冷却 비용 스트레스테스트 수행.",
+      "source": "CP24, ARMENPRESS",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHTdQb37EFy1yfRM2xvN9F-ot5MQoDK8dp2xAW2L3GaIkjy3RwyXhxHIWia5CWcKiXHds105sppFqNXtIDuIx0WrAOgdLnbN1jWci3AREKflYwDkwPstVet2aoIzq-SeUQy4F2PyabnKpo1TN6OQkaehuVasAAVqS3U7TnlMuX-AwPBSfDSQFGTUERGZfKkP7r5v9N41d2PFY3VgtpBtAsJNdc22kgkPtb8npdWAtA"
     },
     {
       "id": "h5",
       "cat": "일본",
-      "title": "WTI $91.11, 에너지 가격 변동성으로 일본 에너지비용 압박",
-      "time": "10-05 07:30",
-      "summary": "WTI가 $91.11(10/2 종가)으로 높은 수준을 유지하고 있어 에너지비용 상승에 따른 일본 리테일·물류 비용 압력이 예상됩니다. 원유 일중 범위는 $88.03~$93.30입니다.",
-      "detail": "원유 선물은 변동성이 높아 향후 연료비·전기요금 변동 가능성을 키우고 있습니다. 일본의 에너지 수입 의존도와 기업들의 에너지 비용 민감도를 감안하면 실물섹터의 마진 압박이 우려됩니다.",
-      "implications": "포트폴리오 영향: 물류 창고·리테일 자산의 운영비 상승(연간 Opex 2~4% 추가 상승 가능성). 액션: 임대차 계약 내 유틸리티 패스스루 검토 및 장기 전력·연료 공급계약 재협상 권고.",
-      "source": "시장aggregated",
-      "url": ""
+      "title": "BOJ, 인플레이션 2% 초과 방지에 중점 둔다고 명시",
+      "time": "10-05 20:51 GMT-7",
+      "summary": "BOJ 9월 회의 요약은 인플레이션이 2% 목표를 초과하는 상황을 방지하는 데 더 강한 초점을 맞추고 있음을 밝혔다. 이는 추가 금리 인상 가능성을 시사한다.",
+      "detail": "회의 요약은 정책 기조가 현물 인플레이션을 제어하는 데 집중돼 있음을 확인했다. 다만 10월·12월 중 특정 회의에서의 추가 인상 언급은 없었다. 금융·부동산 시장 참가자는 BOJ 발언을 근거로 금리 정상화 시나리오를 재평가 중이다.",
+      "implications": "구체적 수치: BOJ의 매파적 스탠스 강화 시 JGB 10Y 추가 상승 가능성 10–30bp. 포트폴리오 영향: 개발 프로젝트 할인율 상향(예: 50bp) 시 IRR 하락 가능. 액션: 신규 레버리지 딜시 기준금리 스트레스(3.5–4.0% JGB 시나리오) 반영 및 헤지 검토.",
+      "source": "TradingView",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGMOT_QFX_1XbMhovuos8GlhpHsCntc0y9JnRK3Stide3Jt4WEB2SwcgbTfMqFo-sjB22Ydm4dJF6826WseIRr2siwwH39ScMZUr3GIEjDYRXl6RxrJ08B3JolsdCQbg4HzzxdyDSoCBYhiFes-MxnYHVZ4zKC8DWX7PFRICp9FkQwT5jAxUQm5MhRnoCIf"
     },
     {
       "id": "h6",
       "cat": "미국",
-      "title": "9월 미국 고용 29,000건 증가, 예상 90,000에 크게 하회",
-      "time": "10-05 08:00",
-      "summary": "미국은 9월에 29,000개의 일자리만 늘어나며 예상치 90,000을 크게 밑돌았습니다. 이는 연준의 긴축정책에 대한 경고로 해석됩니다.",
-      "detail": "24/7 Wall St. 보도에 따르면 9월 비농업 고용이 29,000건 증가에 그쳐 노동시장이 급격히 둔화되고 있습니다. 연준의 금리정책 경로에 대한 재평가 가능성이 커졌고, 금융시장 변동성이 확대될 수 있습니다.",
-      "implications": "포트폴리오 영향: 미국 금리상승 기대 완화 시 글로벌 리스크자산(리츠·프라이빗에쿼티) 가치 재평가 가능. 구체적 수치: 만약 미국 10Y 국채수익률이 40bp 하락하면 미국 오피스·리테일 자산의 나이(수익률)는 25~40bp 압박 완화. 액션: 미국 금리 민감 자산(특히 레버리지 높은 포지션)에 대해 델타 헤지·시나리오 분석 수행.",
-      "source": "24/7 Wall St.",
-      "url": "https://247wallst.com/economy/2026/10/04/america-added-just-29000-jobs-in-september-did-the-fed-just-get-its-first-warning-that-it-went-too-far/"
+      "title": "S&P500 7,773.99·나스닥 27,477.31 상승, M&A·AI 호재",
+      "time": "10-05 14:23",
+      "summary": "S&P 500이 0.66% 상승한 7,773.99, 나스닥은 1.05% 상승해 27,477.31로 신고점을 기록했다. 대형 M&A(슈나이더 일렉트릭의 PTC 인수·C.H. 로빈슨의 RXO 인수 관련 소식)와 AI 기술주 강세가 배경이다.",
+      "detail": "미국 주식시장은 일부 대형 인수합병 소식과 AI 관련 모멘텀에 힘입어 상승했다. 시장은 연준의 추가 인상 신중론과 결합해 위험선호를 확장하는 모습이다. 주식시장 강세는 글로벌 자금흐름을 통해 일본 및 아시아 자산가격에도 영향을 미칠 수 있다.",
+      "implications": "포트폴리오 영향: 글로벌 호흡의 시가총액 기반 수익형 자산 수요 개선 시 J-REIT 펀더멘털에 긍정적. 환율(USD/JPY 157.82) 감안 시 해외투자 유입은 엔화 헤지 비용 상승을 동반. 액션: 해외 주식연계 리츠·데이터센터 노출 비중 1–3% 증대 검토, 환 헤지 정책 재점검.",
+      "source": "The Business Journal, Stock Market Today",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEiPYbTrH0X2oH4dl3Kn-0q8OriecUzchc0YRygpDBNJ3iPN7URtoFLtAqj4k2TWZWgACEcfv1ir0B95nBYrbgAyGG6s8cuxv2SZA73xle01Zns_EBMjbJDqzQy0BNDrQjgscEV4WIgTHH2twG4y31Ct65SoQAgAwORF44Y-tpLfkaK6HRg3aoKs94lKvuJ2sVWT5OSvPdqn_mzD3YxTO59gmX1roMn"
     },
     {
       "id": "h7",
       "cat": "미국",
-      "title": "미 의회, 부족법원 전자증거 접근 법안 만장일치 통과",
-      "time": "10-05 08:20",
-      "summary": "미 상원은 부족 법원의 전자증거 접근을 용이하게 하는 초당적 법안을 만장일치로 통과시켰습니다. 에너지 프로젝트 협의 절차도 강화됩니다.",
-      "detail": "Native News Online 보도에 따르면 법안은 부족의 전통·보존 검토에서 역할을 유지하도록 연방 협의 절차를 규정합니다. 이는 토지이용·인프라 프로젝트의 승인 프로세스에 영향을 줄 수 있습니다.",
-      "implications": "프로젝트 파이프라인 영향: 미국 내 인프라·에너지 개발 사업의 규제검토 기간이 장기화될 가능성. 구체적 수치: 승인 지연 시 평균 프로젝트 IRR 0.5~1.5%p 하락. 액션: 미국 개발 프로젝트의 커뮤니티·부족 협의 리스크 점검 및 여유 자금(콘틴전시) 확보 권고.",
-      "source": "Native News Online",
-      "url": "https://nativenewsonline.net/currents/native-news-weekly-october-4-2026-d-c-briefs"
+      "title": "연준 관계자들, 추가 금리 인상 신중론 제기",
+      "time": "10-05 00:00",
+      "summary": "연준 제퍼슨 부의장 등 관계자들이 추가 금리 인상 판단에는 더 시간이 필요하다고 발언했다. 뉴욕연은 총재 윌리엄스도 추가 인상의 긴급성은 낮다고 언급했다.",
+      "detail": "연준 내 일부 인사들은 여전히 인플레이션에 대한 경계를 유지하면서도, 최근 고용지표 약화 등을 이유로 즉각적 추가인상 필요성은 낮다고 평가했다. 이는 시장의 금리 기대를 완화시키며 주식시장에 긍정적 요인으로 작용했다.",
+      "implications": "구체적 수치: 연준 신중론 지속 시 미국 10Y 금리 단기적 추가 상승 제한(현재 5.31%) 가능성. 포트폴리오 영향: 글로벌 자금의 리스크 자산 선호 재개로 J-REIT·일본 리더 자산 수요 증가. 액션: 단기 채권 롤오버 계획 재검토, 변동성에 대비한 옵션 커버 리스크 관리 권고.",
+      "source": "Guggenheim Investments",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG1DwINY952ig84HavLyQuwouMbJvfffX0s63EIudAv06vx0FoHUUO5tpiZeTRz9SYeAXz5y-UqTEuFAxsEPMk0dy-86gzcVGzUVd8YXLGZ-WGYteF0yC9pQU9km5feh1YBxSLAGoThQKrNxA8afmJR-DXWpyy_TZQxMVKhmYuqOjwVm-seHQCRs1_Zql_H5Hhm95UccpmhJ6TeEFKlxPdWJTRv1Ws9xRJ9QIaQZ5JAgOgGLuzfmaEl53axMniRzJQdjL9ftr22"
     },
     {
       "id": "h8",
       "cat": "미국",
-      "title": "트럼프 행정부, 마이클 카푸토 암 패널 임명 발표",
-      "time": "10-05 08:35",
-      "summary": "미 보건복지부는 마이클 R. 카푸토를 대통령 암 패널에 임명했다고 발표했습니다. 패널은 국가 암 프로그램의 개발·모니터링 역할을 합니다.",
-      "detail": "HHS 공식 발표에 따르면 카푸토 임명은 암 연구 및 보건정책 우선순위에 영향을 미칠 수 있는 인사입니다. 공공보건·의료 인프라 관련 펀딩·정책 방향이 일부 변경될 가능성이 있습니다.",
-      "implications": "의료·헬스케어 자산 영향: 연방정책 변화 시 연구센터·의료시설의 보조금·프로그램 수혜 가능성 변동. 액션: 의료시설 포트폴리오의 정책 의존도(보조금 비중)를 파악하고 시나리오별 대응계획 수립.",
-      "source": "HHS.gov",
-      "url": "https://www.hhs.gov/about/news/2026/10/04/president-trump-appoints-michael-caputo-cancer-panel.html"
+      "title": "미국 9월 비농업 고용 29,000명 증가로 예상 대폭 하회",
+      "time": "10-05 00:00",
+      "summary": "미국 9월 비농업 고용은 29,000명 증가에 그쳐 예상치 90,000명을 크게 밑돌았다. 제조업 활동은 소폭 둔화했으나 9개월 연속 확장세를 유지했다.",
+      "detail": "9월 고용 데이터의 부진은 연준 통화정책의 긴축 속도에 대한 재평가를 촉발했다. 고용이 예상치를 크게 하회함에 따라 연준은 금리정책 긴축을 서두르지 않을 명분이 생겼다. 단, 노동시장이 꾸준히 둔화할 경우 소비 관련 자산군에 하방압력이 있을 수 있다.",
+      "implications": "포트폴리오 영향: 미국 상업용 부동산(특히 소매·호텔) 수요 둔화 가능성. 해외 부동산 투자 고려 시 3–6개월 모니터링 권고. 액션: 미주 자산 신규 투자 심사 시 하향 시나리오(고용 약화) 반영 및 스트레스 테스트 강화.",
+      "source": "Guggenheim Investments",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG1DwINY952ig84HavLyQuwouMbJvfffX0s63EIudAv06vx0FoHUUO5tpiZeTRz9SYeAXz5y-UqTEuFAxsEPMk0dy-86gzcVGzUVd8YXLGZ-WGYteF0yC9pQU9km5feh1YBxSLAGoThQKrNxA8afmJR-DXWpyy_TZQxMVKhmYuqOjwVm-seHQCRs1_Zql_H5Hhm95UccpmhJ6TeEFKlxPdWJTRv1Ws9xRJ9QIaQZ5JAgOgGLuzfmaEl53axMniRzJQdjL9ftr22"
     },
     {
       "id": "h9",
       "cat": "글로벌",
-      "title": "러시아, 젤렌스키 발언 후 우크라 공습 강화 예고",
-      "time": "10-05 09:00",
-      "summary": "러시아 국방부는 젤렌스키 대통령의 발언에 대응해 키이우 등 우크라이나 지역에 대한 공습을 강화하겠다고 발표했습니다. 군사적 긴장이 고조되고 있습니다.",
-      "detail": "Reuters 보도에 따르면 러시아는 정유시설 및 군수 인프라를 포함한 타깃을 확대할 것이라고 밝혔습니다. 이는 유럽 에너지 시장과 글로벌 원자재 가격에 추가적인 상승 요인을 제공할 수 있습니다.",
-      "implications": "에너지·물류 자산 영향: 유럽 에너지 공급 리스크 확대 시 WTI 상승 압력으로 글로벌 에너지비용 상승. 구체적 수치: 지정학적 충격 시 유가 10% 이상 급등 가능성. 액션: 에너지 집약적 자산의 비용 전가 구조 검토 및 비상전력 계약 검토.",
-      "source": "Reuters",
-      "url": "https://www.reuters.com/world/europe/russia-intensify-strikes-ukraine-after-zelenskiy-interview-2026-10-04/"
+      "title": "USD/JPY 157.82로 달러 강세 지속",
+      "time": "10-05 00:00",
+      "summary": "USD/JPY는 157.82 부근에서 거래되며 달러 강세가 유지되고 있다. 일본의 인플레이션 가속에도 미·일 금리차가 달러 강세를 지지하고 있다.",
+      "detail": "엔화는 도쿄 물가 상승에도 불구하고 미·일 금리차 확대와 일본 금융정책의 상대적 완화로 인해 추가적 약세 흐름을 보이고 있다. 이는 해외투자 및 외화표시 레버리지 운용에 있어 환노출 비용을 증가시킨다.",
+      "implications": "구체적 수치: USD/JPY 157.82 수준은 엔화 환헤지 비용을 연간 기준으로 1–2%포인트 상승시키는 효과. 포트폴리오 영향: 해외자산의 엔화 환산 수익률 저하. 액션: 해외투자 시 환헤지 비율 재검토(부분적 또는 전부 헤지 옵션 검토).",
+      "source": "RoboForex",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQErNyI_ICRqcLpk0bParPFVCw4-oe2FNYZm8hy84KWNHBHtj7s8qNpjepw8IrHbFFvjT5Cvj2ziXeuumoZu_xwc16VMbrg22s4VIMSmjLMrLl7Jw0W-NxJn3b2LwtzzwHEaKRVh4CBudj5FfJtatp72GPvF2I4xpki6XL3gMVOZMyghfLXyoZSS-QnV2pli8VMlNmBcoE2q0ZG4Zw=="
     },
     {
       "id": "h10",
       "cat": "글로벌",
-      "title": "북·러, 유엔 제재 회피해 러시아 드론 생산 지원 의혹",
-      "time": "10-05 09:20",
-      "summary": "보고서는 북한과 러시아가 유엔 제재를 회피하며 드론 생산을 지원하는 광범위한 네트워크를 구축했다고 전했습니다. 국제 제재 이행 리스크가 부각됩니다.",
-      "detail": "Indo-Pacific Defense FORUM 보도에 따르면 북한 노동자 파견 및 물자·기술 교환이 이뤄지고 있다고 지적했습니다. 이는 제재 관련 기업·금융거래에 대한 추가 규제·제재 가능성을 시사합니다.",
-      "implications": "투자영향: 제재리스크가 있는 지역·기업과의 간접 노출은 법률·평판리스크를 유발. 구체적 수치: 제재 연루 확인 시 해당 자산의 매각·정상화 비용이 수십~수백만 달러 발생 가능. 액션: 글로벌 투자 포트폴리오에 대한 제재스크리닝 강화 및 거래상대 실사 강화.",
-      "source": "Indo-Pacific Defense FORUM",
-      "url": "https://indopacificdefenseforum.com/2026/10/04/north-korea-russia-evade-u-n-sanctions-to-buttress-moscows-drone/"
+      "title": "WTI $89.43, 브렌트 $102 넘어서며 유가 혼조",
+      "time": "10-05 03:43",
+      "summary": "WTI가 $89.43로 하락한 반면 브렌트는 $102를 상회하는 등 유가는 중동 공급 불확실성과 유조선 부족 요인으로 혼조세를 보였다.",
+      "detail": "중동 지역의 공급 경로 불확실성 및 선박·운송 차질이 유가에 상이한 영향을 미치고 있다. 에너지 비용 변동성은 물류·운영 비용에 직접 영향을 주어 특히 물류센터·유통 관련 자산의 운용 마진을 압박할 수 있다.",
+      "implications": "구체적 수치: WTI $89.43, Brent >$102. 포트폴리오 영향: 물류·유통센터의 운영비(연료·운송비) 연간 3–8% 상승 가능성. 액션: 물류 자산 임차계약의 운송비 조항 검토 및 장기 에너지 계약 재검토 권고.",
+      "source": "Gulf News, Odessa American",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEFfMi-tP8Y2jFXmSTR-1LTmQtYTOCNoLgarY_3ZdQJ110tIK_BXbQeven9l6SbSg53Fa9gTVtEFNEaOGCnDhLkSTE2Ch9klRYLOmdfgucDlOYRo3kfYAa54Fq_2o-t4JQUm8tboOLmjkekjX0_JytGOFV-aG9JABx5Au3Bulf_aQP6fdviM-jljduqI7gUkdhGyQ=="
     },
     {
       "id": "h11",
       "cat": "한국",
-      "title": "삼성전자, 용인 반도체 클러스터에 360조원 투자 재확인",
-      "time": "10-05 09:40",
-      "summary": "삼성전자는 용인에 반도체 클러스터 조성을 위해 약 360조원(약 2,600억 달러)을 투자하겠다고 재확인했습니다. 폐수 재활용 등 환경 대책도 포함됩니다.",
-      "detail": "Sedaily 보도에 따르면 삼성전자는 용인 첨단 시스템 반도체 국가산업단지 계획과 함께 하루 수십만 톤의 처리된 폐수 재활용 계획을 발표했습니다. 대규모 투자로 지역경제·건설·물류 수요가 크게 증가할 전망입니다.",
-      "implications": "부동산·인프라 영향: 용인 지역 산업부지·물류·주거수요 증가로 토지·임대료 상승 가능. 구체적 수치: 인근 오피스·물류 임대료 연간 5~15% 상승 압력. 액션: 용인·경기권 토지·물류 포지셔닝 검토 및 장기 리ース·개발 옵션 확보 권고.",
-      "source": "Sedaily.com",
-      "url": "https://www.sedaily.com/NewsView/2684990"
+      "title": "한국·상하이, 국경일로 10월5일 휴장…아시아 거래량 축소",
+      "time": "10-05 06:07 EDT",
+      "summary": "10월 5일 한국과 상하이 시장이 국경일로 휴장해 아시아 전체 거래량이 제한됐다. 이는 일시적 유동성 저하 요인으로 작용했다.",
+      "detail": "국경일 휴장은 단기적으로 시장 깊이와 거래량을 줄여 변동성 확대 가능성을 높인다. 특히 일본·한국·중국을 연결하는 크로스보더 딜 진행 시 일정 조정이 필요하다.",
+      "implications": "구체적 수치: 휴장일 거래량 평상시 대비 20–40% 감소 예상. 포트폴리오 영향: 아시아 인수·매각 딜 타이밍 지연 가능. 액션: 딜 데드라인·자금결제 일정 재확인 및 백업 계획 수립 권고.",
+      "source": "CP",
+      "url": ""
     },
     {
       "id": "h12",
       "cat": "한국",
-      "title": "삼성 갤럭시 A 시리즈, 미국서 가격 인상·아마존 할인 병존",
-      "time": "10-05 09:55",
-      "summary": "삼성의 갤럭시 A 시리즈가 미국 시장에서 가격 인상됐으나 아마존 등에서 한시적 프로모션이 진행되고 있습니다. 소비자 가격 민감도가 높아지고 있습니다.",
-      "detail": "소비재 가격 상승은 단말기 보급속도와 이동통신사 보조금 정책에 영향을 미칠 수 있습니다. 단기적으로는 판매 프로모션이 가격 인상 충격을 완화하는 효과를 내고 있습니다.",
-      "implications": "리테일·테크 자산 영향: 전자제품 가격 상승은 리테일 마진과 소비자 수요에 영향. 구체적 수치: 단말기 평균판매가(ASP) 3~7% 인상 시 전자 유통업체의 분기 매출 변동 가능. 액션: 전자유통·리테일 포트폴리오의 프로모션·재고 전략 점검.",
-      "source": "시장aggregated",
+      "title": "USD/KRW 1340.85, 원화 약세 지속",
+      "time": "10-05 00:00",
+      "summary": "USD/KRW가 1,340.85를 기록하며 원화 약세가 지속되고 있다. 글로벌 달러 강세와 아시아 시장 휴장 영향이 복합적으로 작용했다.",
+      "detail": "원화 약세는 한국 부동산 투자자의 외화 차입 비용 상승과 해외 자산 환노출 확대를 초래한다. 수입 비용 상승과 가계·기업 채무 상환 부담도 증가할 수 있다.",
+      "implications": "구체적 수치: USD/KRW 1,340.85 수준은 원화 기반 수익률을 환산 시 약 1–3%포인트 손익 변동 가능. 포트폴리오 영향: 한·일 크로스보더 투자수익률 하락. 액션: 환헤지 또는 현지 통화 조달 확대 검토(헤지비용 산정 필요).",
+      "source": "Raw data",
       "url": ""
     },
     {
       "id": "h13",
-      "cat": "아시아",
-      "title": "달러당 원화 1,342.15, 당일 범위 1342.15-1366.08",
-      "time": "10-05 10:10",
-      "summary": "USD/KRW가 1,342.15로 기록되었고 당일 등락 범위는 1,342.15~1,366.08을 보였습니다. 환율 변동성이 확대되었습니다.",
-      "detail": "시장 리포트에 따르면 13:00 UTC 기준 1,343.12 KRW, 다른 시각엔 1,342.58로 보이며 원화는 달러 강세에 민감하게 반응하고 있습니다. 한국 수출기업 및 외화부채 보유 자산은 환율 리스크에 노출됩니다.",
-      "implications": "포트폴리오 영향: 원화 약세(달러 강세) 시 수출기업의 환산이익은 증가하나, 원화표시 부동산·인프라 투자자는 외화부채 부담 증가. 구체적 수치: 외화부채 1억 USD 보유 시 원화 1% 약세는 부채원화 환산액 약 1.34억 KRW 증가. 액션: 환헤지 정책과 외화부채 만기구조 재검토 권고.",
-      "source": "시장aggregated",
-      "url": ""
+      "cat": "딜",
+      "title": "슈나이더 일렉트릭의 PTC 인수 관련 M&A 소식 (금액 미기재)",
+      "time": "10-05 14:23",
+      "summary": "슈나이더 일렉트릭의 PTC 인수 소식이 시장에 전해지며 관련 기술·제조 섹터에 호재로 작용했다. 이 소식은 글로벌 M&A가 상업·산업용 부동산 수요에 간접적 영향을 미칠 가능성이 있다.",
+      "detail": "보고된 인수는 산업 소프트웨어·AI 솔루션 강화가 목적이며, 관련 기업의 자산배분·운영전략 변화가 예상된다. 산업용 부동산(공장·물류) 및 데이터센터 수요에 긍정적 영향을 줄 수 있다. 다만 원문 기사에서는 인수 금액이 명시되지 않았음.",
+      "implications": "포트폴리오 영향: 산업·데이터센터 관련 자산 수요 증가로 임대료·활용률 개선 가능(예상 범위 임대료 상승 3–8%). 액션: 포트폴리오 내 산업·데이터센터 잠재 매물 재검토, 관련 장기임대 계약 구조화 고려.",
+      "source": "The Business Journal",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEiPYbTrH0X2oH4dl3Kn-0q8OriecUzchc0YRygpDBNJ3iPN7URtoFLtAqj4k2TWZWgACEcfv1ir0B95nBYrbgAyGG6s8cuxv2SZA73xle01Zns_EBMjbJDqzQy0BNDrQjgscEV4WIgTHH2twG4y31Ct65SoQAgAwORF44Y-tpLfkaK6HRg3aoKs94lKvuJ2sVWT5OSvPdqn_mzD3YxTO59gmX1roMn"
     },
     {
       "id": "h14",
-      "cat": "매크로",
-      "title": "미국 실업률 상승·모기지 금리 3년 최고로 소비심리 약화",
-      "time": "10-05 10:30",
-      "summary": "미국의 실업률 상승과 모기지 금리 상승으로 소비심리가 10년 내 최저 수준으로 떨어졌습니다. 이는 글로벌 수요 둔화 우려를 키웁니다.",
-      "detail": "The Weekender 보도에 따르면 높은 물가와 지정학적 리스크(이란 전쟁 등)로 임금 정체와 소비 위축이 심화되고 있습니다. 글로벌 수요 둔화는 수출 중심 기업과 리테일 섹터에 하방 압력으로 작용할 수 있습니다.",
-      "implications": "포트폴리오 영향: 글로벌 소비 둔화시 리테일·호텔 수요 약화로 수익성 하락. 구체적 수치: 소비 둔화에 따른 매출 5% 감소 시 NOI 3~6% 하락 가능. 액션: 소비민감 자산의 우선순위 매각·현금흐름 확보 방안 검토.",
-      "source": "The Weekender",
-      "url": ""
+      "cat": "딜",
+      "title": "C.H. 로빈슨, RXO 트럭 중개 사업부 인수 발표(세부금액 불명)",
+      "time": "10-05 14:23",
+      "summary": "C.H. 로빈슨이 RXO의 트럭 중개 사업부 인수를 발표하며 물류·운송 부문 재편 소식이 나왔다. 이는 물류 자산 수요와 장기 계약 환경에 영향을 줄 수 있다.",
+      "detail": "인수는 물류·운송 네트워크 통합을 통해 효율성을 높이려는 전략으로 풀이된다. 물류센터 임차 수요와 라스트마일 비용 구조에 영향을 주며, 운영형 물류자산의 가치에도 파급될 수 있다. 발표문에는 인수금액이 명시되지 않았다.",
+      "implications": "포트폴리오 영향: 대형 물류센터의 장기 임대수요 안정화 가능성, 운영비용 구조 개선으로 순영업소득(NOI) 개선 여지. 액션: 물류 포트폴리오의 임차인 신용도·장기계약 비중 재평가 및 임대차 구조 최적화 검토.",
+      "source": "The Business Journal",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEiPYbTrH0X2oH4dl3Kn-0q8OriecUzchc0YRygpDBNJ3iPN7URtoFLtAqj4k2TWZWgACEcfv1ir0B95nBYrbgAyGG6s8cuxv2SZA73xle01Zns_EBMjbJDqzQy0BNDrQjgscEV4WIgTHH2twG4y31Ct65SoQAgAwORF44Y-tpLfkaK6HRg3aoKs94lKvuJ2sVWT5OSvPdqn_mzD3YxTO59gmX1roMn"
     },
     {
       "id": "h15",
+      "cat": "딜",
+      "title": "MUFG 리서치 분석: 재정정책에 따라 국채 발행량 조정 가능성",
+      "time": "10-05 00:00",
+      "summary": "MUFG 리서치는 다카이치 총리 발언을 인용, 금리 상황에 따라 연간 국채 발행량을 유연하게 결정할 것이라고 분석했다. 이는 채권시장·금리 변동성에 영향이 있다.",
+      "detail": "보고서는 정부가 금리·시장상황을 고려해 연간 국채 발행량을 조정할 가능성을 제기했다. 채권 발행량 변화는 은행·보험사의 포트폴리오 재구성 압력 및 JGB 유동성에 직접적 영향을 미친다. MUFG는 관련 시나리오별로 금리 충격을 모델링할 것을 권고했다.",
+      "implications": "구체적 수치: 발행량 조정이 연간 수조엔 단위로 발생할 경우 JGB 10Y 기준 수익률에 10–30bp 변동 가능성. 포트폴리오 영향: 채권·대출 비용 변화로 레버리지 전략 재평가 필요. 액션: 채권 포지션 민감도 분석 및 대체자금조달 옵션 확보.",
+      "source": "MUFG Research",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF64O8iD9w77ZlcVRD21iIteNdEi_wZC9rcG8ilYtuQ4VaZ298PQQOgtNMuE5p_JixD3U7AR9mMz62UxYqij-gqlzkFH2QnnZAzVIAqrZ5Q4-6SHqr_4kChJcsF-3XXY7JNhEUak2s5-PpEg3nTeZtF6hC_1st-bkGttkcYd0RW4MzpaqBAybRBJHDOtoB7"
+    },
+    {
+      "id": "h16",
       "cat": "화제",
-      "title": "S&P 500 7,722.72 마감, 나스닥 27,190.86 강세 마감",
-      "time": "10-05 10:50",
-      "summary": "미국 증시는 S&P 500이 7,722.72(+0.73%), 나스닥은 27,190.86(+1.19%)로 강세 마감했습니다. 기술주가 강세를 주도했습니다.",
-      "detail": "전일 마감 수치는 기술·대형주의 강세 지속을 반영합니다. 다만 거시데이터(고용·금리)에 따라 단기 변동성은 지속될 전망입니다. 글로벌 자금흐름은 일본·아시아 자산에도 영향을 미칩니다.",
-      "implications": "포트폴리오 영향: 주식시장 랠리 시 프라임 상업용자산의 재평가 가능. 구체적 수치: 주가 5% 상승은 투자심리 개선으로 리츠 프리미엄 25~50bp 축소 가능. 액션: 주식연계 리스크포지션 및 RE 밸류에이션 재검토.",
-      "source": "시장aggregated",
-      "url": ""
+      "title": "일본 데이터: 닛케이 70,000선 잠시 돌파·종가 69,946.86",
+      "time": "10-05 06:07 EDT",
+      "summary": "닛케이는 장중 70,000선을 잠시 돌파했으나 종가는 69,946.86으로 마감했다. AI·기술주 강세가 배경이다.",
+      "detail": "장중 70,000 돌파는 투자심리 개선의 신호이나 지속성은 미확인이다. 기술주 중심의 랠리는 실물 부동산 수요에 즉시 전이되기보다 특정 섹터(데이터센터·산업시설)에 간접 영향을 줄 가능성이 크다.",
+      "implications": "포트폴리오 영향: 기술주 랠리와 연동된 데이터센터·서버룸 수요 증가 가시화 시 기대 NOI 상승(예상 2–6%). 액션: 데이터센터 개발 후보지 우선 검토 및 전력·냉각 설계 비용 재계산.",
+      "source": "CP24, ARMENPRESS",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHTdQb37EFy1yfRM2xvN9F-ot5MQoDK8dp2xAW2L3GaIkjy3RwyXhxHIWia5CWcKiXHds105sppFqNXtIDuIx0WrAOgdLnbN1jWci3AREKflYwDkwPstVet2aoIzq-SeUQy4F2PyabnKpo1TN6OQkaehuVasAAVqS3U7TnlMuX-AwPBSfDSQFGTUERGZfKkP7r5v9N41d2PFY3VgtpBtAsJNdc22kgkPtb8npdWAtA"
     }
   ],
   "market": {
     "jgb10y": {
-      "v": "N/A",
-      "d": "—",
-      "t": 0
+      "v": "3.10%",
+      "d": "−0.01%p",
+      "t": 1
     },
     "usdjpy": {
-      "v": "157.855",
-      "d": "0.00%",
-      "t": 0
+      "v": "157.82",
+      "d": "상승",
+      "t": 1
     },
     "nikkei": {
-      "v": "N/A",
-      "d": "—",
-      "t": 0
+      "v": "69,946.86",
+      "d": "2.4%↑",
+      "t": 1
     },
     "sp500": {
-      "v": "7,722.72",
-      "d": "+0.73%",
+      "v": "7,773.99",
+      "d": "0.66%↑",
       "t": 1
     },
     "wti": {
-      "v": "$91.11",
-      "d": "-1.90% (최근거래일)",
+      "v": "$89.43",
+      "d": "하락(혼조)",
       "t": -1
     },
     "usdkrw": {
-      "v": "1,342.15",
-      "d": "변동 범위 1342.15-1366.08",
-      "t": 0
+      "v": "1,340.85",
+      "d": "약세",
+      "t": -1
     },
     "tibor": {
       "v": "N/A",
@@ -212,41 +223,52 @@
       "t": 0
     },
     "caprate": {
-      "v": "3.8% (Tokyo A-grade, 추정)",
-      "d": "상승 압력",
-      "t": 1
+      "v": "N/A",
+      "d": "—",
+      "t": 0
     }
   },
   "deals": [
     {
       "id": "d1",
-      "title": "삼성전자 용인 반도체 클러스터 투자 약속 360조원",
+      "title": "슈나이더 일렉트릭의 PTC 인수(공개된 금액 없음)",
       "time": "10-05",
-      "value": "360조원",
-      "type": "대규모 기업투자(산업클러스터)",
-      "summary": "삼성전자는 용인에 반도체 클러스터를 조성하기 위해 약 360조원(약 2,600억 달러)을 투자한다고 발표했습니다.",
-      "detail": "투자에는 생산시설 건설과 인프라, 하루 수십만 톤 규모의 폐수 재활용 설비 구축이 포함됩니다. 지역 경제 활성화·건설수요·물류 수요 증가가 기대됩니다. 투자금은 단계적으로 집행될 예정이며 삼성은 지역 주민과의 협의도 강조했습니다.",
-      "source": "Sedaily.com",
-      "url": "https://www.sedaily.com/NewsView/2684990"
+      "value": "금액 미기재",
+      "type": "M&A(기업인수)",
+      "summary": "슈나이더 일렉트릭이 PTC 인수 소식으로 산업용 소프트웨어·AI 역량을 강화한다는 발표가 나왔다.",
+      "detail": "인수는 제조·산업 소프트웨어 통합을 통한 솔루션 강화 목적이며, 관련 기업들의 자산배분 및 산업용 부동산 수요에 간접적인 영향이 기대된다. 원문에서는 인수 금액이 명시되지 않았다.",
+      "source": "The Business Journal",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEiPYbTrH0X2oH4dl3Kn-0q8OriecUzchc0YRygpDBNJ3iPN7URtoFLtAqj4k2TWZWgACEcfv1ir0B95nBYrbgAyGG6s8cuxv2SZA73xle01Zns_EBMjbJDqzQy0BNDrQjgscEV4WIgTHH2twG4y31Ct65SoQAgAwORF44Y-tpLfkaK6HRg3aoKs94lKvuJ2sVWT5OSvPdqn_mzD3YxTO59gmX1roMn"
+    },
+    {
+      "id": "d2",
+      "title": "C.H. 로빈슨, RXO 트럭 중개사업 인수(금액 비공개)",
+      "time": "10-05",
+      "value": "금액 미기재",
+      "type": "M&A(사업부 인수)",
+      "summary": "C.H. 로빈슨이 RXO의 트럭 중개 사업부를 인수했다는 소식이 전해졌다. 물류·운송 부문 구조 재편이 주된 목적이다.",
+      "detail": "이번 거래는 물류 네트워크 통합과 운송 효율화를 목표로 하며, 물류센터 수요와 장기 임대환경에 영향을 줄 수 있다. 발표에는 구체적 거래 규모가 포함되지 않았다.",
+      "source": "The Business Journal",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEiPYbTrH0X2oH4dl3Kn-0q8OriecUzchc0YRygpDBNJ3iPN7URtoFLtAqj4k2TWZWgACEcfv1ir0B95nBYrbgAyGG6s8cuxv2SZA73xle01Zns_EBMjbJDqzQy0BNDrQjgscEV4WIgTHH2twG4y31Ct65SoQAgAwORF44Y-tpLfkaK6HRg3aoKs94lKvuJ2sVWT5OSvPdqn_mzD3YxTO59gmX1roMn"
     }
   ],
   "watch": [
     {
       "n": 1,
-      "text": "BOJ의 10월 통화정책 결정 및 JGB 10년 금리 추이(특히 10Y 10~30bp 변동 시 도쿄 오피스 cap-rate 영향 분석)"
+      "text": "BOJ 추가 금리 인상 시점(10월·12월)과 JGB 10Y의 추가 상승 폭(목표 관찰치: +10–30bp)"
     },
     {
       "n": 2,
-      "text": "미국 고용지표의 추가 약화 여부(9월 29,000건 이후) 및 연준의 금리 경로 재평가 가능성"
+      "text": "USD/JPY(157.82)와 USD/KRW(1,340.85) 환율 변동이 해외투자 수익률에 미치는 영향(환헤지 비용 재산정)"
     },
     {
       "n": 3,
-      "text": "용인 360조원 투자 집행 스케줄과 인프라·토지수요 파급: 물류·오피스·주거권역의 임대료·거래량 변화 예측"
+      "text": "데이터센터·물류 자산 수요 변화: AI·M&A(슈나이더·PTC, C.H.로빈슨·RXO) 관련 수요 확대 여부"
     }
   ],
   "serverGenerated": true,
   "specialTopic": {
-    "title": "도쿄 오피스 마켓: 프라임 vs 비프라임 양극화와 리파이 리스크",
+    "title": "일본 PE 시장 동향: 카브아웃, 테이크프라이빗, 승계 딜 파이프라인",
     "type": "deep-dive"
   }
 }
