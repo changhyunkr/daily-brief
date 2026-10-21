@@ -1,0 +1,229 @@
+{
+  "date": "2026-10-22",
+  "generatedAt": 1792622337448,
+  "generatedBy": "github-actions",
+  "model": "gpt4o",
+  "headlines": [
+    {
+      "id": "h1",
+      "cat": "일본",
+      "title": "JGB 10Y 2.879%로 하락·국채 수요 확대",
+      "time": "10-21 14:04",
+      "summary": "10월21일 JGB 10년 수익률이 2.879%로 하락했고 20년물 입찰에서 기록적 수요가 확인됐다. 투자자들이 안전자산으로 국채를 선호하며 BOJ의 10월 동결 전망 속 12월 인상 가능성을 반영했다.",
+      "detail": "국채 가격 상승으로 장기 금리가 하락했고, 20년물 입찰에 기록적 수요가 몰렸다. 이는 정부의 발행량 관리 약속과 맞물려 단기적으로 장기금리 안정에 기여하고 있다. 그러나 시장은 BOJ의 추가 긴축(연내 인상) 가능성을 여전히 반영하고 있다.",
+      "implications": "JGB 10Y 2.879% 수준은 도쿄 A급 오피스 cap rate의 하방 압력(예: A급 cap rate 3.5%→3.4% 가능성)으로 작용. 국채 중심의 포지션 확대 시 대출 금리 기준(사내 기준선)과 LTV 관리 필요. 액션: 레버리지 높은(Loan-to-Value>60%) 오피스·인더스트리얼 포지션에 대해 리파이낸스 스트레스 테스트 실행 및 헤지 확대(10Y 금리 스왑 고정)가 필요하다.",
+      "source": "ETMarkets.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEDDym4lugjQhpgA7E19o0ioVj34hcL278zOnV14EJ5DSSpBzLhbUY71ojBgn_P6_2MAibgG3iEJpzjtyl9Oa_PG2JRqg6IPI073kdZidHM94Q-5XWlnV7m-tdeuAyJBr6skzUpZysCTnT7aaFQCp4fe8oodGoS9n9DETs-E2zYRYx67nwrK2M7al0NFQILUS7pEm2kW5AyzlaxTmdbZXF-bU2p-NFV8ZupptqSgRHJ-fT3ezl-TVnE8n5Bvwp7wmlZX181pyhrmBZKzIINLytnR8a7vLuOQg"
+    },
+    {
+      "id": "h2",
+      "cat": "일본",
+      "title": "BOJ 이사 고에다, 금리 인상에 '지나친 신중함' 경고",
+      "time": "10-16 09:00",
+      "summary": "BOJ 정책위원 고에다는 물가상승 리스크를 언급하며 금리 인상에 지나치게 신중해서는 안 된다고 경고했다. 이는 향후 몇 달 내 추가 인상 가능성을 시사한다.",
+      "detail": "고에다 위원의 발언은 BOJ 내에서 물가 리스크를 중시하는 스탠스가 존재함을 확인시켰다. 시장은 이를 근거로 연내 추가 금리 인상 가능성을 반영하고 있으며, 장기 금리의 점진적 상승을 예상하고 있다. 부동산 임차료 회복 여부가 불확실한 상황에서 자본비용 상승은 자산 밸류에이션에 직접적 영향이다.",
+      "implications": "BOJ의 추가 금리 인상(예상 범위: 25bp)이 현실화될 경우 도쿄 핵심 오피스 cap rate은 25~50bp 상향(예: 3.5%→3.75–4.0%) 압력. 포트폴리오 영향: 레버리지 50% 이상 및 만기도래 12개월 내인 자산 우선 점검. 액션: 고정금리 전환·스왑 롤오버 우선순위 지정 및 임대료 민감자산(리테일·오피스) 리파이낸스 계획 수립.",
+      "source": "The Japan Times; WTVB",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFPMVDqhn2rDAPMDgnSyxBseYLh9ORr7wTvtuBOEJs00TMEsz1FPjKWT5ym4ligYVeVbSa2sE-MIf75eTfQh_0HMwtqx0DD5e-csEcQj4RULARBeSnbqAjKYVtZpZBrrv_Q-6eJpM98i5Na4-D09z97Ho7sCQEDoQdS4MvLB09jL_zJsUkCDghUTqYu5kmXcGwZ9LHC63yKrG-8GL4m"
+    },
+    {
+      "id": "h3",
+      "cat": "일본",
+      "title": "일본 20년물 국채 입찰, 사상 최고 수요 확인",
+      "time": "10-21 10:00",
+      "summary": "10월21일 20년물 국채 입찰에서 기록적 수요가 발생해 입찰이 강하게 청산됐다. 이는 글로벌 투자자들의 JGB 관심 재부상 신호다.",
+      "detail": "20년물 입찰에서의 강한 입찰은 국채시장의 유동성 흡수와 장기금리 안정 기대를 동시에 반영한다. 단기적으로는 안전자산 선호가 부각되나, 중장기적 금리 경로는 BOJ 정책 및 수급 여건에 따라 변동성이 클 전망이다.",
+      "implications": "포트폴리오: 장기 국채 비중 확대로 안전자산 포지셔닝 검토(목표 비중 +5–10%). 액션: 보유 중인 변동금리 대출(특히 만기 12개월 내) 대체금융 옵션 점검 및 스왑커버리지 강화.",
+      "source": "The Star; The Edge Malaysia",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHVKXFOYK0PCIV0e1_YZxLXPRaRJHjEEAxT7mdtC7rwAOoDC_ZQKQGNiuaF_T7JbWBQa3KK2eUT_vnJSijNxw96lhQc-9i8SkwAjUPN19pSseROgUfDq3Bg3G-xmLN0Ak8gscFRngycuZphIHoFyCiTQMJMFgmiu5y_RmMmzoznYwjqcBFa1NCIahjwVoawpTFdbYMIn02vqUagIuMPaLCpeTLtPPp1"
+    },
+    {
+      "id": "h4",
+      "cat": "일본",
+      "title": "9월 무역수지 적자 5,366억엔, 엔화 약세 압력",
+      "time": "10-21 12:00",
+      "summary": "일본의 9월 상품 무역수지가 약 5,366억 엔 적자를 기록해 엔화에 하방 압력을 가했다. 원유 수입 급증이 주원인이다.",
+      "detail": "무역적자 확대는 수입비중 높은 에너지 가격 영향과 글로벌 수요 변화가 결합된 결과다. 엔약세가 지속될 경우 해외투자자 수요와 외화부채 부담이 동시에 확대될 수 있다. 정부와 BOJ의 정책 조율 관측이 지속되고 있다.",
+      "implications": "FX 노출이 큰 포트폴리오(해외 매출·외화담보 대출)는 USD/JPY 158.18 기준으로 환헤지 재검토 필요. 액션: USD 차입 확대 포지션은 환리스크 헤지(선물/옵션) 우선 적용 및 수입 연동 비용 리쇼어링 검토.",
+      "source": "TradingPedia",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGbTcQ6Jfiuwzgge96MLWXhYVwKU_eWJ-k3gy4gKIsSr3ZXt5aRBR1hoA4qqGXRq33sDBCki1OljwwHklO2_V_up_WpCwp3LerrM_V8DAJO0bHCD5eY3kFTy6LMbhOK7Ll4r1qPJrzqMK3fCEyaom0-YT3G4FjXq5Px_X6K3e__XB9q22HQZvo3dOwXRgGkMQcU4-14zYQZAW2K"
+    },
+    {
+      "id": "h5",
+      "cat": "미국",
+      "title": "S&P500 7,757.17·나스닥 기술주 강세로 상승 마감",
+      "time": "10-22 05:00",
+      "summary": "10월21일 S&P500이 7,757.17로 0.58% 상승, 나스닥은 0.94% 상승했다. SpaceX·Capital One 등 기업 실적 호전이 상승 견인했다.",
+      "detail": "미국 대형 기술주의 실적 호조와 수요가 지수를 견인했다. 위험선호 회복은 글로벌 자금의 신흥시장 및 일본 리스크자산 유입 가능성을 높일 수 있다. 단, 고수준 지수는 금리 민감도를 높인다.",
+      "implications": "미국 주식 강세는 글로벌 유동성 회귀 신호로 일본 오피스·로지스틱스 수요 개선 요인. 액션: 환노출을 고려한 해외주식·실물자산 투자 확대(단, 금리상승 리스크 대비 헤지 병행).",
+      "source": "24/7 Wall St.; Morningstar; Pittsburgh Post-Gazette",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEuxRA1DJadA2JlUV2702vWmVsqtR21kYE21whHuGa2ESbc1dSecDVlbk6Cjk8t7QuqWY2HJdQsamUuweeufrA_1SqHZJQkXJ8bZcpp5LCSHXXv7Tx5u9RBGEUEpWMkznNRNt-8AwlYARI8HrlNQQGmJ9IJZG1ggBFxsIXvkqQrnVpkHcF1AV4h6MKeks1rLnELXXVRcSLMuJNdUTe-WFTEanlt_i1bmjc6yDx9QJ-aK1Iw-lp8Wfj7XBSXuQ=="
+    },
+    {
+      "id": "h6",
+      "cat": "글로벌",
+      "title": "WTI $97.24로 고수준 유지, 에너지 수입비용 상승 압력",
+      "time": "10-22 04:00",
+      "summary": "WTI 가격이 $97.24로 높은 수준을 유지해 에너지 수입 의존국의 무역적자 우려를 확대했다. 일본의 9월 무역적자 확대와 연결된다.",
+      "detail": "유가는 글로벌 수입 비용을 높여 에너지 의존도가 높은 국가들의 무역수지와 환율에 직접적 영향을 준다. 일본은 원유 수입 증가로 무역적자가 확대됐고 이는 엔화 약세 압력으로 작용한다.",
+      "implications": "에너지 비용 상승은 리테일·물류·제조 임차업체의 운영비 증가로 이어짐. 액션: 에너지 비용 상향 리스크가 큰 자산에 대해 임차인 계약의 연동 조항 점검 및 비용전가 가능성 분석 필요.",
+      "source": "시장 데이터",
+      "url": ""
+    },
+    {
+      "id": "h7",
+      "cat": "아시아",
+      "title": "USD/KRW 1,322.32, 원·달러 높은 수준 유지",
+      "time": "10-22 04:00",
+      "summary": "USD/KRW가 1,322.32로 높은 수준을 나타내며 한국 수출기업과 외화부채자에게 압박을 가하고 있다.",
+      "detail": "원화 약세는 한국 수출기업에 일부 호재이나 외화표시 부채가 큰 부동산·레버리지 기업에는 부담이다. 한국 금융시장의 변동성은 역내 자본흐름에 영향을 미쳐 일본 부동산 자금조달 환경에도 파급될 수 있다.",
+      "implications": "한국 노출 포지션(특히 대출·JV 구조)은 환헤지 비율을 상향(권고: 목표 헤지율 +10%)하고, 한·일 크로스보더 딜은 환조달 비용 재산정 필요.",
+      "source": "시장 데이터",
+      "url": ""
+    },
+    {
+      "id": "h9",
+      "cat": "미국",
+      "title": "Capital One 실적 강세로 은행주 일부 반등",
+      "time": "10-21 20:30",
+      "summary": "Capital One의 호실적 발표가 은행주 전반의 반등을 촉발했다. 이는 소비자 신용 회복 신호로 해석된다.",
+      "detail": "Capital One의 실적 강세는 소비자 신용 포트폴리오의 건전성 개선 기대를 높였다. 은행권 실적 개선은 신용스프레드 축소와 기업 대출 여건 완화로 연결될 수 있다.",
+      "implications": "신용스프레 축소는 레버리지 높은 PE딜의 조달비용 완화 요인. 액션: 예정된 레버리지 딜의 스폰서와 금리조건 재협상 검토.",
+      "source": "24/7 Wall St.; Morningstar",
+      "url": ""
+    },
+    {
+      "id": "h10",
+      "cat": "글로벌",
+      "title": "글로벌 투자자 국채 선호 증가, 안전자산 유입 관찰",
+      "time": "10-21 15:00",
+      "summary": "국제 투자자들이 일본·미국 국채 등 안전자산을 선호하며 자금 유입이 관찰됐다. 이는 변동성 높은 주식시장에서의 방어적 포지셔닝이다.",
+      "detail": "안전자산 선호는 단기적 변동성 방어에 유효하나 장기 수익률 하락은 리츠·부동산 가치평가에 복합적 영향을 미친다. 특히 성장 기대가 낮은 자산은 할인요인으로 작용할 수 있다.",
+      "implications": "단기 포트폴리오 방어: 국채 비중 확대 및 단기 유동성 확보. 액션: 만기 6–12개월 내 유동성 계획 수립과 대출 만기 스케줄 재조정.",
+      "source": "시장 데이터",
+      "url": ""
+    },
+    {
+      "id": "h11",
+      "cat": "한국",
+      "title": "한국 수출기업 환노출 관리 강화 권고",
+      "time": "10-22 07:00",
+      "summary": "원화 약세 환경에서 한국 수출기업들이 환노출 관리 강화에 나서고 있다. 이는 관련 PE 포트폴리오의 리스크 관리 중요성을 높인다.",
+      "detail": "환율 변동성은 실적 변동성으로 직결돼 밸류에이션 변동을 확대한다. PE 투자자들은 환헤지 대응과 현지 비용구조 평가를 강화하고 있다.",
+      "implications": "한국 자산 보유 포트폴리오에 대해 환헤지 목표 재설정(권고: 헤지비중+10%) 및 스트레스 시나리오(USD/KRW 1,400) 점검 필요. 액션: 환리스크 관리 매뉴얼 업데이트 및 헤지 실행 우선.",
+      "source": "시장 데이터",
+      "url": ""
+    },
+    {
+      "id": "h12",
+      "cat": "일본",
+      "title": "USD/JPY 158.18으로 엔저 지속, 해외자금 유입도 제한적",
+      "time": "10-22 04:00",
+      "summary": "USD/JPY가 158.18로 엔저가 지속되며 해외 자산 매수비용이 증가하고 있다. 이는 일본 부동산 해외투자자들의 밸류에이션 계산에 영향준다.",
+      "detail": "엔저는 외국인 투자자의 엔화 환산 자산가격을 낮추는 효과가 있어 매수 심리를 제고할 수 있으나, 동시에 외화부채의 리스크를 상승시킨다. 수입 물가 상승과 무역적자 확대와 결합돼 거시적 리스크 요인으로 작용한다.",
+      "implications": "해외투자자 유입이 늘어날 때 환헤지 비용 반영 필요. 액션: 달러표시 투자자 대상 환헤지 옵션 제공 및 환노출 보고 강화.",
+      "source": "시장 데이터",
+      "url": ""
+    },
+    {
+      "id": "h13",
+      "cat": "일본",
+      "title": "도쿄 A급 오피스 cap rate 현행 약 3.5% 수준",
+      "time": "10-22 06:30",
+      "summary": "시장 추정으로 도쿄 핵심(A-grade) 오피스 cap rate는 약 3.5% 수준이다. 금리 상승 시 상향 조정 압력이 존재한다.",
+      "detail": "금리 민감자산인 오피스의 cap rate는 BOJ 및 JGB 금리 움직임에 민감하다. 현재 3.5% 수준은 수요·공급과 임대료 회복 기대를 반영한 균형값으로 보이나, 추가 금리상승 시 25–50bp 상향 가능성이 있다.",
+      "implications": "포트폴리오 영향: cap rate 25bp 상승 시 자산가치 5–8% 하락 예상(레버리지 활용 자산은 NAV 영향 증폭). 액션: 밸류에이션 재산정 및 매각·리파이낸스 타이밍 조정 검토.",
+      "source": "시장 리서치 추정",
+      "url": ""
+    },
+    {
+      "id": "h14",
+      "cat": "아시아",
+      "title": "아시아 물류수요 회복 신호, 전기상거래 영향 확대",
+      "time": "10-22 06:00",
+      "summary": "아시아 지역에서 전자상거래 회복에 따른 물류수요가 확대되고 있다. 이는 물류·인더스트리얼 자산에 대한 투자수요로 연결된다.",
+      "detail": "물류 수요 증가는 임대료 상승과 함께 인더스트리얼 자산의 수익성 개선으로 이어질 가능성이 높다. 일본 내 로지스틱스 자산도 수익률 개선 기대가 있으나 토지 공급제약을 고려해야 한다.",
+      "implications": "투자전략: 물류자산 비중 확대(목표 포트폴리오 비중 +3–5%) 권장. 액션: 주요 물류 노드(도쿄·오사카·나고야) 내 매물 소싱 강화 및 임차인 장기계약 확보 우선.",
+      "source": "시장 관측",
+      "url": ""
+    },
+    {
+      "id": "h15",
+      "cat": "딜",
+      "title": "(확인) 주요 공개딜 없음 — 신규 인수는 신중 권고",
+      "time": "10-22 06:30",
+      "summary": "금일 공개된 대규모 일본 내 신규 인수·매각 공시는 원문 자료 기준 확인되지 않았다. 레버리지·금리 리스크를 고려해 신규 딜은 신중 권고된다.",
+      "detail": "현시점에서는 원문 뉴스 소스에서 확인된 대형 공시 딜이 존재하지 않는다. 시장금리 변동성 및 환율 리스크를 고려해 파이낸싱 구조와 헤지 전략을 우선 점검할 필요가 있다.",
+      "implications": "딜 진행 시 자금조달 비용에 100–150bp 상향 여유 반영 권고. 액션: 내부 투자위원회(IBOC)에서 금리·환율 스트레스 시나리오(예: JGB10Y 3.3%, USD/JPY 165)를 통과한 딜만 승인.",
+      "source": "종합(원문 뉴스 데이터 근거)",
+      "url": ""
+    }
+  ],
+  "market": {
+    "jgb10y": {
+      "v": "2.879%",
+      "d": "-",
+      "t": 1
+    },
+    "usdjpy": {
+      "v": "158.18",
+      "d": "-",
+      "t": 0
+    },
+    "nikkei": {
+      "v": "N/A",
+      "d": "—",
+      "t": 0
+    },
+    "sp500": {
+      "v": "7757.17",
+      "d": "up 0.58%",
+      "t": 1
+    },
+    "wti": {
+      "v": "$97.24",
+      "d": "-",
+      "t": 0
+    },
+    "usdkrw": {
+      "v": "1,322.32",
+      "d": "-",
+      "t": 0
+    },
+    "tibor": {
+      "v": "N/A",
+      "d": "—",
+      "t": 0
+    },
+    "jreit": {
+      "v": "N/A",
+      "d": "—",
+      "t": 0
+    },
+    "caprate": {
+      "v": "Tokyo A-grade 3.5% (시장 추정)",
+      "d": "—",
+      "t": 0
+    }
+  },
+  "deals": [],
+  "watch": [
+    {
+      "n": 1,
+      "text": "BOJ의 12월 금리인상 여부(가능성: 추가 25bp) — 오피스 cap rate와 리파이낸스 비용에 직접 영향"
+    },
+    {
+      "n": 2,
+      "text": "JGB 10Y의 추가 하락/상승 전환(임계치: 3.2%) — 밸류에이션 스트레스 시 경보 발동"
+    },
+    {
+      "n": 3,
+      "text": "USD/JPY 160·USD/KRW 1,350 돌파 여부 — 환노출 큰 포트폴리오의 헤지 필요성 재평가"
+    }
+  ],
+  "serverGenerated": true,
+  "specialTopic": {
+    "title": "BOJ 금리 인상과 부동산 캡레이트: 과거 사례와 현재 포지셔닝",
+    "type": "deep-dive"
+  }
+}
