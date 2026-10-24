@@ -1,184 +1,184 @@
 {
-  "date": "2026-10-24",
-  "generatedAt": 1792794762380,
+  "date": "2026-10-25",
+  "generatedAt": 1792878604687,
   "generatedBy": "github-actions",
   "model": "gpt4o",
   "headlines": [
     {
       "id": "h1",
       "cat": "일본",
-      "title": "Bank of Japan 정책 불확실성 지속: JGB 10Y 수익률 N/A",
-      "time": "10-24 06:30",
-      "summary": "BOJ의 향후 금리·보유정책 불확실성이 지속되며 JGB 10년 수익률은 단기 변동성 확대. 기업 부동산 수요는 보수적 기조 유지.",
-      "detail": "최근 BOJ의 통화정책 스탠스에 대한 명확한 신호 부재로 채권시장은 방향성을 잃은 상태다. JGB 10년 수익률 지표는 데이터 미확인(N/A) 상태이며, 이는 기관투자가들의 데스크뷰에서 포지셔닝을 제한하고 있다. 도쿄 오피스 임대료 및 거래량 회복 기대는 완만하게 진행 중이나, 금리 불확실성은 캡레이트(수익률) 압력 요인으로 남아 있다.",
-      "implications": "JGB 10Y 불확실성→도쿄 A급 캡레이트 상승 압력 가능성. 포트폴리오에 오피스·레버리지 자산 비중 10% 이상인 경우 스트레스테스트 필요. 액션: 보유 레버리지·리파이낸싱 스프레드 점검 및 만기 12개월 내 도래 부채 우선 검토.",
-      "source": "내부 리서치",
-      "url": ""
-    },
-    {
-      "id": "h2",
-      "cat": "일본",
-      "title": "도쿄 A급 오피스 캡레이트 추정치 3.5% 수준 유지",
-      "time": "10-24 06:45",
-      "summary": "시장 관측상 도쿄 A급 오피스 캡레이트는 약 3.5% 수준으로 관측됨(N/A 공식 수치). 거래심리는 보수적.",
-      "detail": "공식 집계 자료는 제공되지 않았으나, 시장 참가자 인터뷰를 종합하면 도쿄 중심지(A등급 오피스)는 약 3.3~3.7% 대의 캡레이트를 기준으로 가격이 형성되고 있다. 금리 상승·BOJ 불확실성으로 캡레이트 하방 여지는 제한적이다.",
-      "implications": "캡레이트 3.5% 가정→평가손 리스크. 오피스 노출 비중 20%인 포트폴리오라면 장부가 2~4% 조정 시나리오 준비. 액션: 안정적 임대수익(면적기준 상위 30%) 자산은 홀드, 공실률 높은 자산은 매각검토.",
-      "source": "시장 인터뷰 종합",
-      "url": ""
+      "title": "블랙스톤, 일본에 400억 달러(약 6조엔) 투자 계획 발표",
+      "time": "10-20 00:00",
+      "summary": "블랙스톤 그룹은 향후 3년간 일본에 400억 달러를 투자한다고 발표했다. 투자 대상은 부동산·AI·방위산업 M&A로 명시됐다.",
+      "detail": "출처 GuruFocus에 따르면 블랙스톤은 400억 달러 규모를 일본 시장에 투입할 예정이며, 목표 섹터로 부동산(오피스·로지스틱스), 인공지능 관련 기업 및 방위산업을 지목했다. 투자 기간은 향후 3년으로 제시돼 대형 자본의 일본 부동산·테크 시장 진입 압력이 증가할 전망이다. 구체적 차량(펀드) 구조와 첫 대상 자산 목록은 공개되지 않았다.",
+      "implications": "수치: 400억 달러(3년). 포트폴리오 영향: 도쿄 A급 오피스 및 물류 자산의 경쟁입찰 확대 → 밸류업 플랜 지연 및 매입가격 상승 압력. action: (1) 도쿄 A급 신규매입 딜에 대해 cap rate 민감도 재산정(예: cap rate 25bp 압축 시 IRR 변동 시뮬레이션), (2) 기존 보유물건의 매도 시점 재검토 및 매각 체크리스트 업데이트, (3) 대형 외자 경쟁에 대비한 PF 리파이낸스 선행협상 권고.",
+      "source": "GuruFocus",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH3nhY_jY3j3_TjDXhEifPBFLKAaj-wGgaumNrn1e9j3HCLv50mCPZwbffoUAFtypefub-oc6Q6fggS71-SHxclhhwno1_WFz58pXGtmqoFPN5ru25UKB2_KR_UOODEhc6UCVZqSg86sltABUTnIorBF8c5C6-H2iDCW3rAVLrJbkmSoQCQPA4IAUxw64iQ_oFSi4GiowOi-LciAXSfQaUR4Ys="
     },
     {
       "id": "h3",
-      "cat": "일본",
-      "title": "MS&AD·Tokio Marine 등 보험사 부동산 투자 신중 모드",
-      "time": "10-24 07:00",
-      "summary": "주요 일본 보험사들이 부동산 신규투자 승인기준을 강화하고 있음. 목표수익률 가이던스 상향 검토.",
-      "detail": "MS&AD와 Tokio Marine 등 대형 손해보험사들은 최근 내부 승인 프로세스를 재검토해 수익률 가이던스를 상향하고 있다. 이는 금리·자본비용을 반영한 조치로, 위험자산 할당 축소 가능성이 제기된다. 결과적으로 대형 보험사의 신규 대형 거래 진입 속도는 둔화될 전망이다.",
-      "implications": "보험사 출자로 운용되는 공동투자물건의 자금조달 리스크 증가. 포트폴리오 내 보험사 출자 비중이 15% 이상인 펀드는 유동성·지분구조 재검토 권고. 액션: 투자조건(가격·지분·클로징 기한) 재협상 고려.",
-      "source": "업계 소식통",
-      "url": ""
+      "cat": "미국",
+      "title": "미 재무부, 적대국 첨단기술 투자 단속 강화 제안",
+      "time": "10-22 00:00",
+      "summary": "미국 재무부는 중국·쿠바·이란·북한·러시아 대상 첨단기술 투자 단속 규정 강화를 제안했다. 프로그램은 2023년 시작돼 2025년 법제화된 바 있다.",
+      "detail": "ClickOnDetroit 보도에 따르면 재무부의 제안은 외국투자심사 및 자본유입 규제 범위 확대를 포함해 민감기술의 해외 이전을 억제하는 내용이다. 대상국으로 명시된 국가들에 대한 기업 간 M&A·JV·지분 투자에 대한 심사 문턱이 높아질 가능성이 있다. 기술·반도체·AI 관련 크로스보더 딜의 실무적 승인 절차와 소요기간이 길어질 전망이다.",
+      "implications": "수치: 대상국 명시 5개국(중국·쿠바·이란·북한·러시아). 포트폴리오 영향: 미국계·글로벌 PE의 대중국(및 지정국) 투자 딜 커버리지 축소 → 일본·한국·동남아로의 투자 전환 가속 가능. action: (1) 중국 연계 자산의 규제 리스크 재평가, (2) 미국 관할 딜의 CFIUS·재무부 규제 시나리오별 승인 소요기간 반영, (3) 대체 출구(아시아 지역 매각 채널) 확보 전략 수립.",
+      "source": "ClickOnDetroit",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH3a6zV_mOlJU24xK6dfdgjYwaGeurnY5gfvJzHBzP0pZmiFc_-N8JLf5PJqk-4_-NsdrrToGb9CctBAHM8SSsr-_Cm3vVG-48kdKQ5O3OAtNIJ7SbOTx64HSShNX8SiRt1dSjUFPA_-zBRMWdNh7wD9etTA-FEOaJHniE4e5tPCJfhV3TBG4_16LrED0evSlrGYLM_hHGxBz-IJ1Vs3MVaMbOgfDHe0Ltfbb0EBpZCtMRdYrr6tsstpgMdyBsMflr3QMsLoqzn5TEKiS8u"
     },
     {
       "id": "h4",
-      "cat": "일본",
-      "title": "대형 개발사 Mitsubishi Estate, 리테일 전략 재정비 추진",
-      "time": "10-24 07:15",
-      "summary": "Mitsubishi Estate가 리테일·복합시설 운영 전략을 재검토 중(N/A 매각·투자 금액). 오프라인 매출 복원 중이나 재구성 필요성 제기.",
-      "detail": "글로벌 관광객 회복과 일본 내 소비 회복세에도 불구하고, 리테일 섹터에서의 수익성 개선을 위해 입지별 재구성이 진행 중이다. Mitsubishi Estate는 상업시설의 구성·임대료 정책을 재정비해 공간 효율을 높이는 방안을 검토하고 있다.",
-      "implications": "리테일자산 비중이 높은 포트폴리오는 NOI 개선 기회. 단, 리노베이션 CAPEX 필요로 현금흐름 일시 축소 가능. 액션: 리노베이션 우선순위 재설정 및 임대계약 재협상 준비.",
-      "source": "기업 공시·업계 리포트",
-      "url": ""
+      "cat": "미국",
+      "title": "미·중 정상회담: 300억 달러 비민감 관세 인하 합의",
+      "time": "10-19 00:00",
+      "summary": "9월 미중 정상회담에서 양국은 300억 달러 규모 비민감 품목 관세 인하에 합의했다. AI 대화 채널 구축도 합의됐다.",
+      "detail": "BRG 보도에 따르면 합의는 비민감 품목 약 300억 달러 규모에 대해 관세를 단계적으로 인하하는 내용과 AI 사고·대화 관련 양자 채널 신설을 포함한다. 무역 긴장 완화는 글로벌 공급망 재조정과 기술 협력 환경에 일부 긍정적 신호를 보낸다. 다만 민감 기술·반도체 관련 제재는 별도로 유지될 가능성이 크다.",
+      "implications": "수치: 300억 달러 관세 대상. 포트폴리오 영향: 글로벌 무역비용 하락에 따른 수출입 관련 물류·산업용지 수요 긍정적. action: (1) 한국·일본의 수출 연계 물류센터 수요 시나리오 업데이트, (2) 관세 인하 대상 품목 연관 자산(클러스터) 모니터링 강화.",
+      "source": "BRG",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEi8qvFX4K-xV3MP-3txk1-iwU_KLIeLXrKZYjyXnujoV-Y5h7KnnKU5zUH83Cp02WPQKpG3Tfw-__rIJKiIw2ZnRvVDONhsViHQ_85wFnIOEoY7s-DF7t1E3mWncN33svL3q60xUcmdFraIsnDxHcp4qtNFU_jqpOvd64PcwlLUJou__NlhuOSexh0JxTlYS7muox3M_D1ZKNh_7OVX6r7iZWoZP4wqPv1T_QAWWyGGVv6"
     },
     {
       "id": "h5",
-      "cat": "일본",
-      "title": "Nomura Real Estate, 물류·데이터센터로 포트폴리오 다각화 가속",
-      "time": "10-24 07:30",
-      "summary": "Nomura RE은 물류·데이터센터 투자를 확대 중이며 연간 투자목표 상향 검토(N/A 금액).",
-      "detail": "도심 오피스의 구조적 리스크에 대응해 Nomura는 물류·데이터센터 등 수익 안정성이 높은 섹터로 자본 배분을 전환하고 있다. 이는 임대수익의 안정성과 장기 성장성에 초점을 둔 전략이다.",
-      "implications": "물류·데이터센터 비중 확대 시 포트폴리오 평균 NOI 안정화 기대. 단, 진입가격이 높은 시장에서는 초기 운용수익률 하락 가능성. 액션: 타깃 자산의 입지·전력·네트워크 조건 검증 및 장기 계약 확보 우선.",
-      "source": "회사 발표(전략보고)",
-      "url": ""
+      "cat": "글로벌",
+      "title": "중동 분쟁, 유가 상승·무역 혼란 지속",
+      "time": "10-23 00:00",
+      "summary": "중동 분쟁이 유가 상승과 글로벌 무역 혼란을 야기하고 있다. 다국적 '반전 블록'이 재공격 중지를 촉구했다.",
+      "detail": "The Guardian은 2026년 2월 이후 지속된 미·이스라엘 대 이란 충돌이 해상·항로 리스크와 보험료 상승을 초래, 글로벌 무역비용을 증가시켰다고 분석한다. 에너지 공급 불안정으로 원유 가격의 변동성이 확대되고, 항공·해운 노선의 재조정으로 물류 차질이 잇따르고 있다. 지정학적 불확실성은 리스크프리미엄 상승 및 투자 지연으로 연결되고 있다.",
+      "implications": "수치: 분쟁 기간 누적 유가 상승 폭(지면 출처는 특정 수치 미제공). 포트폴리오 영향: 물류센터·항만 연계 자산의 운영비(운송비·보험료) 상승 및 공급망 지연 리스크. action: (1) 주요 물류자산의 컨트랙트 CPI·운임 연동 조항 점검, (2) 보험비용 증액 시나리오 반영한 NOI 민감도 분석.",
+      "source": "The Guardian",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFzyK5NSbDcukYtlwD4kJmcPoGnSYebzm0M4OrSqh6zoXmeMntkMa8IEjY3mZawNzfmcBPeqkXZyGQFlY5OibDzsjEsOpxD9V9RA9-hMuypue1Z_A6lQ3zeFy6H1B7eFIoKBhZb-5s8MMzHonWAX6EbJgKUVnKB-q2h5ZCUWpVw5U9rsYHNDQdDUTqe2BKZyU1NgZ_IQxHPjrUDt8ZPfroV"
     },
     {
       "id": "h6",
-      "cat": "미국",
-      "title": "미국 상업부동산 대출 스프레드 확대: 주요 은행 대출 기준 강화",
-      "time": "10-24 07:45",
-      "summary": "미국 대형은행들이 CRE 대출 스프레드를 확대하고 승인기준을 강화 중이며 평균 스프레드 N/A. 자금조달 비용 상승 우려.",
-      "detail": "미국 은행권은 대출 포트폴리오 리스크 관리를 위해 CRE 대출에 대해 신규 조건을 엄격히 하고 있다. 이는 레버리지 높은 거래의 자금조달 난이도 증가로 이어질 가능성이 크다. 해외 운용사들의 미국 자산 딜 타이밍 재검토가 불가피하다.",
-      "implications": "미국 자산 레버리지 60% 이상인 포트폴리오에 즉각적 리파이낸싱 검토 권고. 액션: 차주 신용·만기 스케줄 전수 점검 및 대체금융(사채·기관투자) 검토.",
-      "source": "미국 은행권 보고서(종합)",
-      "url": ""
+      "cat": "한국",
+      "title": "한국은행, 기준금리 연 3.00% 동결 발표",
+      "time": "10-22 00:00",
+      "summary": "한국은행은 10월 22일 기준금리를 연 3.00%로 동결했다. 7·8월 연속 인상 뒤 일시 정지 결정이다.",
+      "detail": "Capital Economics 보도에 따르면 한국은행은 물가 위험과 대내외 리스크를 고려해 기준금리를 3.00%로 유지했다. 이는 금융·부동산 시장의 차입비용 수준을 일정 구간에 고정시키는 결정이며, 향후 금리 경로는 글로벌 통화정책 및 수출지표 변화에 따라 재검토될 전망이다.",
+      "implications": "수치: 기준금리 3.00%. 포트폴리오 영향: 한국 내 레버리지 높은 부동산 프로젝트의 금융 비용 안정화(단기). action: (1) 한국 보유 딜의 LTV·DSCR 재평가(금리 충격 시나리오 포함), (2) 신규 프로젝트의 금리 헤지 필요성 재검토.",
+      "source": "Capital Economics",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGfLHbRXGfR8nH8b0rNLY8L2_dO7Gh1psZa7LoMMeeZZkDyLQSaSAb-b5Wn7_TMYsAcIuE6nC7lzO9o03eO0k0NPOyK3FNwQkNXKKC4LV53yYXzmGZcumAyU6JgLzzGOLCI6uNPrdZ1K8sdG9B3bZYh5Hslx5n-IqF7F4gnRRzu6DwpGcWbtQ1y-RKd2_kb5YWFScXJPwN4fB1dGg=="
     },
     {
       "id": "h7",
-      "cat": "미국",
-      "title": "Blackstone·Brookfield의 물류·주거 투자 계속 확대: 연간 배정 증가 추정",
-      "time": "10-24 08:00",
-      "summary": "Blackstone과 Brookfield가 물류·멀티패밀리 자산에 대한 배정을 확대하고 있음(N/A 투자금액).",
-      "detail": "고정수요 기반의 섹터인 물류·주거(멀티패밀리)는 기관투자가들의 선호가 지속된다. Blackstone·Brookfield는 시장 내 유동성으로 적극적인 포트폴리오 확장을 진행 중이며, 이는 가격 프리미엄 형성 요인으로 작용한다.",
-      "implications": "경쟁심화로 진입가격 상승 및 예상 수익률 압박. 포트폴리오 내 타깃 자산의 진입장벽을 재평가할 필요. 액션: 입찰 시 수익률 마진 요구치(예: 목표 IRR)를 상향 조정하고, 공동투자 검토 강화.",
-      "source": "대형 운용사 공개 자료 및 시장 관측",
-      "url": ""
+      "cat": "한국",
+      "title": "한국 10월 1–20일 수출 616억 달러, 전년比 +105.4%",
+      "time": "10-21 00:00",
+      "summary": "한국의 10월 1~20일 수출이 616억 달러로 전년 동기 대비 105.4% 증가했다. 반도체가 222.5% 급증해 수출의 44.7%를 차지했다.",
+      "detail": "Korea JoongAng Daily 보도에 따르면 반도체 수출 호조가 전체 수출 급증을 견인했고, AI·데이터센터 관련 수요 확대로 메모리·시스템 반도체 수출이 크게 증가했다. 이는 한국 제조업의 AI 수요 연계성이 높아졌음을 시사하며 반도체 업황의 사이클이 투자 회복을 촉진 중이다.",
+      "implications": "수치: 수출 616억 달러(+105.4%), 반도체 +222.5%, 비중 44.7%. 포트폴리오 영향: 반도체 클러스터 인근 물류·산업용지 수요 및 임차료 상승 압력. action: (1) 한국 내 산업·물류 자산의 수요 예측 업데이트, (2) 반도체 공급망 관련 임대 계약 장기화 가능성 검토.",
+      "source": "Korea JoongAng Daily",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHagezwZR5ZfXXcI7ejKtMiE2cdKFuK4vJ013C5ktUFBfXgEpujDxWnA6VskvmYpeWeyp_jPMDBh-zZFUwhWJ0X2oroOoD_QoIgTGqZibAqM6o5bwPWlM7bZuQVfGHJ5HtJnL7cbBb2MJS6pQrYWobWulCRPF35mp9-NJrrb7jT46Vj7euPKiiKophN6JTUpxu1eDlW6eQJ-AKoTCQ9aqQbTnjQn7rYtElzeJCOb7ZBkCg="
     },
     {
       "id": "h8",
-      "cat": "글로벌",
-      "title": "글로벌 금리 상향 리스크: 투자등급 채권 스프레드 변동성 확대",
-      "time": "10-24 08:15",
-      "summary": "중앙은행 정책 정상화 기대가 지속되면서 투자등급 채권 스프레드가 변동 확대(N/A 구체치).",
-      "detail": "미국·유럽 중심의 통화정책 정상화 기조로 전 세계 채권시장의 변동성이 커지고 있다. 이는 부동산 등 실물자산의 할인율(캡레이트) 산정에 영향을 미쳐 자산가치 평가 리스크를 높인다.",
-      "implications": "포트폴리오 할인율을 25~75bps 범위로 스트레스 테스트 권고. 액션: 금리 민감도 높은 레버리지 포지션 축소 및 헷지(금리 스왑) 검토.",
-      "source": "글로벌 채권시장 모니터",
-      "url": ""
+      "cat": "화제",
+      "title": "AI 스타트업 66건·총 421억 달러 자금조달 집계",
+      "time": "10-22 00:00",
+      "summary": "2026년 10월까지 AI 스타트업 대상 딜은 66건, 총 421억 달러가 집계됐다. OpenAI가 대규모 라운드를 주도했다.",
+      "detail": "AI Funding 집계에 따르면 올해 10월까지 AI 분야에서 66건의 펀딩으로 총 421억 달러가 조달됐다. OpenAI의 대형 라운드(부분 기여 포함)와 다수의 앙트리프 및 유망 스타트업의 대규모 시리즈가 포함됐다. 자금 유입이 기술 상용화 및 데이터센터 수요를 자극하면서 관련 인프라·부동산 수요에도 영향이 파급되고 있다.",
+      "implications": "수치: 66건·421억 달러. 포트폴리오 영향: 데이터센터·콜드체인·R&D 오피스 수요 증가 가능성. action: (1) 데이터센터 투자 후보지·전력·냉각 인프라 점검, (2) AI 관련 오피스·랩공간으로의 리포지셔닝 전략 검토.",
+      "source": "AI Funding",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE3POFdOX7Mfz3BWv87d_rtOKysPj8-MrTmmcHHKPqhFoOQAIF3OF5Z-3wPfV7AbgQapyI_pPlLqkMrWm9Eja6KEkCN_n098CejaRXVH2kHZTprXKDpj105YRkJ0wxrAtIOYc3kNA=="
     },
     {
       "id": "h9",
-      "cat": "글로벌",
-      "title": "ESG 규제 강화: EU 지속가능성 공시체계 영향 확산",
-      "time": "10-24 08:30",
-      "summary": "EU의 지속가능성 공시 규제가 글로벌 자본 흐름에 영향, 부동산 펀드의 공시 의무 확대(N/A 세부항목).",
-      "detail": "EU가 추진하는 지속가능성 공시 강화는 글로벌 기관투자가들의 포트폴리오 재조정 요인이다. 일본·한국 운용사들도 펀드 레벨의 ESG 데이터 확보 및 보고체계 정비를 촉진하고 있다.",
-      "implications": "ESG 데이터 미비 자산의 투자유치 난이도 상승. 액션: 에너지효율·탄소배출 데이터 정비 및 개선 CAPEX 계획 수립 필요.",
-      "source": "EU 규제 안내·국제금융리포트",
-      "url": ""
+      "cat": "화제",
+      "title": "OpenAI, 최대 300억 달러 자금조달 라운드 마무리 임박",
+      "time": "10-23 00:00",
+      "summary": "OpenAI는 최대 300억 달러 규모의 자금조달 라운드를 마무리 중이라고 보도됐다. 사전평가액은 1조 2,500억 달러(1.25조 달러)로 언급됐다.",
+      "detail": "PYMNTS.com에 따르면 OpenAI는 1.25조 달러(12,500억 달러) 평가 기준으로 최대 300억 달러 조달을 추진 중이다. 대형 자금 유입은 AI 연구·인프라 투자 가속화와 경쟁사(예: Anthropic)와의 기술경쟁 구도를 심화시킬 전망이다. 대규모 자금은 데이터센터·거점 오피스·인재유치 비용 상승을 촉발할 수 있다.",
+      "implications": "수치: 라운드 최대 300억 달러, 사전평가 1조 2,500억 달러. 포트폴리오 영향: AI 인프라(데이터센터) 수요 및 토지·전력계약 재고 요청 증가. action: (1) 데이터센터 부지·전력계약 포트폴리오 우선순위 재검토, (2) AI 기업 대상 임대·협업 모델 개발 검토.",
+      "source": "PYMNTS.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEROKfY0I7fs3HrtmBdoqfUhjG3DUl431UZj4lFmZZOhsuwodHFcjT9sYkAVBQAl1BChRca_plxLjPgPZ_w6SVL71a3urMG7Uf5u_p43ic9u1kHg1R7RSNjtKYdBSHW4KyRzHZQhCn51eU80GGJSir8ib5DItcRaQ3sHqEZP_nY3-xPfMlds3xnRVmFPeNOppUBaCwOFrXwO1aD6tI6tnIRuKdOV_d3vVoA6IphY7CZqeM="
     },
     {
       "id": "h10",
-      "cat": "한국",
-      "title": "한국 대형 리츠·운용사, 물류·리테일 전략 재조정",
-      "time": "10-24 08:45",
-      "summary": "한국 리츠 및 자산운용사들이 물류·리테일 자산 포트폴리오를 재조정 중이며 목표수익률 변경 가능성(N/A 금액).",
-      "detail": "온라인 물류 수요 증가와 오프라인 리테일의 재편에 따라 한국 운용사들이 포트폴리오 최적화를 추진하고 있다. 이는 일본·미국 시장에서의 투자전략에도 파급효과를 미칠 수 있다.",
-      "implications": "한일 크로스보더 투자시 섹터별 리스크·수익성 재평가 필요. 액션: 한국 파트너사와의 공동 투자 구조 검증 및 환율 민감도 점검.",
-      "source": "한국 자산운용업계 보고",
-      "url": ""
+      "cat": "화제",
+      "title": "Flapping Airplanes, 10월 21일에 10억 달러 시리즈A 유치",
+      "time": "10-21 00:00",
+      "summary": "AI 스타트업 Flapping Airplanes가 10억 달러 규모 시리즈 A를 유치하며 기업가치 60억 달러를 인정받았다.",
+      "detail": "AI Funding 보도에 따르면 Flapping Airplanes는 10월 21일 10억 달러 규모의 시리즈 A를 마감했으며, 브로드 캐피탈 참여로 기업가치가 약 60억 달러로 평가되었다. 거액의 초기 라운드는 AI 연구·인력 확보와 모델 확장에 집중될 전망이다. 벤처 자금의 대형화가 벤처·부동산 연계 수요(랩·오피스) 확대를 재촉할 수 있다.",
+      "implications": "수치: 10억 달러 시리즈A, 가치 60억 달러. 포트폴리오 영향: AI 스타트업 클러스터 주변 오피스·랩 수요 증가. action: (1) 스타트업 수요에 맞춘 단기 전환 가능한 오피스 공간 옵션 검토, (2) R&D 임대 계약 템플릿 준비.",
+      "source": "AI Funding",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE3POFdOX7Mfz3BWv87d_rtOKysPj8-MrTmmcHHKPqhFoOQAIF3OF5Z-3wPfV7AbgQapyI_pPlLqkMrWm9Eja6KEkCN_n098CejaRXVH2kHZTprXKDpj105YRkJ0wxrAtIOYc3kNA=="
     },
     {
       "id": "h11",
-      "cat": "한국",
-      "title": "Korean banks tightening CRE lending 기준: LTV·DSCR 강화",
-      "time": "10-24 09:00",
-      "summary": "한국 은행권이 CRE 대출의 LTV와 DSCR 기준을 강화하고 있어 개발·레버리지 거래 영향(N/A 상세수치).",
-      "detail": "한국 은행들이 규제 및 리스크 관리 차원에서 대출 심사를 강화하면서, 대형개발 프로젝트의 자금조달 구조가 어려워지고 있다. 이는 해외 자본의 한국 부동산 시장 진입에도 영향을 줄 전망이다.",
-      "implications": "한국 자산에 대해 LTV 60% 이상인 거래는 리파이낸싱 리스크 존재. 액션: 만기 스케줄 재검토 및 보증·지분구조 강화 검토.",
-      "source": "한국 금융권 발표 종합",
+      "cat": "글로벌",
+      "title": "우크라·러시아 올레시키 지역 휴전 합의, 발효 10월 27일",
+      "time": "10-24 00:00",
+      "summary": "우크라이나와 러시아가 올레시키 지역 휴전에 합의했으며, 휴전은 10월 27일부터 발효된다. 휴전은 인도적 지원과 민간인 대피를 허용한다.",
+      "detail": "원문은 휴전 합의가 미국 영부인 멜라니아 트럼프의 중재로 이뤄졌다고 보도하며, 합의에는 민간인 대피와 인도적 지원 허용 조항이 포함된다. 전선 완화는 일부 유럽 지역의 물류·에너지 리스크에 단기 완화 효과를 줄 수 있다. 다만 장기적 안정화 여부는 추가 협상에 달려 있다.",
+      "implications": "수치: 휴전 발효일 10월 27일. 포트폴리오 영향: 유럽 리스크프리미엄 일부 소폭 완화 가능성. action: (1) 유럽 자산 대상 지정학 리스크 프리미엄 재산정, (2) 인도적 지원 관련 자선 파트너십 노출 검토.",
+      "source": "AIToolsRecap (기사 내 인용)",
       "url": ""
     },
     {
       "id": "h12",
-      "cat": "딜",
-      "title": "(실무 관점) 크로스보더 공동투자 증가: LP 요구조건 강화",
-      "time": "10-24 09:15",
-      "summary": "LP들이 유동성·ESG·리스크 관리 조건을 강화하면서 GP의 거래구조 변경 요구 증가(N/A 사례 수).",
-      "detail": "최근 펀드레이징 환경에서 LP들은 투자 리스크를 낮추기 위한 조건(우선청구권, 스폰서 캐리 조건, 클린업콜 등)을 강화하고 있다. 결과적으로 GP들은 거래구조를 유연하게 조정해야 하는 압박을 받고 있다.",
-      "implications": "기존 포트폴리오의 GP 역할인 경우 조건 재협상 필요. 액션: LP 조건 대비 시나리오별 자본구조 재설계 및 문서 리스크 점검.",
-      "source": "운용업계 인터뷰",
+      "cat": "일본",
+      "title": "도쿄 A급 오피스 캡레이트(시장 참고) 공개 요구 증가",
+      "time": "10-25 06:30",
+      "summary": "블랙스톤 등 대형 자본 유입 소식으로 도쿄 A급 오피스의 캡레이트 민감도에 대한 기관 요구가 증가하고 있다. 구체적 시장캡레이트 수치는 자주 공시되지 않는다.",
+      "detail": "국내외 투자자의 대규모 일본 자본 유입 계획(예: 블랙스톤 400억 달러)을 배경으로, 투자자·신탁·은행들이 도쿄 A급 오피스의 캡레이트 수준(시장 평균)에 대한 투명성 제고를 요구하고 있다. 최근 거래에서 캡레이트는 거래별 차별성이 커서 포트폴리오별 민감도 분석이 중요해졌다. 공식 통계 수치는 공개 소스에 따라 상이하다.",
+      "implications": "수치: 공개 수치 없음(N/A). 포트폴리오 영향: 캡레이트 재산정 가능성으로 매입·처분 타이밍 민감도 증가. action: (1) 보유 오피스의 가정 캡레이트 범위별(예: ±25~100bp) 시나리오 리레이팅 분석, (2) 매각 대비 스트레스 시나리오 마련.",
+      "source": "시장 종합(뉴스 종합)",
       "url": ""
     },
     {
       "id": "h13",
-      "cat": "딜",
-      "title": "국제운용사들, 일본 물류포트폴리오 인수 타깃 집중",
-      "time": "10-24 09:30",
-      "summary": "Blackstone·GLP 등 국제운용사가 일본 물류자산에 높은 관심 보임(N/A 투자액).",
-      "detail": "e커머스 성장과 공급망 재편으로 인해 일본 내 물류시설에 대한 수요가 강세다. 국제운용사들은 대형 현대화 물류센터 및 도심형 라스트마일 자산을 우선 타깃으로 삼고 있다.",
-      "implications": "물류자산 보유 비중이 낮은 포트폴리오는 기회 포착 필요. 액션: 물류 진입을 위한 J-REIT·합작사 등 파트너십 구축 검토.",
-      "source": "시장 관측",
-      "url": ""
+      "cat": "미국",
+      "title": "미국 시장 규제 강화 속 기술·AI 딜 딜레이 리스크 증가",
+      "time": "10-22 00:00",
+      "summary": "미 재무부 규제 강화와 미·중 협의는 기술·AI 관련 크로스보더 딜의 승인 지연을 유발할 가능성이 높다. 기업들은 컴플라이언스 비용 증가에 직면했다.",
+      "detail": "재무부의 규제 강화 제안으로 중국 등 지정국을 대상으로 한 AI·반도체 관련 투자심사가 강화되고 있다. 이는 글로벌 PE·VC의 딜 타임라인 연장과 비용 상승으로 연결되어, 미국·유럽·아시아 간 딜 구조 재설계가 필요하다. 승인 지연은 거래 완료 시점과 자금 집행 계획에 영향을 준다.",
+      "implications": "수치: 규제 대상국 5개, 승인 절차 지연 가능성(기간 불명). 포트폴리오 영향: 일부 크로스보더 엑시트·인베스트먼트 스케줄 지연. action: (1) 승인 소요기간을 반영한 딜 타임라인 재작성, (2) 법률·컴플라이언스 예산 상향 조정.",
+      "source": "ClickOnDetroit 외 보도 종합",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH3a6zV_mOlJU24xK6dfdgjYwaGeurnY5gfvJzHBzP0pZmiFc_-N8JLf5PJqk-4_-NsdrrToGb9CctBAHM8SSsr-_Cm3vVG-48kdKQ5O3OAtNIJ7SbOTx64HSShNX8SiRt1dSjUFPA_-zBRMWdNh7wD9etTA-FEOaJHniE4e5tPCJfhV3TBG4_16LrED0evSlrGYLM_hHGxBz-IJ1Vs3MVaMbOgfDHe0Ltfbb0EBpZCtMRdYrr6tsstpgMdyBsMflr3QMsLoqzn5TEKiS8u"
     },
     {
       "id": "h14",
-      "cat": "딜",
-      "title": "한·일 공동 투자 사례 증가: 에너지 효율 개선 프로젝트 파이낸싱 확대",
-      "time": "10-24 09:45",
-      "summary": "한일 투자자들이 공동으로 건물 에너지효율 개선 프로젝트에 자금을 투입하는 사례가 늘고 있음(N/A 금액).",
-      "detail": "탄소중립 규제 및 운영비 절감 목적의 에너지개선(Retrofit) 프로젝트가 한일 투자자 간 공동투자 대상으로 부상하고 있다. 공조·전력설비 교체, BEMS 도입 등이 주요 투자대상이다.",
-      "implications": "에너지개선 CAPEX 투자비 대비 NOI 개선 예상. 액션: 대상 건물의 에너지사용 데이터 수집 및 예상 ROI 산정 후 공동투자 제안서 마련.",
-      "source": "업계 사례",
+      "cat": "아시아",
+      "title": "아시아 데이터센터 수요 증가: AI 자금유입과 연계",
+      "time": "10-23 00:00",
+      "summary": "OpenAI·AI 스타트업 대규모 자금유입으로 아시아 데이터센터 수요가 증가하고 있다. 전력·냉각 인프라 확보가 관건이다.",
+      "detail": "OpenAI의 300억 달러 라운드 및 AI 스타트업 총 421억 달러 유입 소식은 데이터센터 확장 수요를 자극한다. 특히 한국·일본·싱가포르 등 아시아 주요 거점에서 전력공급·토지·냉각 인프라 확보 경쟁이 심화될 전망이다. 인프라 약점은 개발 일정 지연 및 CAPEX 상승으로 직결될 수 있다.",
+      "implications": "수치: AI 자금총액 421억 달러, OpenAI 라운드 최대 300억 달러. 포트폴리오 영향: 데이터센터 개발비용·전력계약 확보 리스크 상승. action: (1) 데이터센터 후보지 전력계약 조기확보, (2) 전력 인덱스 기반 장기 임대·전력공급 계약 검토.",
+      "source": "AI Funding / PYMNTS.com 종합",
       "url": ""
     },
     {
       "id": "h15",
-      "cat": "화제",
-      "title": "TIBOR·J-REIT·도쿄 캡레이트 모니터링 권고",
-      "time": "10-24 10:00",
-      "summary": "3개월 TIBOR·J-REIT 지수·도쿄 A급 캡레이트에 대한 지속 모니터링 권고.",
-      "detail": "금융시장 변동성 확대에 따라 3M TIBOR, J-REIT 지수 및 도쿄 A급 캡레이트의 움직임을 일일 기준으로 관찰할 필요가 있다. 특히 J-REIT 지수는 금융시장 유동성 상태를 반영해 자산매각·포지셔닝 결정에 중요한 역할을 한다.",
-      "implications": "포트폴리오 스트레스테스트 시 TIBOR +100bps·J-REIT -15% 시나리오 필수. 액션: 일일 모니터링 체계 수립 및 알림 임계값 설정.",
-      "source": "내부 리서치 권고",
-      "url": ""
+      "cat": "딜",
+      "title": "블랙스톤 일본 투자(400억 달러) — 전략펀드 조성 가능성",
+      "time": "10-20 00:00",
+      "summary": "블랙스톤의 400억 달러 일본 투자 계획은 전용 전략펀드 조성 가능성을 시사한다. 부동산·AI·방위산업에 배분될 전망이다.",
+      "detail": "GuruFocus 보도 기반으로 블랙스톤은 일본용 자금배분을 위해 전용 팬아시아 또는 일본전문 펀드를 조성할 가능성이 크다. 부동산 매입, AI 기업 지분투자, 방위 관련 기업 인수 등이 균형 있게 포함될 수 있으며, 이는 일본 내 M&A 거래 활성을 높일 것으로 보인다. 자금배분 비율과 첫 투자대상은 미공개다.",
+      "implications": "수치: 400억 달러. 포트폴리오 영향: 대형 외자 펀드의 가격 경쟁으로 매입가격 상승·캡레이트 압축 위험. action: (1) 일본 신규투자(특히 오피스·물류) 입찰전략 차별화, (2) 기존 포지션의 홀드·셀 전략 재검토.",
+      "source": "GuruFocus",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH3nhY_jY3j3_TjDXhEifPBFLKAaj-wGgaumNrn1e9j3HCLv50mCPZwbffoUAFtypefub-oc6Q6fggS71-SHxclhhwno1_WFz58pXGtmqoFPN5ru25UKB2_KR_UOODEhc6UCVZqSg86sltABUTnIorBF8c5C6-H2iDCW3rAVLrJbkmSoQCQPA4IAUxw64iQ_oFSi4GiowOi-LciAXSfQaUR4Ys="
     },
     {
       "id": "h16",
-      "cat": "미국",
-      "title": "미국 주거(멀티패밀리) 임대수요 견조: 공실률 지역별 3~6%대",
-      "time": "10-24 10:15",
-      "summary": "미국 멀티패밀리 공실률은 지역에 따라 대체로 3~6% 수준을 유지하고 있음(N/A 세부 도시).",
-      "detail": "인구·고용 호조 지역을 중심으로 멀티패밀리 섹터의 임대수요가 견조하다. 다만 건설 공급 확대 지역에서는 공실률 상승 압력이 존재한다.",
-      "implications": "멀티패밀리 투자시 지역별 공급·수요 동태 분석 중요. 액션: 타깃 자산의 실수요 지표(가구증가률·임대료 성장률) 검토 우선.",
-      "source": "미국 주택시장 리포트",
-      "url": ""
+      "cat": "딜",
+      "title": "Flapping Airplanes 시리즈A 10억 달러 투자 마감",
+      "time": "10-21 00:00",
+      "summary": "Flapping Airplanes가 10억 달러 시리즈A를 마감했다. 기업가치는 60억 달러로 보도됐다.",
+      "detail": "AI Funding에 따르면 Flapping Airplanes의 대규모 시리즈A는 연구개발 및 인력 확보, 모델 확장에 투입될 예정이다. 대형 라운드는 AI 스타트업의 자금 유입 확대 트렌드를 대변하며, 관련 오피스·랩 공간 수요 증가로 이어질 가능성이 있다.",
+      "implications": "수치: 10억 달러, 기업가치 60억 달러. 포트폴리오 영향: R&D 랩·오피스 전환 수요 증가. action: (1) 단기 전환 가능한 오피스 물건 파악, (2) 스타트업 대상 유연 임대 상품 제안.",
+      "source": "AI Funding",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE3POFdOX7Mfz3BWv87d_rtOKysPj8-MrTmmcHHKPqhFoOQAIF3OF5Z-3wPfV7AbgQapyI_pPlLqkMrWm9Eja6KEkCN_n098CejaRXVH2kHZTprXKDpj105YRkJ0wxrAtIOYc3kNA=="
+    },
+    {
+      "id": "h17",
+      "cat": "딜",
+      "title": "OpenAI 대형 라운드(최대 300억 달러) — 인프라 확장 재원",
+      "time": "10-23 00:00",
+      "summary": "OpenAI의 최대 300억 달러 라운드는 데이터센터·인프라 확장 재원으로 활용될 전망이다. 사전평가 1조 2,500억 달러가 거론된다.",
+      "detail": "PYMNTS.com 보도에 따르면 OpenAI는 최대 300억 달러 조달로 경쟁사와의 기술개발 경쟁에 필요한 인프라·인력 투자를 가속화할 계획이다. 대규모 자금은 데이터센터 CAPEX·전력계약·글로벌 거점 확장에 직결될 가능성이 높다. 이는 데이터센터용 부지 및 전력계약 확보 경쟁을 심화시킬 수 있다.",
+      "implications": "수치: 최대 300억 달러, 사전평가 12,500억 달러(1.25조 달러). 포트폴리오 영향: 데이터센터 개발 및 전력계약 확보 경쟁 심화 → 개발비용·토지비 상승. action: (1) 데이터센터 후보지 장기 전력공급 계약 우선협상, (2) CAPEX 상승을 반영한 금융구조 재검토.",
+      "source": "PYMNTS.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEROKfY0I7fs3HrtmBdoqfUhjG3DUl431UZj4lFmZZOhsuwodHFcjT9sYkAVBQAl1BChRca_plxLjPgPZ_w6SVL71a3urMG7Uf5u_p43ic9u1kHg1R7RSNjtKYdBSHW4KyRzHZQhCn51eU80GGJSir8ib5DItcRaQ3sHqEZP_nY3-xPfMlds3xnRVmFPeNOppUBaCwOFrXwO1aD6tI6tnIRuKdOV_d3vVoA6IphY7CZqeM="
     }
   ],
   "market": {
@@ -223,30 +223,63 @@
       "t": 0
     },
     "caprate": {
-      "v": "3.5% (시장 관측치)",
+      "v": "N/A",
       "d": "—",
       "t": 0
     }
   },
-  "deals": [],
+  "deals": [
+    {
+      "id": "d1",
+      "title": "블랙스톤의 일본 투자(Blackstone) — 400억 달러",
+      "time": "10-20",
+      "value": "400억 달러",
+      "type": "전략투자/PE",
+      "summary": "블랙스톤이 향후 3년간 일본에 400억 달러를 투자한다고 발표했다. 부동산·AI·방위산업에 집중할 계획이다.",
+      "detail": "발표에 따르면 자금은 일본 내 부동산(오피스·물류 등)과 AI 관련 기업 투자, 방위산업 인수합병 등에 배분될 가능성이 크다. 자금 집행은 향후 3년 동안 단계적으로 이뤄질 예정이며, 구체적 펀드 구조는 공개되지 않았다.",
+      "source": "GuruFocus",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH3nhY_jY3j3_TjDXhEifPBFLKAaj-wGgaumNrn1e9j3HCLv50mCPZwbffoUAFtypefub-oc6Q6fggS71-SHxclhhwno1_WFz58pXGtmqoFPN5ru25UKB2_KR_UOODEhc6UCVZqSg86sltABUTnIorBF8c5C6-H2iDCW3rAVLrJbkmSoQCQPA4IAUxw64iQ_oFSi4GiowOi-LciAXSfQaUR4Ys="
+    },
+    {
+      "id": "d2",
+      "title": "Flapping Airplanes 시리즈A — 10억 달러",
+      "time": "10-21",
+      "value": "10억 달러",
+      "type": "벤처/시리즈A",
+      "summary": "AI 스타트업 Flapping Airplanes가 10억 달러 규모의 시리즈A를 유치했다. 기업가치는 약 60억 달러로 보도됐다.",
+      "detail": "자금은 모델 개발 및 인재 확보, 인프라 확장에 투입될 예정이며 대형 벤처라운드가 AI 스타트업 생태계에 미치는 파급력이 크다. 관련 오피스·랩 공간 수요가 증가할 가능성이 있다.",
+      "source": "AI Funding",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE3POFdOX7Mfz3BWv87d_rtOKysPj8-MrTmmcHHKPqhFoOQAIF3OF5Z-3wPfV7AbgQapyI_pPlLqkMrWm9Eja6KEkCN_n098CejaRXVH2kHZTprXKDpj105YRkJ0wxrAtIOYc3kNA=="
+    },
+    {
+      "id": "d3",
+      "title": "OpenAI 자금조달(연속 라운드) — 최대 300억 달러",
+      "time": "10-23",
+      "value": "최대 300억 달러",
+      "type": "프라이빗 자금조달",
+      "summary": "OpenAI가 최대 300억 달러 규모의 자금조달 라운드를 마무리할 예정이라고 보도됐다. 사전평가액은 1조 2,500억 달러로 거론된다.",
+      "detail": "PYMNTS.com 보도에 따르면 OpenAI는 대규모 자금으로 데이터센터·인프라·연구개발에 투자할 계획이다. 자금조달은 AI 경쟁 심화 속에서 기술 확보를 위한 전략적 움직임으로 해석된다.",
+      "source": "PYMNTS.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEROKfY0I7fs3HrtmBdoqfUhjG3DUl431UZj4lFmZZOhsuwodHFcjT9sYkAVBQAl1BChRca_plxLjPgPZ_w6SVL71a3urMG7Uf5u_p43ic9u1kHg1R7RSNjtKYdBSHW4KyRzHZQhCn51eU80GGJSir8ib5DItcRaQ3sHqEZP_nY3-xPfMlds3xnRVmFPeNOppUBaCwOFrXwO1aD6tI6tnIRuKdOV_d3vVoA6IphY7CZqeM="
+    }
+  ],
   "watch": [
     {
       "n": 1,
-      "text": "JGB 10Y 수익률 움직임과 도쿄 A급 캡레이트(현재 관측치 3.5%)의 관계 모니터링"
+      "text": "블랙스톤·대형 해외자본의 일본 매수 경쟁: 도쿄 A급 오피스 및 물류 자산의 캡레이트 리레이팅 여부(±25~100bp 시나리오)를 모니터링."
     },
     {
       "n": 2,
-      "text": "3개월 TIBOR와 은행권 CRE 대출 스프레드 변화—리파이낸싱 리스크 점검"
+      "text": "OpenAI·AI 스타트업의 대규모 자금유입에 따른 아시아 데이터센터 전력·토지 확보 경쟁과 개발비 상승 리스크 점검."
     },
     {
       "n": 3,
-      "text": "국제운용사들의 일본 물류·데이터센터 인수 집행 속도 및 진입가격 변화"
+      "text": "한국 수출(10월 1–20일 616억 달러, 반도체 +222.5%) 호조가 산업용지·물류 수요에 미치는 영향 및 관련 임대료 상승 여부."
     }
   ],
   "serverGenerated": true,
-  "unverified": true,
   "specialTopic": {
-    "title": "아시아 PE 파이프라인: 일본·한국·동남아 주요 타겟 섹터 비교",
+    "title": "일본 물류 부동산 시장 현황: 캡레이트, 공급, 이커머스 임차 트렌드",
     "type": "deep-dive"
   }
 }
