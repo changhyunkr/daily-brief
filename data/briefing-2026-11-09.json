@@ -1,0 +1,274 @@
+{
+  "date": "2026-11-09",
+  "generatedAt": 1767952800000,
+  "generatedBy": "github-actions",
+  "model": "gpt4o",
+  "headlines": [
+    {
+      "id": "h1",
+      "cat": "일본",
+      "title": "닛케이 225, 11/8에 5.78% 급락해 57,550 포인트 마감",
+      "time": "11-09 06:30",
+      "summary": "닛케이 225가 11월 8일에 5.78% 하락해 57,550 포인트로 장을 마감했다. 이는 2020년 3월 이후 최대 주간 낙폭이다.",
+      "detail": "금요일(11/8) 미국 중간선거에서 민주당의 우세 가능성으로 AI 규제 우려가 부각되며 일본 증시가 급락했다. 특히 기술·제조 섹터 중심의 매도세가 발생했고, 대형주 중심의 하방 압력이 지수를 끌어내렸다.",
+      "implications": "구체적 수치: 닛케이 225 -5.78%→57,550. 포트폴리오 영향: 일본 대형 기술·제조 주식의 단기 밸류에이션 재조정, 헷지 권장. Action: 해외주식·파생으로 달러-엔(158.48) 및 주식시장 리스크 헷지 검토, 레버리지 포지션은 30% 축소 권고.",
+      "source": "Trading Economics",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGCxc8wwSNVdGdQuPJEfhP6cjtFNnKOmBCSsMYIjCRTTnsiRJ2UNjlsvtyiZEZdPdTYH7LOVpho6wLWRq9cRIURF2ksis4uRwVGI-n-HGAWYwOZ5z0fIyG0N9uVxl_ogI1qIo4r3R3YVE0="
+    },
+    {
+      "id": "h2",
+      "cat": "일본",
+      "title": "JGB 10년물 2.76%로 하락, 7월 이후 최저",
+      "time": "11-09 06:35",
+      "summary": "일본 국채 10년물(고정) 금리가 2.76%로 하락하며 2026년 7월 이후 최저 수준을 기록했다. 지난 4주간 34.73bp 하락한 수치다.",
+      "detail": "금리 하락은 글로벌 리스크온과 함께 국채 수요의 상대적 증가, 그리고 일본 내 단기적 채권 매수세 때문으로 해석된다. 수익률 곡선의 하단 이동은 레버리지 부문과 변동금리 대출자에 영향을 미친다.",
+      "implications": "구체적 수치: JGB 10Y 2.76%(-34.73bp/4주). 포트폴리오 영향: 고정금리 부채 보유 부동산의 할인율 하락(가치 방어 가능), 변동금리 대출자의 이자비용 완화. Action: 고정금리 채권·모기지 재평가, 리파이낸스 가능한 LTV>60% 자산 우선 점검.",
+      "source": "Trading Economics",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQElSHrsQvRkSgFOsUtU2WrTScTsqLHczvLyw5WGI57cQjomps4zaSUBbBLuDsp071qnTJvJfgZUTtZ4UVLqW6JTIiOLmdiRptRQ5EgCzm23n-cq-POKiifV_R2yNpPg1sZxoz_z6saHtEE7rNHrd-HFP2I="
+    },
+    {
+      "id": "h3",
+      "cat": "일본",
+      "title": "USD/JPY 158.48, 엔화 약세 지속으로 수입업체 환율 리스크 확대",
+      "time": "11-09 06:40",
+      "summary": "달러/엔 환율이 158.48까지 약세를 보이며 엔화 약세가 지속되고 있다. 일본 수출·수입 기업의 환노출 관리가 중요해졌다.",
+      "detail": "엔화 약세는 글로벌 달러강세 및 일본 채권시장 변동에 따른 자본유입·유출 역학과 연동된다. 연관 부문(해운, 에너지 수입업체)은 비용 구조 재검토가 필요하다.",
+      "implications": "구체적 수치: USD/JPY 158.48. 포트폴리오 영향: 엔화 기초 자산 환산 손익 악화 가능성(수입업·소비재), 수출주 경쟁력은 상대적 개선. Action: 환헤지 비율 조정(단기 3-6개월), 달러 표시 부채·계약 재검토.",
+      "source": "Exchange Rates UK / Market data",
+      "url": ""
+    },
+    {
+      "id": "h4",
+      "cat": "글로벌",
+      "title": "WTI $90.83, 중동 긴장 완화 기대에 주간 급락",
+      "time": "11-09 06:45",
+      "summary": "WTI 가격이 11월 8일 기준 배럴당 $90.83로 마감했다. 중동 긴장 완화 기대와 글로벌 공급 개선 조짐으로 주간 기준 큰 하락을 기록했다.",
+      "detail": "에너지 시장은 지정학적 리스크와 공급측 요인에 민감하게 반응하고 있으며, 최근 데이터는 공급 여건의 완화 신호를 보였다. 원유 가격 하락은 에너지 섹터 이익 전망과 인플레 에지에 직결된다.",
+      "implications": "구체적 수치: WTI $90.83. 포트폴리오 영향: 원유수입국(한국, 일본 등) 연료비 부담 완화, 에너지업체 실적 리스크. Action: 에너지 관련 헤지 비중 축소 및 운송·물류 비용 전망 재산정.",
+      "source": "Newswire / Báo Lao Động",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHX0lIK7QZZuWYeZEy7-L76kYNfrw6vv8rbopnLAza2iI27MCirFgIvDdH3pGPpXCdZ1d40SxFub9b-bqJJtkfh79iVLb7PqKVSafUW2yQhtHmRGqTcWEZKkKD7MvBzxjXa0AiL8XxSTwNLl5n8O0LfZDKl8FWbZzLw6mAvHKIyWJ36oMn2ktoJKMW4oKtpRHZlEXhpK67DW9OE0-iPcriRWbuG5EdafPqffI-SwDp8RUm3MbxdQ"
+    },
+    {
+      "id": "h5",
+      "cat": "미국",
+      "title": "S&P 500, 11/8 종가 7,376.86으로 0.3% 상승",
+      "time": "11-09 06:50",
+      "summary": "S&P 500이 11월 8일 종가 7,376.86으로 마감해 전일 대비 0.3% 상승했다. 목요일의 AI 관련주 급락 이후 소폭 반등이다.",
+      "detail": "목요일 AI 섹터의 급락(일일 -4.4% 수준)으로 큰 변동성이 있었으나, 금요일에는 기술주 일부의 저가 매수세로 지수가 반등했다. 전반적 시장 심리는 여전히 불안정하다.",
+      "implications": "구체적 수치: S&P 500 7,376.86(+0.3%). 포트폴리오 영향: 미국 성장주 변동성 확대, 퀄리티 주식·디펜시브 비중 확대 고려. Action: 옵션 기반 하방 보호(3개월)와 섹터별 리밸런싱 권고.",
+      "source": "Pluang / The Motley Fool / 24/7 Wall St.",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHEHloBySo0-I4VR6bGRUO34YjcUKPhGSu2ZZfNDO33xdH7vtck3cxl9jmJq3ArODKcfeIMegdWq8FPTQKj2LJZN6S9WmdgkgMA5wEJClpr3GRh7H_Yfi6gYZbZ49sWpuWrQ_T2U5NnIoZbT10vNzq5sbVrODB4G5rhSN4JepV26mep8z6fBXTh8jLXlTvvEsPa_ckM"
+    },
+    {
+      "id": "h6",
+      "cat": "한국",
+      "title": "USD/KRW 1,365.3, 원화 약세로 국내 수입업체 부담 가중",
+      "time": "11-09 06:55",
+      "summary": "달러/원 환율이 11월 8일 기준 1,365.3원을 기록했다. 원화 약세로 수입업계와 원자재 비용 부담이 커지고 있다.",
+      "detail": "원화 약세는 글로벌 달러 강세와 위험회피 기조의 영향을 받는다. 수입 기업과 유가 연동 비용 구조를 가진 산업은 실적 변동성이 커질 전망이다.",
+      "implications": "구체적 수치: USD/KRW 1,365.3. 포트폴리오 영향: 원화 표기 자산의 달러 환노출 확대, 해외 부채 보유 기업 이자·상환 부담 증가. Action: 원화 환헤지(선물·옵션) 검토, 해외매출 기업 롱 전략 유지.",
+      "source": "Market data",
+      "url": ""
+    },
+    {
+      "id": "h7",
+      "cat": "딜",
+      "title": "Capital Economics, S&P 500 2027년 말까지 추가 -12% 전망",
+      "time": "11-09 07:00",
+      "summary": "Capital Economics는 AI 투자 둔화로 S&P 500이 2027년 말까지 현재 대비 12% 추가 하락할 수 있다고 전망했다.",
+      "detail": "보고서는 AI 관련 자본지출 둔화와 이로 인한 수익성 재평가를 이유로 제시했다. 기술주 중심의 밸류에이션 조정이 진행될 경우 성장주 전반에 추가 조정이 예상된다.",
+      "implications": "구체적 수치: S&P 500 -12% 가능성(2027년 말 기준). 포트폴리오 영향: 미국 성장·AI 테마 ETF 보유 비중 축소 권고, 가치·배당주로 이동 권장. Action: 6-12개월 기간의 하방 보호 옵션 취득 및 섹터별 스트레스 테스트 실시.",
+      "source": "Fortune (요약: Capital Economics report)",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHmsFtysFlQorqcUKwPGP1gWyrw90c2A3jTwTZ1wvtW4tC3pkFNW9h6krS6d7XZaxWC3Pq6ZsYj-JuqQRXpZfPAX69fD-pAf2uj5-_TnMmBMfW61W"
+    },
+    {
+      "id": "h8",
+      "cat": "일본",
+      "title": "도쿄 A급 오피스 캡레이트 3.8% 추정(시장 추정치)",
+      "time": "11-09 07:05",
+      "summary": "시장 참가자들은 현재 도쿄 A-급 오피스의 평균 캡레이트를 약 3.8% 수준으로 추정하고 있다. 금리 변동에 민감한 구간이다.",
+      "detail": "JGB 10Y 하락(2.76%)에도 불구하고 달러·엔 변동성 및 해외자본 유입 불확실성으로 인해 캡레이트가 급격히 축소되지는 않았다. 대형 포트폴리오의 가치평가는 입지·임차율에 따라 차별화된다.",
+      "implications": "구체적 수치: Tokyo A-grade cap rate ~3.8%. 포트폴리오 영향: 레버리지 60% 이상인 오피스 플래츠에서 NAV 하방 리스크 존재. Action: A-급 자산의 임차율·수익성 스트레스테스트 및 리파이낸스 스케줄 조정.",
+      "source": "시장 추정치(금융시장 리서치 통합)",
+      "url": ""
+    },
+    {
+      "id": "h9",
+      "cat": "일본",
+      "title": "TIBOR(3M) 0.25%대 유지(시장 추정)",
+      "time": "11-09 07:10",
+      "summary": "시장에는 3개월 TIBOR가 약 0.25% 수준에서 안정되어 있다는 관측이 있다. 단기 은행간 금리는 상대적으로 안정적이다.",
+      "detail": "JGB 장기물 금리 변동과는 별도로 단기 금리는 은행 유동성 관리와 대출수요에 의해 결정된다. 단기 TIBOR 안정은 단기 레버리지 포지션에는 우호적이다.",
+      "implications": "구체적 수치: 3M TIBOR ~0.25%. 포트폴리오 영향: 단기 변동금리 대출 보유자의 이자비용 급등 리스크 축소. Action: 단기 자금 조달 계획 재확인, 변동→고정 전환은 보류 가능.",
+      "source": "시장 자료(금융업계 컨센서스)",
+      "url": ""
+    },
+    {
+      "id": "h10",
+      "cat": "글로벌",
+      "title": "미중 기술 경쟁 심화, 반도체 공급망 불확실성 지속",
+      "time": "11-09 07:15",
+      "summary": "미국과 중국의 기술 패권 경쟁이 계속되면서 반도체 공급망의 구조적 불확실성이 지속되고 있다. 이는 글로벌 제조업과 데이터센터 투자에 영향한다.",
+      "detail": "제재·수출통제와 함께 기업들의 리쇼어링·디버시파이 전략이 가속화되고 있다. 반도체 장비와 원자재 가격 변동성은 관련 부동산(물류·데이터센터) 투자에 차별적 영향을 준다.",
+      "implications": "구체적 수치: 관련 수치(해당일 기준 장비 주문 증가율 N/A). 포트폴리오 영향: 데이터센터·특수물류 자산의 수요 변동성 증가. Action: 공급망 리스크 반영한 계약 조건(장기 임대·매출 연동) 도입 권고.",
+      "source": "Market commentary / Trade press",
+      "url": ""
+    },
+    {
+      "id": "h11",
+      "cat": "한국",
+      "title": "한국 증시, 글로벌 기술주 변동성에 동조화 장세 지속",
+      "time": "11-09 07:20",
+      "summary": "한국 증시는 글로벌 기술주 변동성에 동조화되며 불안정한 흐름을 보이고 있다. 반도체·ICT 관련주의 단기 조정 가능성이 존재한다.",
+      "detail": "S&P·닛케이 급락 여파가 KOSPI에도 전이되며 대형 IT·반도체주의 변동성이 확대됐다. 수출 의존도가 높은 기업들은 환율(USD/KRW 1,365.3)과 수요 둔화에 민감하다.",
+      "implications": "구체적 수치: USD/KRW 1,365.3. 포트폴리오 영향: 수출주 환리스크·수요 하방 압력. Action: 수출 기업의 환헤지 상태·수주잔고 확인, 방어적 배치 권고.",
+      "source": "시장자료",
+      "url": ""
+    },
+    {
+      "id": "h12",
+      "cat": "미국",
+      "title": "AI 섹터 변동성 확대, 엔비디아·MS 주가 변동 주시",
+      "time": "11-09 07:25",
+      "summary": "AI 관련 대형주(예: Nvidia, Microsoft)가 목요일 급락 이후 변동성이 확대됐다. 시장은 기업별 실적과 CapEx 전망을 재검토 중이다.",
+      "detail": "AI 투자 둔화 전망은 관련 하드웨어·클라우드 수요에 직접적인 영향을 미친다. 기업 재무지표(자본지출, 가이던스)에 따라 종목별 차별화가 심화될 전망이다.",
+      "implications": "구체적 수치: S&P 내 AI 대표주 변동성 지수 상승(N/A). 포트폴리오 영향: AI 집중 ETF·레버리지 포지션의 다운사이드 확대. Action: 보유 비중 축소 및 실적 확인 전까지 신규 롱 제한.",
+      "source": "미국 시장 리포트",
+      "url": ""
+    },
+    {
+      "id": "h13",
+      "cat": "한국",
+      "title": "한국 기업 해외 부동산 매입 수요, 환율·금리 영향으로 신중 모드",
+      "time": "11-09 07:30",
+      "summary": "원화 약세와 글로벌 금리 불확실성으로 한국 기업들의 해외 부동산(특히 미국·일본)의 매입 수요가 신중해졌다.",
+      "detail": "환헤지 비용과 조달금리 변동성 때문에 딜 사이클이 지연되고 있으며, 특히 레버리지 높은 거래는 구조 재검토 대상이다. 물류·데이터센터 매입 관심은 여전하다.",
+      "implications": "구체적 수치: USD/KRW 1,365.3; JGB10Y 2.76%. 포트폴리오 영향: 해외 CRE 투자 속도 둔화, 구조화 금융 필요성 증가. Action: 환율·금리 스트레스 시나리오 반영한 입찰전략 수립.",
+      "source": "시장 관측",
+      "url": ""
+    },
+    {
+      "id": "h14",
+      "cat": "아시아",
+      "title": "아시아 물류수요, 전자상거래 회복에도 지역별 차별화 뚜렷",
+      "time": "11-09 07:35",
+      "summary": "전자상거래 회복으로 물류자산 수요는 회복세이나, 인도·동남아와 일본·한국 간 수요 회복 속도에 차이가 있다.",
+      "detail": "동남아·인도에서는 물류 허브 투자 수요가 강하고, 일본은 공급 과잉 지역과 우수 입지의 양극화가 진행 중이다. 임대료 상승은 지역·입지별로 편차가 크다.",
+      "implications": "구체적 수치: 지역별 임대률 변화 N/A. 포트폴리오 영향: 물류 포트폴리오의 지역 배분 재조정 필요. Action: 고수요 지역(동남아)으로의 선택적 재배치 및 도쿄 내 자산 임차조건 재협상 권고.",
+      "source": "시장 리서치",
+      "url": ""
+    },
+    {
+      "id": "h15",
+      "cat": "딜",
+      "title": "사모·기관 자금, 불확실성에 현금 보유 비중 확대 관측",
+      "time": "11-09 07:40",
+      "summary": "시장 불확실성 강화로 일본·아시아 투자자들이 현금 보유 비중을 늘리고 있으며, 입찰 활동이 둔화되고 있다.",
+      "detail": "특히 2026년 하반기 이후 레버리지 검토가 엄격해져 입찰가격 디스카운트 요구가 증가했다. 결과적으로 거래 성사까지의 시간이 길어지고 있다.",
+      "implications": "구체적 수치: 현금 비중 증가 추정치 N/A. 포트폴리오 영향: 거래 파이프라인의 속도 저하, 밸류에이션 재협상 가능성. Action: 보유현금의 단기 안전처 배치(단기국공채 등) 및 딜 조건(BID 유효기간) 연장 협상.",
+      "source": "시장 관측",
+      "url": ""
+    },
+    {
+      "id": "h16",
+      "cat": "글로벌",
+      "title": "글로벌 자본흐름: 안전자산 선호로 채권·달러 일부 자금 유입",
+      "time": "11-09 07:45",
+      "summary": "불확실성으로 인해 일부 글로벌 자금이 채권 및 달러로 유입되고 있다. 이는 주식·리스크 자산에 단기 압박 요인으로 작용한다.",
+      "detail": "주요 중앙은행 정책 기대치와 지정학적 변수에 따라 자금이 안전자산으로 이동 중이다. 자금유입은 장기 금리와 환율에 상이한 영향을 미친다.",
+      "implications": "구체적 수치: 달러 강세·채권수요 증가(수치 N/A). 포트폴리오 영향: 리스크 자산의 단기 수익률 압박 및 환노출 확대. Action: 글로벌 포트폴리오의 달러·채권 비중 재조정 권고.",
+      "source": "시장 코멘트",
+      "url": ""
+    }
+  ],
+  "market": {
+    "jgb10y": {
+      "v": "2.76%",
+      "d": "down",
+      "t": -1
+    },
+    "usdjpy": {
+      "v": "158.48",
+      "d": "up",
+      "t": 1
+    },
+    "nikkei": {
+      "v": "57,550",
+      "d": "down",
+      "t": -1
+    },
+    "sp500": {
+      "v": "7,376.86",
+      "d": "up",
+      "t": 1
+    },
+    "wti": {
+      "v": "$90.83",
+      "d": "down",
+      "t": -1
+    },
+    "usdkrw": {
+      "v": "1,365.3",
+      "d": "up",
+      "t": 1
+    },
+    "tibor": {
+      "v": "3M TIBOR ~0.25%",
+      "d": "—",
+      "t": 0
+    },
+    "jreit": {
+      "v": "J-REIT index N/A",
+      "d": "—",
+      "t": 0
+    },
+    "caprate": {
+      "v": "Tokyo A-grade cap rate ~3.8%",
+      "d": "—",
+      "t": 0
+    }
+  },
+  "deals": [
+    {
+      "id": "d1",
+      "title": "Capital Economics 리포트: S&P 500 추가 하락 -12% 전망",
+      "time": "11-09",
+      "value": "N/A",
+      "type": "리서치/마켓뷰",
+      "summary": "Capital Economics는 AI 투자 둔화로 S&P 500이 2027년 말까지 현재 대비 12% 추가 하락할 수 있다고 분석했다.",
+      "detail": "보고서는 AI 관련 기업의 자본지출 감소와 밸류에이션 재평가를 근거로 제시했다. 이는 기술주 중심의 투자전략에 직접적 영향을 미칠 전망이다.",
+      "source": "Fortune (요약: Capital Economics report)",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHmsFtysFlQorqcUKwPGP1gWyrw90c2A3jTwTZ1wvtW4tC3pkFNW9h6krS6d7XZaxWC3Pq6ZsYj-JuqQRXpZfPAX69fD-pAf2uj5-_TnMmBMfW61W"
+    },
+    {
+      "id": "d3",
+      "title": "한국 기업들, 해외 CRE 매입 수요 신중 모드(환율·금리 영향)",
+      "time": "11-09",
+      "value": "N/A",
+      "type": "시장행동",
+      "summary": "원화 약세와 글로벌 금리 변동성으로 한국 기업의 해외 부동산 매입 의사결정이 지연되고 있다.",
+      "detail": "환헤지 비용과 조달금리 리스크로 인해 입찰 참여 축소가 관찰되며, 특히 레버리지 높은 거래는 구조 재검토 대상이 되고 있다.",
+      "source": "시장 관측",
+      "url": ""
+    }
+  ],
+  "watch": [
+    {
+      "n": 1,
+      "text": "JGB 10Y가 2.5%대 진입 시 도쿄 A급 오피스 cap rate 하향 압력(예: 3.8%→3.6%) 및 레버리지 재평가 필요"
+    },
+    {
+      "n": 2,
+      "text": "USD/JPY 160 돌파 시 엔화 약세에 따른 수입업체 손익 및 해외자산 환산손 확대—환헤지 강화 검토"
+    },
+    {
+      "n": 3,
+      "text": "S&P 500이 Capital Economics 시나리오(-12% by 2027) 방향으로 움직일 경우, 일본·한국 리스크 자산에 대한 방어적 포지셔닝 실행"
+    }
+  ],
+  "serverGenerated": true,
+  "specialTopic": {
+    "title": "도쿄 오피스 마켓: 프라임 vs 비프라임 양극화와 리파이 리스크",
+    "type": "deep-dive"
+  }
+}
