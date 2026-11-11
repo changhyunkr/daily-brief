@@ -1,0 +1,163 @@
+{
+  "date": "2026-11-11",
+  "generatedAt": 1794355978750,
+  "generatedBy": "github-actions",
+  "model": "gpt4o",
+  "headlines": [
+    {
+      "id": "h1",
+      "cat": "일본",
+      "title": "닛케이225, 소프트뱅크 14% 급등으로 60,459 회복",
+      "time": "11-10 00:06",
+      "summary": "닛케이225는 11월10일 2.87% 상승한 60,459.58로 마감했다. 소프트뱅크 그룹이 14% 이상 급등해 지수 상승을 주도했다.",
+      "detail": "지난주 급락분을 일부 만회하며 투자심리가 단기 개선됐다. 소프트뱅크 급등은 자회사·지분 재평가 기대와 기술 섹터 중심의 강세가 복합 작용한 결과로 보인다. 단기 변동성 확대 가능성이 높아 외국인 매수세 지속 여부가 관건이다.",
+      "implications": "JGB 10Y 2.681% 수준에서 장기 금리 상승은 도쿄 오피스 밸류에 하방 압력(캡레이트 +0.25% 가능성). 포트폴리오: 일본 테크·대형주 비중 과중 시 리밸런스 권고(목표 비중 -5-10%). Action: 소프트뱅크 관련 레버리지 보유분 리스크 점검 및 익절·헤지 검토.",
+      "source": "BBN Times / Invezz",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE2VnlAP2PNPcdIs6PWWGoKB_QFqKNyNWrSeCiJy_25lSyAVRfrUtEHXXIUQUvc-xL6WX-azFhHcRNhVn2Og2JqMToiiNZOseoEr4MXf7nxzgWqxSn6e3o2q9nhIKVr9cMUPNd031LBJWyhkO3BH6_KN1wpyOMJ443wr1DijORqhcQrGUT3wr32XG_UnNXuOh7VmUaMXRGGmRNs7cOUL8-aGtH_"
+    },
+    {
+      "id": "h2",
+      "cat": "일본",
+      "title": "BOJ 12월 인상 확률 80%→약65%로 하락",
+      "time": "11-09 06:00",
+      "summary": "MUFG 리서치에 따르면 시장의 BOJ 12월 금리 인상 확률이 전일 약 80%에서 약 65%로 하락했다. 글로벌 주식 조정 이후 인상 기대가 일부 약화된 결과다.",
+      "detail": "중간선거 충격과 글로벌 위험회피 심리로 금리 인상 기대가 조정됐다. 단기적으로 BOJ의 매파적 언급에도 시장은 속도 조절을 예상하는 쪽으로 베팅을 변경했다. 시장의 재평가가 이어질 경우 엔화·금리 변동성은 계속 확대될 전망이다.",
+      "implications": "JGB 10Y 2.681% 유지 상황에서 BOJ 인상 지연 시 엔화 약세 지속 가능성. 포트폴리오: 일본 채권·현금성 자산의 듀레이션·환 노출 점검(달러 환헤지 비중 확대 검토). Action: 12월 회의 전까지 단기 환·금리 헤지 강화 권고.",
+      "source": "MUFG Research",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG38P2mK9pERF-v93XeWn-j5dhmBfNMQMBLtgD6Ir6qy-goaV7Z9vcNQXGYhHqTVH-0sTKPTiuAcPMbXTcXKZAk3Su1DSwkzk3yIhW4DOzMjJT6YDPJIrXwUN62-1NZQrucv07G7xoi3XffFcENjN8n_CZknF21sjE-xBzsOiBatynKLk4MDFNDGDGXBQ4l"
+    },
+    {
+      "id": "h3",
+      "cat": "미국",
+      "title": "S&P500 0.34% 하락, 기술주 약세 주도",
+      "time": "11-10 16:00",
+      "summary": "S&P500은 11월10일 0.34% 하락한 7,524.25로 마감했다. 기술 섹터가 조정 압력을 크게 받았다.",
+      "detail": "10월 인플레이션 서프라이즈로 금리 상승 우려가 커지며 성장주가 타격을 받았다. 기술 대형주 중심의 차익실현 매물이 유입되었고 시장 전반의 밸류에이션 리프레이밍이 진행 중이다. 단기적으로는 실적 시즌과 연준 정책 신호에 민감하게 반응할 전망이다.",
+      "implications": "미국 10Y가 재상승(5%대 복귀)하면 글로벌 성장주 밸류에이션 압박 지속. 포트폴리오: US 기술주 익스포저 축소(목표 -3-7%) 및 금리 민감 포지션 헤지 권고. Action: 델타·감마 위험 모니터링 및 옵션 보호 전략 고려.",
+      "source": "24/7 Wall St. / Morningstar",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGpHjp-c4EBvspc4oNhSr1yZFd6ZBA_C_S8Z4uSY3CjMlzNSljlatmWioBrtAil0TekGiCWHPVMCkH9KMWH69Z3Yb498OuEf87SbOz_FfQTwSa7GTiAfzBteNXoCcBX8gL_adDUXWSYU6FXWJvoGwLLIF4LHMV1Wbrd65MglU89PDbibzxRW-3qOPbEsbyZLDdmTMqzG3Ce6d-7Qclds8Yfix7kZeg6H3uASrJiu3f2RO4l-hFFfrn-Vu3JaVxK"
+    },
+    {
+      "id": "h4",
+      "cat": "미국",
+      "title": "미국 10월 핵심 CPI 3개월 연속 월 0.3%↑, 연준 긴축 가능성↑",
+      "time": "11-10 16:01",
+      "summary": "10월 핵심 물가가 3개월 연속 월 0.3% 상승하면서 인플레이션이 예상보다 강하게 유지됐다. 10년물 금리는 5% 상회로 재상승했다.",
+      "detail": "물가 모멘텀이 둔화되지 않으면서 시장은 12월 연준 금리인상 확률을 다시 상향했다. 실물경제와 금융시장 간 괴리가 확대되면 신용스프레드와 자산 배분 전략에 추가 조정 필요성이 발생한다.",
+      "implications": "미국 금리 상승은 글로벌 자본비용 상승으로 이어져 일본·아시아 부동산·레버리지 딜 가격에도 하방 압력. 포트폴리오: 미국 금리 민감 자산 축소 및 단기 국채·현금 확대(목표 +5%). Action: 만기구조 단축 및 금리 스왑 재평가 권고.",
+      "source": "CNBC / Pittsburgh Post-Gazette",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGQqv6_ipP1o2jWR-J_KLmjoBKz1BOGhkRNeQmt77C75ZPiIf1IZdFjQN6zQ_OTdPkV2uE8eUOXeidUU24MzAuYcnjA6b-erKgW9HXATS-8C_NLUTn5s44PR1ri18WmCvkn3Y9ZocG-NEDsZr1pwhGOOP-2PyZJZ9CLPFkyNlkbAOuMWFmWVfU="
+    },
+    {
+      "id": "h5",
+      "cat": "미국",
+      "title": "엔비디아 5.5% 급락, CEO 조사 소식·AI 우려 확산",
+      "time": "11-10 09:47",
+      "summary": "엔비디아 주가는 11월10일 5.5% 하락했다. 이사회 조사 및 AI 섹터 전반의 규제·성장 둔화 우려가 원인이다.",
+      "detail": "CEO 관련 이사회 조사 소식이 단기 신뢰도를 훼손했고, AI 관련 과열 구간에 대한 조정도 병행됐다. 팩트 확인과 규제 리스크가 이어질 경우 관련 섹터의 자금 유출이 단기 지속될 수 있다.",
+      "implications": "GPU·AI 관련 펀드에 과다 노출된 포트폴리오의 변동성 확대. 포트폴리오: AI·반도체 집중형 펀드 레버리지 축소 권고(목표 -5%). Action: 엔비디아와 동종 업종에 대한 스트레스 시나리오 실행 및 헤지(풋 옵션 등) 고려.",
+      "source": "CNBC / Pittsburgh Post-Gazette",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGQqv6_ipP1o2jWR-J_KLmjoBKz1BOGhkRNeQmt77C75ZPiIf1IZdFjQN6zQ_OTdPkV2uE8eUOXeidUU24MzAuYcnjA6b-erKgW9HXATS-8C_NLUTn5s44PR1ri18WmCvkn3Y9ZocG-NEDsZr1pwhGOOP-2PyZJZ9CLPFkyNlkbAOuMWFmWVfU="
+    },
+    {
+      "id": "h6",
+      "cat": "글로벌",
+      "title": "WTI $84.74, 이란 긴장 완화 기대에 하락",
+      "time": "11-10 04:30",
+      "summary": "WTI는 11월10일 배럴당 $84.74로 내렸다. 이란 전쟁 완화 기대와 공급 증가 우려가 하방 요인으로 작용했다.",
+      "detail": "군사적 긴장 완화 기대와 주요 산유국의 공급 복귀·증가 시그널이 유가를 눌렀다. 에너지 섹터의 캐시플로 불안정성은 일부 에너지 레버리지·프로젝트 파이낸스 딜의 비용구조 재평가를 촉발할 수 있다.",
+      "implications": "에너지 관련 레버리지·프로젝트파이낸스에 대한 수익성 압박 가능. 포트폴리오: 에너지 부문 신용 평가 재검토 및 변동성 대비 헤지(에너지 선물·옵션) 권고. Action: 개발형 딜의 유가 스트레스 테스트 실행.",
+      "source": "EnergyNow.com / Rigzone",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGvONoXAhrzjp25eQ2ne00oBXX4AhnxSvYcyO7sLGiF_FiJJ5bfvLV6-MpLCc7GStnm8DzfDoSbDQUYXV86GZ2nBmN_dKVAf21idDM8cbpNuwvS-Q7k_GoWBngaI9GJEbO6-LcQguOkORQIxZcZGzig3qmgv03YnDqrx9d3_8p7NbuBDO-y010jOBISG49f9k1MYp7T-wUXirlHNsI1lhEfMrpff5WTeMdqvtaCmrv5pYDqz"
+    },
+    {
+      "id": "h7",
+      "cat": "글로벌",
+      "title": "달러 강세 지속: USD/JPY 158.825, USD/KRW 1344.3",
+      "time": "11-10 16:00",
+      "summary": "달러 대비 주요 신흥·아시아 통화 약세가 이어졌다. USD/JPY는 158.825, USD/KRW는 1344.3을 기록했다.",
+      "detail": "미국 금리 재상승과 위험회피 심리로 달러 강세가 지속되고 있다. 특히 엔화는 BOJ 매파 신호에도 불구하고 추가 약세를 보였고, 한화는 반도체 호황 기대에 상대적 강세를 보였으나 달러 기준 상승 압력은 유효하다.",
+      "implications": "환율 변동은 해외 부동산·인프라 투자 수익률에 직접 영향. 포트폴리오: 엔화·원화 환노출 관리 필요(달러 헤지 비중 확대 검토). Action: 주요 외화표시 채권·부동산의 환헤지 재조정 권고.",
+      "source": "Trading Economics / Wise",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHE6mk1UM8bvmS9X9uCvAw_cPRhSXmUb-7LDMq7eBdMcURHWnX8a_4sv1W-oGddrZsmKYLYMtiiwTLwr883sr0SSGGCQkMnzSm8vBll5dqZUCaCrzUFB8Mu3FuO0JHrm9ddQZb726Q"
+    },
+    {
+      "id": "h8",
+      "cat": "한국",
+      "title": "코스피 4.4% 급등, 삼성전자·SK하이닉스 주도",
+      "time": "11-10 09:47",
+      "summary": "코스피는 11월10일 4.4% 상승하며 세계 주요지수 중 큰 폭의 오름세를 기록했다. 삼성전자와 SK하이닉스가 AI 수요 기대에 강세를 보였다.",
+      "detail": "반도체 업종의 강력한 실적 기대 및 AI 수요 재평가로 외국인·기관의 순매수가 유입됐다. 다만 글로벌 금리 상승 시 밸류에이션 조정 가능성은 상존한다. 한국 증시는 단기 모멘텀을 확보했으나 변동성에 대비해야 한다.",
+      "implications": "반도체 중심의 한국주식 포지션은 달러·금리 민감도가 높음. 포트폴리오: 한국 대형 IT 비중 조정(익절 목표 설정) 및 환헤지 검토. Action: SK하이닉스·삼성전자 관련 노출 리스크 매핑 실행.",
+      "source": "Pittsburgh Post-Gazette",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFP5VX9XeE6XM8owICS4K0Cq7MCDO-uZA2gVdHg5PTtTitgPx3toH9Jmk4GfXCedwCQEKxbrTdeyABqMgDz87464BZRpz31laNLhfvojhgMfziHLQdnszOJryjqW7oa7TP2o40cbE-l1I1XqBbVYPj8qjjgL6Vy8OJuAb1w7WQbZ957LTggs_K3ui-JjiqeSnz-e1m0uh81rlwrA06cQH4H-4rlOYPET09CjQ=="
+    }
+  ],
+  "market": {
+    "jgb10y": {
+      "v": "2.681%",
+      "d": "up",
+      "t": 1
+    },
+    "usdjpy": {
+      "v": "158.825",
+      "d": "up",
+      "t": 1
+    },
+    "nikkei": {
+      "v": "60,459.58",
+      "d": "up",
+      "t": 1
+    },
+    "sp500": {
+      "v": "7,524.25",
+      "d": "down",
+      "t": -1
+    },
+    "wti": {
+      "v": "$84.74",
+      "d": "down",
+      "t": -1
+    },
+    "usdkrw": {
+      "v": "1344.3",
+      "d": "up",
+      "t": 1
+    },
+    "tibor": {
+      "v": "N/A",
+      "d": "—",
+      "t": 0
+    },
+    "jreit": {
+      "v": "N/A",
+      "d": "—",
+      "t": 0
+    },
+    "caprate": {
+      "v": "Tokyo A-grade 3.5% (시장 추정)",
+      "d": "up",
+      "t": 1
+    }
+  },
+  "deals": [],
+  "watch": [
+    {
+      "n": 1,
+      "text": "BOJ 12월 회의: 시장의 인상 기대 변화가 환율·국채·부동산 밸류에이션에 직접 영향"
+    },
+    {
+      "n": 2,
+      "text": "미국 CPI·연준 스탠스: 12월 금리 인상 가능성에 따른 글로벌 금리 및 리스크 자산 민감도"
+    },
+    {
+      "n": 3,
+      "text": "일본 대형 기술주(SoftBank)와 한국 반도체(삼성·SK하이닉스) 포지셔닝: 레버리지·헤지 필요성 점검"
+    }
+  ],
+  "serverGenerated": true,
+  "specialTopic": {
+    "title": "일본 호텔/호스피탈리티: 인바운드 폭증과 J-REIT 편입 기회",
+    "type": "deep-dive"
+  }
+}
