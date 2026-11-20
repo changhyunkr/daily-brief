@@ -1,0 +1,240 @@
+{
+  "date": "2026-11-20",
+  "generatedAt": 1795137921238,
+  "generatedBy": "github-actions",
+  "model": "gpt4o",
+  "headlines": [
+    {
+      "id": "h1",
+      "cat": "일본",
+      "title": "BOJ 12월·내년 3월 금리인상 전망 강화, 시장 변동성 확대",
+      "time": "11-19 23:00",
+      "summary": "경제학자들은 BOJ가 12월과 2027년 3월까지 추가 금리 인상을 단행할 것으로 전망한다. 인플레이션 리스크 경고가 근거로 제시됐다.",
+      "detail": "Reuters와 Investing.com 보도에 따르면 BOJ의 인플레이션 위험 경고로 인해 단기적으로 시장은 금리 인상 경로를 재확인하고 있다. 금리 정상화 기대는 엔화 강세 압력과 국채 수익률 상방 리스크를 높인다. 단기 채권·대출 구조 조정 가능성과 금융기관의 유동성 관리가 핵심 이슈로 부각된다.",
+      "implications": "JGB 10Y 2.83% 기준, 도쿄 A급 오피스 cap rate는 3.5→3.8% 상향압력 가능성. 보유 포트폴리오에서 레버리지 비중(LTV) 60% 이상 자산은 리파이낸싱 스트레스 점검 필요; 단기(3개월) 변동금리 노출을 고정금리로 전환 검토.",
+      "source": "Reuters / Investing.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFG26mRi-ZHMegfU9989nyaDA-fjVxa2iF12oTjPE_2ohvK_Hw-hJyaX3YKUQRkFbiQ-Gha85AY0uqFzK1GCJPviNM1O9Wt8XnjNCBauGf6e0Ev4DY-olLxQVBv36zIkPrAx1bVfnABT5P-Mh-MW9W1Mntk"
+    },
+    {
+      "id": "h2",
+      "cat": "일본",
+      "title": "JGB 10년물 2.83%로 하락, 일주일 내 최저",
+      "time": "11-19 17:00",
+      "summary": "일본 10년 만기 국채 금리가 2.83%로 하락해 일주일 만에 최저를 기록했다. 주식시장 불확실성과 지정학적 리스크가 채권 수요를 지지했다.",
+      "detail": "Investing.com 보도에 따르면 중동 긴장 고조에도 불구하고 안전자산 선호로 국채 수요가 증가했다. JGB 수익률 하락은 은행 수익률 스프레드 축소와 장기 대출 여건 변화를 초래할 수 있다. 국채와 리스크 자산 간 상관관계가 단기적으로 재설정되고 있어 자산배분 재검토 필요성이 커졌다.",
+      "implications": "JGB 10Y 2.83%는 기존 자금 조달 비용 대비 10~30bp 하향 요인. 국채 중심 포지션은 금리 민감 위험 축소, 유휴현금은 단기 국채·현금성 자산에 배치 권고. 부동산 포트폴리오의 할인율 재산정 필요(예: NOI 기준 할인율 20-50bp 재검토).",
+      "source": "Investing.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFG26mRi-ZHMegfU9989nyaDA-fjVxa2iF12oTjPE_2ohvK_Hw-hJyaX3YKUQRkFbiQ-Gha85AY0uqFzK1GCJPviNM1O9Wt8XnjNCBauGf6e0Ev4DY-olLxQVBv36zIkPrAx1bVfnABT5P-Mh-MW9W1Mntk"
+    },
+    {
+      "id": "h3",
+      "cat": "일본",
+      "title": "닛케이 225, Anthropic IPO 기대 속 0.71% 상승 마감(59,444)",
+      "time": "11-19 15:00",
+      "summary": "닛케이 225가 0.71% 상승해 59,444.21로 마감했다. 투자자들은 Anthropic의 IPO에 따른 AI 관련 수요 지표를 주시하고 있다.",
+      "detail": "Trading Economics와 Nikkei Indexes 보도에 따르면 일본 증시는 AI 테마에 민감하게 반응하며 상승폭을 기록했다. 다만 UBS의 중립 전망과 글로벌 AI 섹터의 불확실성이 존재해 추가 상승은 제한될 수 있다. 기술주 중심의 변동성 확대에 대비한 섹터별 리스크 관리가 필요하다.",
+      "implications": "포트폴리오 내 IT·테크 비중이 20% 이상인 경우 변동성 확대 시 포트폴리오 전체 변동성 2~4% 상승 예상. AI 테마 과도 노출 자산은 5% 이내로 리밸런싱 권고; 신규 진입은 IPO 실적 및 수익성 지표 확인 후 결정.",
+      "source": "Trading Economics / Nikkei Indexes",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGq73Hfz5Uli3UPXcEBrLfoxUIgi2gNsXA1Ve2yrW7kzbw5o1EBIXsk6T5bCFi_hNr86HkLhmls_v6cM1bGZcyz_dZDyTjuZQZS06bEy1u_4J2n2ah3g2yySSpmK8u2DUOzcTVHPiwZzTfV"
+    },
+    {
+      "id": "h4",
+      "cat": "일본",
+      "title": "UBS, 일본주식 의견 '중립' 하향—AI 지출 불확실성 지적",
+      "time": "11-19 12:00",
+      "summary": "UBS는 일본 주식 투자의견을 '중립'으로 낮췄다. 주요 근거는 AI 관련 지출의 불확실성 증가이다.",
+      "detail": "Investing.com에 따르면 UBS는 Nvidia 경영진 변동 등으로 AI 투자 심리가 약화되자 일본 증시에 대한 태도를 보수적으로 조정했다. 이는 기술·하이테크 섹터뿐 아니라 AI 수요에 민감한 산업 전반에 대한 재평가를 촉발할 가능성이 있다. 투자자들은 실적과 CapEx 계획을 기준으로 섹터별 선별투자를 권고받고 있다.",
+      "implications": "기술주 비중이 큰 포트폴리오의 기대수익률 하향(예상 6→4% 수준) 가능. 6개월 이내 실적 불확실성이 높은 기업에 대한 포지션 축소(목표 비중 -10~15%) 및 현금 비중 5%p 상향 권고.",
+      "source": "Investing.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGToveB8EIoLF9RbRO3GzL3zDaldysHI03G98Mn45yhi077iU_x2QnE-x5Uc5rH7XaWhNYWnTGS4hO51DEddnce1lj7zY2MxZ2G2UP9mmNlSX-zOEiNEPSrW_ikjOKFJT8Ppz_U7J05Qg=="
+    },
+    {
+      "id": "h5",
+      "cat": "일본",
+      "title": "일본 기계수주, 예상보다 적게 감소—경기 회복력 신호",
+      "time": "11-19 09:30",
+      "summary": "일본의 기계수주가 예상보다 적게 감소해 경제 지표상 긍정 신호를 보였다. 회복 모멘텀이 일부 확인됐다.",
+      "detail": "Investing.com 보도에 따르면 기계수주는 둔화했으나 전망치보다 양호해 제조업의 펀더멘털이 완전히 약화되지는 않았다. 이는 설비투자 재개 가능성과 연계되며 향후 수출 호조와 결합되면 성장 측면에서 추가적인 서프라이즈를 제공할 수 있다.",
+      "implications": "제조업 중심 포트폴리오의 수출 민감 주식 비중은 방어적 유지 권고. 설비투자 회복 시 물류·산업시설 임대수요는 연간 2~4% 증가 가능, 관련 리츠·부동산 자산의 수익성 재평가 필요.",
+      "source": "Investing.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFG26mRi-ZHMegfU9989nyaDA-fjVxa2iF12oTjPE_2ohvK_Hw-hJyaX3YKUQRkFbiQ-Gha85AY0uqFzK1GCJPviNM1O9Wt8XnjNCBauGf6e0Ev4DY-olLxQVBv36zIkPrAx1bVfnABT5P-Mh-MW9W1Mntk"
+    },
+    {
+      "id": "h6",
+      "cat": "일본",
+      "title": "일본 수출 사상 최고치 기록—엔화 약세·글로벌 수요 배경",
+      "time": "11-19 08:00",
+      "summary": "일본의 수출이 사상 최고치를 기록했다. 엔화 약세와 글로벌 수요가 주요 요인이다.",
+      "detail": "Investing.com 보도에서 수출 호조는 자동차·반도체·산업기계에서 뚜렷했다. 수출 호조는 기업 실적 개선으로 이어질 가능성이 크지만, 동시에 무역수지 확대가 엔화 환율에 미치는 영향은 단기적이다. 정책당국의 환율 대응 가능성도 모니터링 필요하다.",
+      "implications": "수출 연계 기업의 영업이익률 2027년 상반기까지 3~7% 개선 가능성. 수출 기반 부동산(물류센터 등) 수요는 임대료 상승 압력으로 이어져 관련 자산의 재평가 및 신규 투자 검토 필요.",
+      "source": "Investing.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFG26mRi-ZHMegfU9989nyaDA-fjVxa2iF12oTjPE_2ohvK_Hw-hJyaX3YKUQRkFbiQ-Gha85AY0uqFzK1GCJPviNM1O9Wt8XnjNCBauGf6e0Ev4DY-olLxQVBv36zIkPrAx1bVfnABT5P-Mh-MW9W1Mntk"
+    },
+    {
+      "id": "h7",
+      "cat": "미국",
+      "title": "미국 증시 S&P·Nasdaq·Dow 하락—Anthropic 데뷔 불안 영향",
+      "time": "11-19 18:01 ET",
+      "summary": "S&P 500, Nasdaq, Dow가 모두 하락 마감했다. Anthropic의 시장 데뷔가 투자심리에 충분한 신뢰를 주지 못했다.",
+      "detail": "Stocktwits와 Finviz 보도에 따르면 AI 섹터 중심의 차익실현이 진행되며 광범위한 기술주 약세가 확인됐다. Anthropic IPO가 기대에 미치지 못하자 AI 관련 밸류에이션 조정이 촉발되었다. 이는 성장주 전반의 단기 조정으로 이어질 가능성이 있다.",
+      "implications": "미국 성장주 중심 포트폴리오의 1개월 변동성 3~6% 증가 예상. 레버리지 ETF·옵션 노출은 손실 확대 위험, 손절 규칙 및 헷지(풋옵션) 적용 검토 권고.",
+      "source": "Stocktwits / Finviz",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEfWySCaMWE1QzqtwdTdEfVtkiVbORWeGAYfrjCnvCGw7hvvgFpHIwDcGuktAEoAJQDqJBY0iNUePZChwzBKZucl1rvRCT61HGf13U8MsbVNXHOoXOI0Og="
+    },
+    {
+      "id": "h8",
+      "cat": "글로벌",
+      "title": "WTI 유가 배럴당 82.83달러—3개월 내 최저권",
+      "time": "11-19",
+      "summary": "WTI가 배럴당 82.83달러로 하락했다. 공급 과잉 우려가 주요 원인이다.",
+      "detail": "시장 참가자들은 OPEC+의 생산 정책 불확실성과 글로벌 수요 둔화를 이유로 유가 하방 압력을 보고 있다. 중동의 지정학적 리스크가 존재하나 공급 조정 가능성이 제한적이라면 가격 반등은 제한될 수 있다. 에너지 관련 인프라 투자와 석유화학 수요 전망을 재검토할 필요가 있다.",
+      "implications": "에너지 섹터 실적의 단기 하방 리스크. 석유·가스 관련 대규모 개발 프로젝트의 IRR은 유가 5~10% 하락 시 1~3%p 감소 예상. 관련 인프라 투자 타이밍 재검토 및 헤지 계약 재정비 권고.",
+      "source": "시장 데이터",
+      "url": ""
+    },
+    {
+      "id": "h9",
+      "cat": "글로벌",
+      "title": "글로벌 주식·채권 동시 변동성 확대—지정학·금리전망 요인",
+      "time": "11-19",
+      "summary": "주식과 채권 시장이 지정학 리스크 및 금리전망 변화로 동시에 변동성 확대를 보이고 있다. 안전자산 선호가 관찰된다.",
+      "detail": "중동 긴장 고조와 주요국의 금리 경로 재평가가 복합적으로 작용해 글로벌 자금흐름이 재편되고 있다. 투자자들은 리스크 프리미엄 상승과 단기 유동성 프레임을 재검토 중이다. 포트폴리오 스트레스 테스트가 권고된다.",
+      "implications": "글로벌 포트폴리오의 VaR(1개월) 10~20% 상승 가능. 핵심 액션: 현금·단기채 비중 5~10%p 상향, 크레딧 노출의 신용스프레드 민감도 점검.",
+      "source": "시장 관측",
+      "url": ""
+    },
+    {
+      "id": "h10",
+      "cat": "한국",
+      "title": "원/달러 1,336.00 기록—엔화 약세·무역흐름 영향",
+      "time": "11-20",
+      "summary": "USD/KRW가 1,336.00을 기록했다. 글로벌 달러 강세와 수출 흐름이 배경이다.",
+      "detail": "시장 환율 데이터에 따르면 달러 대비 원화는 엔화 약세 및 글로벌 자금흐름 영향으로 압박을 받고 있다. 수출기업 환헤지 전략과 외화부채 포지션 점검이 필요하다. 한국 채권·주식의 달러표시 수익률 변화가 예상된다.",
+      "implications": "수출기업의 영업이익률은 환율 변화로 단기 1~3%p 개선될 수 있으나 원자재 수입비용 상승은 일부 상쇄. 외화부채(LTV 비중 20% 이상) 기업은 환헤지 비용 추정 및 만기 재조정 필요.",
+      "source": "환율시장 데이터",
+      "url": ""
+    },
+    {
+      "id": "h11",
+      "cat": "한국",
+      "title": "한·미 금리차·환율 민감도 확대—수입 물가와 기업실적 영향",
+      "time": "11-19",
+      "summary": "한·미 금리차 확대 및 환율 변동성이 기업 실적 민감도를 높이고 있다. 에너지·원자재 수입비 상승이 관찰된다.",
+      "detail": "원·달러 상승은 수입 물가를 상승시키며 단기적으로 마진 압박을 야기할 수 있다. 반면 수출 의존도가 큰 대기업은 환율 효과로 이익 개선 가능성이 있다. 금융권은 외화 유동성 관리와 대손충당금 가이던스를 재검토해야 한다.",
+      "implications": "무역기업의 EBITDA 민감도 분석 권장(환율 1% 변동 시 EBITDA 영향 ±0.5~1.5%). 은행권은 외화 유동성 커버리지 비율 점검 및 스트레스 시나리오 수립 필요.",
+      "source": "시장 관찰",
+      "url": ""
+    },
+    {
+      "id": "h12",
+      "cat": "아시아",
+      "title": "아시아 주요 증시 글로벌 리스크에 동조화—변동성 확대",
+      "time": "11-19",
+      "summary": "아시아 증시가 글로벌 지정학·금리 리스크에 동조해 변동성을 키우고 있다. 투자자들은 섹터별 선별투자를 선호한다.",
+      "detail": "특히 기술·수출 관련 주식의 변동성이 커져 단기 트레이딩 기회와 리스크가 공존한다. 정책 대응 여력과 외국인 자금 유입 흐름을 면밀히 관찰해야 한다. 아시아 지역의 산업재·물류 관련 자산은 방어적 포지션으로 고려될 수 있다.",
+      "implications": "아시아 포트폴리오 내 외국인 비중이 높은 종목의 변동성 커짐. 방어적 비중(소비·의료·유틸리티)으로 10%p 리밸런싱 권고.",
+      "source": "시장 데이터",
+      "url": ""
+    },
+    {
+      "id": "h13",
+      "cat": "매크로",
+      "title": "글로벌 유동성 환경 변화—단기 금리·환율 변동성 확대",
+      "time": "11-19",
+      "summary": "주요국의 금리 경로 재평가와 지정학적 불확실성으로 글로벌 유동성 환경이 변동하고 있다. 안전자산 선호가 관측된다.",
+      "detail": "유동성 환경 변화는 리스크 프리미엄 상승과 크레딧 스프레드 확대를 유발할 수 있다. 기관투자자들은 레버리지 및 단기 만기 포지션을 축소하는 등 방어적 재배치를 진행 중이다. 채권과 현금성 자산의 상대적 매력이 재부각되고 있다.",
+      "implications": "레버리지 펀드의 마진콜 위험 확대. 포트폴리오 현금비중 3~7%p 상향, 신용포지션의 만기·신용등급 재검토 실행 권고.",
+      "source": "시장 관찰",
+      "url": ""
+    },
+    {
+      "id": "h14",
+      "cat": "화제",
+      "title": "Anthropic IPO 시장 데뷔—AI 섹터 밸류에이션 재조정 촉발",
+      "time": "11-19",
+      "summary": "Anthropic의 IPO 데뷔가 투자자 신뢰를 충분히 얻지 못하면서 AI 섹터의 밸류에이션 조정이 진행되고 있다.",
+      "detail": "IPO 결과는 AI 관련 기대치가 이미 선반영되어 있음을 시사하며, 향후 실적 중심의 선별적 투자가 요구된다. 글로벌 테크 섹터의 단기 수급 변동성이 커지며 거시 이벤트에 민감해졌다.",
+      "implications": "AI 관련 상장·비상장 포트폴리오의 밸류에이션 스트레스 테스트 필요. 신규 자본 배치 보류 및 실적 기반 재평가 권고.",
+      "source": "시장 보도",
+      "url": ""
+    },
+    {
+      "id": "h15",
+      "cat": "일본",
+      "title": "일본 수입 총액 사상 최고치—에너지 가격·내수 회복 영향",
+      "time": "11-19",
+      "summary": "일본의 수입 총액이 사상 최고치를 기록했다. 에너지 가격 상승과 내수 회복이 복합 작용했다.",
+      "detail": "Investing.com 자료에 따르면 수입 증가율은 예상치를 밑돌았으나 총액은 역대 최대를 기록했다. 이는 에너지·원자재 수입비 증가와 내수 수요 회복이 동시에 작용한 결과로 분석된다. 무역흐름 변화는 환율과 물가에 파급된다.",
+      "implications": "무역수지 확대는 단기 환율 변동성 요인. 에너지 비용 상승 노출 기업의 원가전가 전략 점검 및 장기 에너지 계약 재협상 권고.",
+      "source": "Investing.com",
+      "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFG26mRi-ZHMegfU9989nyaDA-fjVxa2iF12oTjPE_2ohvK_Hw-hJyaX3YKUQRkFbiQ-Gha85AY0uqFzK1GCJPviNM1O9Wt8XnjNCBauGf6e0Ev4DY-olLxQVBv36zIkPrAx1bVfnABT5P-Mh-MW9W1Mntk"
+    }
+  ],
+  "market": {
+    "jgb10y": {
+      "v": "2.83%",
+      "d": "down",
+      "t": -1
+    },
+    "usdjpy": {
+      "v": "159.830",
+      "d": "up",
+      "t": 1
+    },
+    "nikkei": {
+      "v": "59,444.21",
+      "d": "up",
+      "t": 1
+    },
+    "sp500": {
+      "v": "7,175.83",
+      "d": "down",
+      "t": -1
+    },
+    "wti": {
+      "v": "82.83",
+      "d": "down",
+      "t": -1
+    },
+    "usdkrw": {
+      "v": "1,336.00",
+      "d": "up",
+      "t": 1
+    },
+    "tibor": {
+      "v": "N/A",
+      "d": "—",
+      "t": 0
+    },
+    "jreit": {
+      "v": "N/A",
+      "d": "—",
+      "t": 0
+    },
+    "caprate": {
+      "v": "N/A",
+      "d": "—",
+      "t": 0
+    }
+  },
+  "deals": [],
+  "watch": [
+    {
+      "n": 1,
+      "text": "BOJ의 12월·2027년 3월 금리 인상 여부와 JGB 10Y의 추가 변동 폭(기준 2.83%)"
+    },
+    {
+      "n": 2,
+      "text": "Anthropic IPO 이후 AI 섹터 밸류에이션 재조정의 파급—기술주 포트폴리오 리스크 관리"
+    },
+    {
+      "n": 3,
+      "text": "원/달러 1,336 수준에서 수출기업·수입기업의 환노출과 헤지 전략 점검"
+    }
+  ],
+  "serverGenerated": true,
+  "specialTopic": {
+    "title": "일본 콜드체인·데이터센터: 구조적 수요와 투자 진입 전략",
+    "type": "deep-dive"
+  }
+}
